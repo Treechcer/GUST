@@ -11,45 +11,58 @@
 
 ## Usage
 
-```powershell
 .\gust.ps1 -message "Your commit message" -gitURL "https://github.com/username/repository"
-```
 
 ### Parameters
 
 | Parameter   | Required | Description |
 |-------------|----------|-------------|
-| -message    | Yes      | Your commit message |
-| -gitURL     | No       | URL of your repository (don't add '`.git`' at the end, it's automatically in) |
+| -message    | Yes      | Your commit message you want to use you'll use|
+| -gitURL     | No       | The GitHub repository URL (omit .git at the end – it is added automatically) |
 
 ## Prerequisites
 
-- Installed [Git](https://git-scm.com/)
+- [Git](https://git-scm.com/) installed on your system
 - User has configured name and email configured:
 
-```powershell
 git config --global user.name "Your Name"  
 git config --global user.email "your@email.com"
-```
 
-> To set local configuration instead, remove `--global`.
+> Note: To configure local configuration instead, remove `--global`.
 
-## Notes
+## Behavior Details
 
-- If -gitURL is provided:
+- When -gitURL is provided and `NO` mode:
   - Initializes the repository if not already initialized
   - Sets `origin` as the remote
   - Pulls from `origin/main` using `--allow-unrelated-histories`
   - Pushes and sets upstream to main
 
-- If -gitURL is not provided, only git add, commit, and push are executed.
+- When -gitURL is not provided:
+  - Only git add, git commit, and git push are executed
 
-## Usage example
+## Examples
 
-.\gust.ps1 -message "Initial commit" -gitURL "https://github.com/Treechcer/GUST"
+.\gust.ps1 -c "Initial commit" -u "https://github.com/Treechcer/GUST"
 
-or you can add it to your `environmental variables` to `PATH` the folder you downloaded GUST into, for example if you had GUST in your disk `C` and in folder structure like `C:\downloads\gust\gust.ps1` you have to add to PATH `C:\downloads\gust`, after this you can call just `gust -message ...` (if you delete the gust.cmd you have to call it by using `gust.ps1` and your PATH would look like `C:\downloads\gust\gust.ps1`)
+Alternatively, you can make gust.ps1 callable from anywhere by adding its directory to your PATH environment variable.
 
-## Last words
+For example, if the script is located at:
+
+C:\downloads\gust\gust.ps1
+
+Then add the following path to your system's PATH variable:
+
+C:\downloads\gust\
+
+> Note: last `\` is necesery for it to work
+
+After that, you can run the script using:
+
+gust -c "Your commit message"
+
+> Note: If you delete the accompanying gust.cmd file, you'll need to call the script explicitly using `gust.ps1`. In that case, include the full path or ensure the .ps1 file extension is recognized in your environment.
+
+## Final Note
 
 This was made mainly for my use, because these are most of the commands I use and it streamlines most of my committing to github.

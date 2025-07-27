@@ -12,6 +12,21 @@ param(
     [string]$branch # this is the name of the branch you'll use if you do branch create switch (bcs) mode
 )
 
+$configPath = "$PSScriptRoot/config.json"
+
+if (Test-Path $configPath){
+    $config = Get-Content $configPath | ConvertFrom-Json
+}
+else{
+    $config = [PSCustomObject]@{
+        defaultBranch = "main";
+        defaultRemote = "origin";
+        userName = $null;
+        userEmail = $null;
+        changeNameGlobal = false
+    }
+}
+
 function checkUser{
     $username = git config --global user.name
     $useremail = git config --global user.email
@@ -24,30 +39,51 @@ function checkUser{
     }
 
     if (-not $username -or -not $useremail) {
-        Write-Host "--------------------------------------------------------------------------------------------------"
-        Write-Host "Please set your username and/or email with:"
-        Write-Host "git config --global user.name 'your name'"
-        Write-Host "git config --global user.email 'your email'"
-        Write-Host ""
-        Write-Host "If you want to set local email and username, just skip '--global' and you'll set them for your repository"
-        Write-Host "--------------------------------------------------------------------------------------------------"
-        exit 1
+        if ($config.userEmail -eq $null -and $config.userName -eq $null){
+            Write-Host "--------------------------------------------------------------------------------------------------"
+            Write-Host "Please set your username and/or email with:"
+            Write-Host "git config --global user.name 'your name'"
+            Write-Host "git config --global user.email 'your email'"
+            Write-Host ""
+            Write-Host "If you want to set local email and username, just skip '--global' and you'll set them for your repository"
+            Write-Host "--------------------------------------------------------------------------------------------------"
+            exit 1
+        }
+        else{
+            if ($config.changeNameGlobal){
+                Write-Host "setting your name and email globaly to $(config.userName) and $(config.userEmail)"
+                git config --global user.name "$config.userName"
+                git config --global user.email "$config.userEmail"
+            }
+            else{
+                Write-Host "setting your name and email localy to $(config.userName) and $(config.userEmail)"
+                git config user.name "$config.userName"
+                git config user.email "$config.userEmail"
+            }
+        }
     }
 }
 
 function gitPushCreate{
     if ($gitURL){
-        git init 1>$null 3>$null 4>$null 5>$null 6>$null
-        git remote add origin "$gitURL.git" 1>$null 3>$null 4>$null 5>$null 6>$null
-        git pull origin main --allow-unrelated-histories 1>$null 3>$null 4>$null 5>$null 6>$null
-        git push --set-upstream origin main 1>$null 3>$null 4>$null 5>$null 6>$null
+        if (-not $branch){
+            $branch = $config.defaultBranch
+        }
+
+        if (-not (Test-Path -Path ".git" -PathType Container)) {
+            git init
+        }
+
+        git remote add $config.defaultRemote "$gitURL.git"
+        git pull $config.defaultRemote $branch --allow-unrelated-histories 
+        git push --set-upstream $config.defaultRemote $branch 
     }
 
-    $errAdd = git add . 1>$null 3>$null 4>$null 5>$null 6>$null
+    $errAdd = git add . 
 
-    $errCom = git commit -m "$message" 1>$null 3>$null 4>$null 5>$null 6>$null
+    $errCom = git commit -m "$message" 
 
-    git push 1>$null 3>$null 4>$null 5>$null 6>$null
+    git push 
 }
 
 function branchCreateSwitch{
