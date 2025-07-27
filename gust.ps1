@@ -1,6 +1,8 @@
 param(
-    [Alias("srd")]
+    [Alias("c")]
     [string]$message,   # commit message
+
+    [Alias("u")]
     [string]$gitURL     # URL, not necessary if you have alread "git add ."
 )
 
