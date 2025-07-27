@@ -3,6 +3,8 @@ param(
     [string]$gitURL     # URL, not necessary if you have alread "git add ."
 )
 
+#test
+
 $username = git config --global user.name
 $useremail = git config --global user.email
 
