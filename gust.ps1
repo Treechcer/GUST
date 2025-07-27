@@ -30,23 +30,12 @@ if ($gitURL){
 
 $errAdd = git add . 2>&1
 
-if ($errAdd -match "fatal: not a git repository") {
-    git init
-    git add .
-    $errCom = git commit -m "$message"
+$errCom = git commit -m "$message"
 
-    git remote add origin $gitURL
-    
-    git pull origin main --allow-unrelated-histories
+git remote add origin $gitURL
 
-    git push --set-upstream origin main
+git pull origin main --allow-unrelated-histories
 
-    git push
-}
-else{
-    $errCom = git commit -m "$message"
+git push --set-upstream origin main
 
-    git pull origin main --allow-unrelated-histories
-
-    $errPus = git push
-}
+git push
