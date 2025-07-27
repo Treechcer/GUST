@@ -51,23 +51,51 @@ function gitPushCreate{
 }
 
 function branchCreateSwitch{
+    $exists = git branch --list $branch
+
+    if ($exists){
+        Write-Host "$branch -- exist, did not create a new one"
+        exit 1
+    }
+
+    $err0 = git branch $branch *>$null
+    $err1 = git checkout $branch *>$null
+    Write-Host "switched"
     git branch
-    git branch $branch
-    git checkout $branch
 }
 
 function branchSwitch{
-    git checkout $branch
+    $exists = git branch --list $branch
+
+    if (-not $exists){
+        Write-Host "$branch -- does not exist"
+        exit 1
+    }
+
+    $err0 = git checkout $branch *>$null
     git branch
 }
 
-function branchDelte{
-    git branch -D $branch
-    git branch
+function branchDelete{
+    $exists = git branch --list $branch
+
+    if (-not $exists){
+        Write-Host "$branch -- does not exist"
+        exit 1
+    }
+
+    $err0 = git branch -d $branch 2>&1
+    if ($LASTEXITCODE -ne 0){
+        git branch
+        Write-Host "$branch could not be safely delted"
+    }
+    else{
+        Write-Host "$branch was deleted"
+    }
 }
 
 function behaviourCheck{
-    $otherModes
+    #$otherModes
     switch ($otherModes){
         "" { # just git add, commit and push :)
             gitPushCreate
@@ -79,7 +107,7 @@ function behaviourCheck{
             branchSwitch
         }
         "bd" { # branch delte
-            branchDelte
+            branchDelete
         }
     }
 }
