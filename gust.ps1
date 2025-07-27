@@ -25,14 +25,16 @@ if (-not $username -or -not $useremail) {
 }
 
 if ($gitURL){
-    git init *> $null
-    git remote add origin "$gitURL.git" *> $null
-    git pull origin main --allow-unrelated-histories *> $null
-    git push --set-upstream origin main *> $null
+    git init 1>$null 3>$null 4>$null 5>$null 6>$null
+    git remote add origin "$gitURL.git" 1>$null 3>$null 4>$null 5>$null 6>$null
+    git pull origin main --allow-unrelated-histories 1>$null 3>$null 4>$null 5>$null 6>$null
+    git push --set-upstream origin main 1>$null 3>$null 4>$null 5>$null 6>$null
 }
 
-$errAdd = git add . *> $null
+$errAdd = git add . 1>$null 3>$null 4>$null 5>$null 6>$null
 
-$errCom = git commit -m "$message" *> $null
+$errCom = git commit -m "$message" 1>$null 3>$null 4>$null 5>$null 6>$null
 
-git push *> $null
+git push 1>$null 3>$null 4>$null 5>$null 6>$null
+
+Write-Host ""
