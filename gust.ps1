@@ -31,7 +31,7 @@ if ($gitURL){
     git push --set-upstream origin main
 }
 
-$errAdd = git add . 2>&1
+$errAdd = git add .
 
 $errCom = git commit -m "$message"
 
