@@ -25,14 +25,14 @@ if (-not $username -or -not $useremail) {
 }
 
 if ($gitURL){
-    git init
-    git remote add origin "$gitURL.git"
-    git pull origin main --allow-unrelated-histories
-    git push --set-upstream origin main
+    git init *> $null
+    git remote add origin "$gitURL.git" *> $null
+    git pull origin main --allow-unrelated-histories *> $null
+    git push --set-upstream origin main *> $null
 }
 
-$errAdd = git add .
+$errAdd = git add . *> $null
 
-$errCom = git commit -m "$message"
+$errCom = git commit -m "$message" *> $null
 
-git push
+git push *> $null
