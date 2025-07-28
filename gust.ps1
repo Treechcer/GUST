@@ -1,6 +1,6 @@
 param(
     [Alias("c")]
-    [string]$message,   # commit message
+    [string]$message,    # commit message
 
     [Alias("u")]
     [string]$gitURL,     # URL, not necessary if you have alread "git add ."
@@ -9,7 +9,10 @@ param(
     [string]$otherModes, # this adds more possibilities / "modes"
 
     [Alias("b")]
-    [string]$branch # this is the name of the branch you'll use if you do branch create switch (bcs) mode
+    [string]$branch,     # this is the name of the branch you'll use if you do branch create switch (bcs) mode
+
+    [Alias("n")]
+    [int]$number         # this is for any input that needs number, it has some default based on context
 )
 
 $configPath = "$PSScriptRoot/config.json"
@@ -23,7 +26,11 @@ else{
         defaultRemote = "origin";
         userName = $null;
         userEmail = $null;
-        changeNameGlobal = false
+        changeNameGlobal = false;
+        autoPullBeforePush = true;
+        defaultCommitMessage = "small fixes";
+        forceBranchDelete = false;
+        defaultLogLength = 5
     }
 }
 
@@ -75,11 +82,18 @@ function gitPushCreate{
         }
 
         git remote add $config.defaultRemote "$gitURL.git"
-        git pull $config.defaultRemote $branch --allow-unrelated-histories 
+
+        if (config.autoPullBeforePush){
+            git pull $config.defaultRemote $branch --allow-unrelated-histories 
+        }
         git push --set-upstream $config.defaultRemote $branch 
     }
 
     $errAdd = git add . 
+
+    if (-not $message){
+        $message = $config.defaultCommitMessage
+    }
 
     $errCom = git commit -m "$message" 
 
@@ -120,7 +134,14 @@ function branchDelete{
         exit 1
     }
 
-    $err0 = git branch -d $branch 2>&1
+    if (config.forceBranchDelete){
+        $delType = "-D"
+    }
+    else{
+        $delType = "-d"
+    }
+
+    $err0 = & git branch $delType $branch 2>&1
     if ($LASTEXITCODE -ne 0){
         git branch
         Write-Host "$branch could not be safely delted"
@@ -128,6 +149,19 @@ function branchDelete{
     else{
         Write-Host "$branch was deleted"
     }
+}
+
+function status{
+    git status
+    git branch
+}
+
+function log{
+    if (-not $number){
+        $number = $config.defaultLogLength
+    }
+
+    git log --oneline -n $number
 }
 
 function behaviourCheck{
@@ -142,8 +176,17 @@ function behaviourCheck{
         "bs" { # branch switch
             branchSwitch
         }
-        "bd" { # branch delte
+        "bd" { # branch delete
             branchDelete
+        }
+        "s" { # status + branch
+            status
+        }
+        "p" { # git pull
+            git pull
+        }
+        "log"{
+            log
         }
     }
 }
