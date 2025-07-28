@@ -188,6 +188,9 @@ function behaviourCheck{
         "log"{
             log
         }
+        default {
+            Write-Host "$otherModes is not correct input"
+        }
     }
 }
 
