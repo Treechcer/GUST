@@ -1,24 +1,70 @@
 # Gust – Git Utility Something Tool (PowerShell)
 
-**Gust** is a PowerShell script that automates pushing your code to a GitHub repository.
+**Gust** is a PowerShell script that automates common Git tasks for your GitHub repository (managing branches, pushing etc.) with all being configurable in `config.json`.
 
 ## Features
 
-- Verifies if user has something under `user name and email` (global and local)
-- Initializes a `new` Git repository `if you provide URL`
-- Adds a `remote origin` and `pulls with --allow-unrelated-histories`
-- Adds all changes, commits with a message, and pushes to the `main` branch
+- Verifies if the user has set `user.name` and `user.email` (global and local) - or set their name and email in config with `"changeNameGlobal" : true` (default is false)
+- Initializes a `new` Git repository if one doesn't exists
+- Adds and commits changes  
+- Pushes to the selected branch (default is `main`)
+- A most of things being configurable in `config.json`
+- Supports multiple "modes" (mode is what the script will do when you run GUST) - including modes: branch switching, branch creating, etc.
+- Allows setting default message for commit messages
+- Support short aliases for inputs (more on that later)
+- Adds a `remote origin` (or any other depends on config) and `pulls with --allow-unrelated-histories`
 
-## Usage
+## Parameters
 
-.\gust.ps1 -message "Your commit message" -gitURL "https://github.com/username/repository"
+| Parameter   | Required  | Description | Aliases |
+|-------------|---------- |-------------| -------- |
+| -message    | Sometimes | Your commit message you want to use| -c (as commit message) |
+| -gitURL     | Only required when initializing repository | The GitHub repository URL (omit .git at the end it will be added automatically) | -u (as URL) |
+| -otherModes|most of the time|This is used to change the mode you want to do, also it has configurable default value `"defaultMode" : "c"` | -m (as mode) |
+| -branch | no | this is for working branches, it has default configurable in config under `"defaultBranch" : "main",`in some cases as `main`| -b |
+| -number | no | this is used when you need some number as an input (now it's only used in log, it has default configurable in config `"defaultLogLength" : 5,`| -n | 
 
-### Parameters
+## Mode parameters
 
-| Parameter   | Required | Description |
-|-------------|----------|-------------|
-| -message    | Yes      | Your commit message you want to use you'll use|
-| -gitURL     | No       | The GitHub repository URL (omit .git at the end – it is added automatically) |
+|Name | Description |
+|-----|-------------|
+| c(commit) | This is configs default. Adds a commit message and pushes to your GitHub repository. |
+| b(ranch)s(witch)c(create) | Creates a new branch and switches to the new branch. |
+| b(ranch)s(witch) | Switches to an existing branch. |
+| b(ranch)d(elete) | Deletes an existing branch. |
+| s(tatus) | Shows the status of current branch. |
+| p(ull) | Pulls the latest changes from your remote repository. |
+| l(og) | Shows recent commits (default number or set with -number / -n). |
+
+## configurations
+
+```json
+{
+    "defaultBranch" : "main",
+    "defaultRemote" : "origin",
+    "userName" : "$null",
+    "userEmail" : "$null",
+    "changeNameGlobal" : false,
+    "autoPullBeforePush": true,
+    "defaultCommitMessage" : "small fixes",
+    "forceBranchDelete": false,
+    "defaultLogLength" : 5,
+    "defaultMode" : "c"
+}
+```
+
+| key | description |
+| --- | ----------- |
+| defaultBranch | Default branch to push to. |
+| defaultRemote | Default git remote name. |
+| userName | Used if no git config is set for user.name. |
+| userEmail | Used if no git config is set for user.email. |
+| changeNameGlobal | Boolean value that makes the name / email change global or local (to enable name changing you have to change the userEmail to your email address and userName to your name) |
+| autoPullBeforePush | If `True` this sets if you automatically pull before pushing. |
+| defaultCommitMessage | Used as no commit message is inputted. |
+| forceBranchDelete | If `true` uses `-D` (force deletes) branches. |
+| defaultLogLength | Number of commits shown when using the `log` mode. |
+| defaultMode | Default mode used when no mode is inputted. |
 
 ## Prerequisites
 
@@ -29,31 +75,65 @@ git config --global user.name "Your Name"
 git config --global user.email "your@email.com"
 
 > Note: To configure local configuration instead, remove `--global`.
+> Note: this can also be setup as automatic action if you set `userName`, `userEmail` to change your name locally, if you want it globally you can change to true `changeNameGlobal` in your config file.
 
-## Behavior Details
+## Usage
 
-- When -gitURL is provided and `NO` mode:
-  - Initializes the repository if not already initialized
-  - Sets `origin` as the remote
-  - Pulls from `origin/main` using `--allow-unrelated-histories`
-  - Pushes and sets upstream to main
+```powershell
+.\gust.ps1 -c "commit message" -u "URL" 
+```
 
-- When -gitURL is not provided:
-  - Only git add, git commit, and git push are executed
+This is an example of pushing and setting up remote code to your GitHub repository.
 
-## Examples
+```powershell
+.\gust.ps1 -c "Refactor UI"
+```
 
-.\gust.ps1 -c "Initial commit" -u "https://github.com/Treechcer/GUST"
+This is an example of committing to an already established repository.
 
-Alternatively, you can make gust.ps1 callable from anywhere by adding its directory to your PATH environment variable.
+``` powershell
+.\gust.ps1 -m "bcs" -b "coolBranch"
+```
 
-For example, if the script is located at:
+this is example of creating a new branch and switching to the branch
 
-C:\downloads\gust\gust.ps1
+```powershell
+.\gust.ps1 -m "bs" -b "main"
+```
 
-Then add the following path to your system's PATH variable:
+This is example of switching to a already existing branch.
 
-C:\downloads\gust\
+```powershell
+.\gust.ps1 -m "bd" -b "coolBranch"
+```
+
+This is example of deleting a existing branch.
+
+```powershell
+.\gust.ps1 -m "s"
+```
+
+This is example of showing git status.
+
+```powershell
+.\gust.ps1 -m "log" -n 8
+```
+
+This is example of showing the log provided the length of how much you want (in this you'l see 8 things in the log).
+
+```powershell
+.\gust.ps1 -c "Bug fixes"
+```
+
+This is showcase you don't need to use `-m` dor mode because you have default mode in config (which defaults to `c` - commit mode).
+
+## Set Up To Call GUST Globally
+
+You can make gust.ps1 callable from anywhere by adding its directory to your PATH environment variable. 
+
+For example, if the script is located at: `C:\downloads\gust\gust.ps1`
+
+Then add the following path to your system's PATH variable: `C:\downloads\gust\`
 
 > Note: last `\` is necesery for it to work
 
@@ -61,7 +141,7 @@ After that, you can run the script using:
 
 gust -c "Your commit message"
 
-> Note: If you delete the accompanying gust.cmd file, you'll need to call the script explicitly using `gust.ps1`. In that case, include the full path or ensure the .ps1 file extension is recognized in your environment.
+> Note: If you delete the `gust.cmd` file, you'll need to call the script explicitly using `gust.ps1`. In that case, include the full path or ensure the .ps1 file extension is recognized in your environment.
 
 ## Final Note
 
