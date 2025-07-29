@@ -16,25 +16,25 @@
 
 ## Parameters
 
-| Parameter   | Required  | Description | Aliases |
+| Parameter   | Required  | Description | Aliases  |
 |-------------|---------- |-------------| -------- |
-| -message    | Sometimes | Your commit message you want to use| -c (as commit message) |
-| -gitURL     | Only required when initializing repository | The GitHub repository URL (omit .git at the end it will be added automatically) | -u (as URL) |
-| -otherModes|most of the time|This is used to change the mode you want to do, also it has configurable default value `"defaultMode" : "c"` | -m (as mode) |
-| -branch | no | this is for working branches, it has default configurable in config under `"defaultBranch" : "main",`in some cases as `main`| -b |
-| -number | no | this is used when you need some number as an input (now it's only used in log, it has default configurable in config `"defaultLogLength" : 5,`| -n | 
+| -message    | Sometimes                                  | Your commit message you want to use                                                                                                           | -c (as commit message) |
+| -gitURL     | Only required when initializing repository | The GitHub repository URL (omit .git at the end it will be added automatically)                                                               | -u (as URL)            |
+| -otherModes | most of the time                           | This is used to change the mode you want to do, also it has configurable default value `"defaultMode" : "c"`                                  | -m (as mode)           |
+| -branch     | no                                         | this is for working branches, it has default configurable in config under `"defaultBranch" : "main",`in some cases as `main`                  | -b                     |
+| -number     | no                                         | this is used when you need some number as an input (now it's only used in log, it has default configurable in config `"defaultLogLength" : 5,`| -n                     | 
 
 ## Mode parameters
 
 |Name | Description |
 |-----|-------------|
-| c(commit) | This is configs default. Adds a commit message and pushes to your GitHub repository. |
-| b(ranch)s(witch)c(create) | Creates a new branch and switches to the new branch. |
-| b(ranch)s(witch) | Switches to an existing branch. |
-| b(ranch)d(elete) | Deletes an existing branch. |
-| s(tatus) | Shows the status of current branch. |
-| p(ull) | Pulls the latest changes from your remote repository. |
-| l(og) | Shows recent commits (default number or set with -number / -n). |
+| c(commit)                 | This is configs default. Adds a commit message and pushes to your GitHub repository. |
+| b(ranch)s(witch)c(create) | Creates a new branch and switches to the new branch.                                 |
+| b(ranch)s(witch)          | Switches to an existing branch.                                                      |
+| b(ranch)d(elete)          | Deletes an existing branch.                                                          |
+| s(tatus)                  | Shows the status of current branch.                                                  |
+| p(ull)                    | Pulls the latest changes from your remote repository.                                |
+| l(og)                     | Shows recent commits (default number or set with -number / -n).                      |
 
 ## configurations
 
@@ -55,16 +55,16 @@
 
 | key | description |
 | --- | ----------- |
-| defaultBranch | Default branch to push to. |
-| defaultRemote | Default git remote name. |
-| userName | Used if no git config is set for user.name. |
-| userEmail | Used if no git config is set for user.email. |
-| changeNameGlobal | Boolean value that makes the name / email change global or local (to enable name changing you have to change the userEmail to your email address and userName to your name) |
-| autoPullBeforePush | If `True` this sets if you automatically pull before pushing. |
-| defaultCommitMessage | Used as no commit message is inputted. |
-| forceBranchDelete | If `true` uses `-D` (force deletes) branches. |
-| defaultLogLength | Number of commits shown when using the `log` mode. |
-| defaultMode | Default mode used when no mode is inputted. |
+| defaultBranch        | Default branch to push to.                                                                                                                                                  |
+| defaultRemote        | Default git remote name.                                                                                                                                                    |
+| userName             | Used if no git config is set for user.name.                                                                                                                                 |
+| userEmail            | Used if no git config is set for user.email.                                                                                                                                |
+| changeNameGlobal     | Boolean value that makes the name / email change global or local (to enable name changing you have to change the userEmail to your email address and userName to your name) |
+| autoPullBeforePush   | If `True` this sets if you automatically pull before pushing.                                                                                                               |
+| defaultCommitMessage | Used as no commit message is inputted.                                                                                                                                      |
+| forceBranchDelete    | If `true` uses `-D` (force deletes) branches.                                                                                                                               |
+| defaultLogLength     | Number of commits shown when using the `log` mode.                                                                                                                          |
+| defaultMode          | Default mode used when no mode is inputted.                                                                                                                                 |
 
 ## Prerequisites
 
