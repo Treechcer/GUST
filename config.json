@@ -7,5 +7,6 @@
     "autoPullBeforePush": true,
     "defaultCommitMessage" : "small fixes",
     "forceBranchDelete": false,
-    "defaultLogLength" : 5
+    "defaultLogLength" : 5,
+    "defaultMode" : "c"
 }

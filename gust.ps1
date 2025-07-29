@@ -30,7 +30,8 @@ else{
         autoPullBeforePush = true;
         defaultCommitMessage = "small fixes";
         forceBranchDelete = false;
-        defaultLogLength = 5
+        defaultLogLength = 5;
+        defaultMode = "c"
     }
 }
 
@@ -58,12 +59,12 @@ function checkUser{
         }
         else{
             if ($config.changeNameGlobal){
-                Write-Host "setting your name and email globaly to $(config.userName) and $(config.userEmail)"
+                Write-Host "setting your name and email globaly to $($config.userName) and $($config.userEmail)"
                 git config --global user.name "$config.userName"
                 git config --global user.email "$config.userEmail"
             }
             else{
-                Write-Host "setting your name and email localy to $(config.userName) and $(config.userEmail)"
+                Write-Host "setting your name and email localy to $($config.userName) and $($config.userEmail)"
                 git config user.name "$config.userName"
                 git config user.email "$config.userEmail"
             }
@@ -134,7 +135,7 @@ function branchDelete{
         exit 1
     }
 
-    if (config.forceBranchDelete){
+    if ($config.forceBranchDelete){
         $delType = "-D"
     }
     else{
@@ -145,6 +146,7 @@ function branchDelete{
     if ($LASTEXITCODE -ne 0){
         git branch
         Write-Host "$branch could not be safely delted"
+        exit 1
     }
     else{
         Write-Host "$branch was deleted"
@@ -166,8 +168,36 @@ function log{
 
 function behaviourCheck{
     #$otherModes
+
+    if ($otherModes -match "b(r(a(n(c(h)?)?)?)?)?"){
+        if ($otherModes -match "d(e(l(e(t(e)?)?)?)?)?"){
+            $otherModes = "bd"
+        }
+        elseif($otherModes -match "c(r(e(a(t(e)?)?)?)?)?" -and $otherModes -match "s(w(i(t(c(h)?)?)?)?)?"){
+            $otherModes = "bsc"
+        }
+        elseif($otherModes -match "s(w(i(t(c(h)?)?)?)?)?"){
+            $otherModes = "bs"
+        }
+    }
+    elseif ($otherModes -match "p(u(l(l)?)?)?"){
+        $otherModes = "p"
+    }
+    elseif ($otherModes -match "c(o(m(m(i(t)?)?)?)?)?"){
+        $otherModes = "c"
+    }
+    elseif ($otherModes -match "l(o(g)?)?"){
+        $otherModes = "log"
+    }
+    elseif ($otherModes -match "s(t(a(t(u(s)?)?)?)?)?"){
+        $otherModes = "s"
+    }
+    elseif ($otherModes -eq ""){
+        $otherModes = $config.defaultMode
+    }
+
     switch ($otherModes){
-        "" { # just git add, commit and push :)
+        "c" { # just git add, commit and push :)
             gitPushCreate
         }
         "bcs" { # branch create switch
