@@ -73,6 +73,8 @@ function checkUser{
 }
 
 function gitPushCreate{
+    git pull --no-edit
+
     if ($gitURL){
         if (-not $branch){
             $branch = $config.defaultBranch
