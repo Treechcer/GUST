@@ -86,7 +86,7 @@ function gitPushCreate{
 
         git remote add $config.defaultRemote "$gitURL.git"
 
-        if (config.autoPullBeforePush){
+        if ($config.autoPullBeforePush){
             git pull $config.defaultRemote $branch --allow-unrelated-histories 
         }
         git push --set-upstream $config.defaultRemote $branch 
