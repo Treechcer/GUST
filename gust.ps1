@@ -76,6 +76,8 @@ function gitPushCreate{
     git pull --no-edit
 
     if ($gitURL){
+        git push --set-upstream origin main
+        
         if (-not $branch){
             $branch = $config.defaultBranch
         }
