@@ -201,6 +201,8 @@ function behaviourCheck{
         $otherModes = $config.defaultMode
     }
 
+    $otherModes
+
     switch ($otherModes){
         "c" { # just git add, commit and push :)
             gitPushCreate
