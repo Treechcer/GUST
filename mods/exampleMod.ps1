@@ -16,6 +16,10 @@ function getModificationName{
     return "modTester"
 }
 
+function getModificationVersion{
+    return "1.0.0"
+}
+
 function getModifications{
     # Returns all modes (as regEx / string) this mod provides
     return $modifications
@@ -32,7 +36,8 @@ function behaviourSwitchCheck{
         "modTest" {
             Write-Host "mods work"
             # Any PowerShell action can go here but you have to implement them yourself 
-            # (or use dot-sourcing, you can use predefined GUST functions)
+            # (or use dot-sourcing, you can use predefined GUST functions... NOT RECOMENDET!)
+            # in newer version there's file 'modAPI.ps1' which contains SOME API for modding
         }
         Default {
             Write-Host "$name is not correct input"

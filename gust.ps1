@@ -15,6 +15,8 @@ param(
     [int]$number         # this is for any input that needs number, it has some default based on context
 )
 
+. "$PSScriptRoot\modAPI.ps1"
+
 $configPath = "$PSScriptRoot/config.json"
 
 if (Test-Path $configPath){
@@ -201,8 +203,6 @@ function behaviourCheck{
         $otherModes = $config.defaultMode
     }
 
-    $otherModes
-
     switch ($otherModes){
         "c" { # just git add, commit and push :)
             gitPushCreate
@@ -241,7 +241,7 @@ function runModification {
         [string]$modname
     )
 
-    . ./modLoader.ps1
+    . "$PSScriptRoot\modLoader.ps1"
 
     loadMods $modname
 }

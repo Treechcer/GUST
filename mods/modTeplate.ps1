@@ -1,5 +1,5 @@
 $modifications = @(
-    "gustImport"
+
 )
 
 function getModificationName{
@@ -11,7 +11,7 @@ function getModifications{
 }
 
 function getModificationVersion{
-    return "1.0.0"
+    return "0.1.0"
 }
 
 function behaviourSwitchCheck{
@@ -20,11 +20,8 @@ function behaviourSwitchCheck{
     )
 
     switch ($name) {
-        "gustImport" { 
-            # This makes mod able to call other mods
+        "-" { 
 
-            # This example calls "status" but it can call ANY mode
-            . "$PSScriptRoot\..\gust.ps1" -m "status"
         }
         Default {
             Write-Host "$name is not correct input"

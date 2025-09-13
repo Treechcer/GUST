@@ -3,7 +3,7 @@ function loadMods {
         [string]$modname
     )
 
-    $mods = Get-ChildItem -Path "mods" -Filter *.ps1
+    $mods = Get-ChildItem -Path "$PSScriptRoot\mods" -Filter *.ps1
 
     foreach ($mod in $mods){
         . $mod.FullName
