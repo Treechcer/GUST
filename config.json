@@ -8,5 +8,6 @@
     "defaultCommitMessage" : "small fixes",
     "forceBranchDelete": false,
     "defaultLogLength" : 5,
-    "defaultMode" : "c"
+    "defaultMode" : "c",
+    "runModification" : true
 }
