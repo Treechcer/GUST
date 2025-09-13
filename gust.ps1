@@ -175,26 +175,26 @@ function behaviourCheck{
     #$otherModes
 
     if ($otherModes -match "^b(r(a(n(c(h)?)?)?)?)?"){
-        if ($otherModes -match "d(e(l(e(t(e)?)?)?)?)?"){
+        if ($otherModes -match "d(e(l(e(t(e)?)?)?)?)?$"){
             $otherModes = "bd"
         }
         elseif($otherModes -match "c(r(e(a(t(e)?)?)?)?)?" -and $otherModes -match "s(w(i(t(c(h)?)?)?)?)?"){
             $otherModes = "bcs"
         }
-        elseif($otherModes -match "s(w(i(t(c(h)?)?)?)?)?"){
+        elseif($otherModes -match "s(w(i(t(c(h)?)?)?)?)?$"){
             $otherModes = "bs"
         }
     }
-    elseif ($otherModes -match "^p(u(l(l)?)?)?"){
+    elseif ($otherModes -match "^p(u(l(l)?)?)?$"){
         $otherModes = "p"
     }
-    elseif ($otherModes -match "^c(o(m(m(i(t)?)?)?)?)?"){
+    elseif ($otherModes -match "^c(o(m(m(i(t)?)?)?)?)?$"){
         $otherModes = "c"
     }
-    elseif ($otherModes -match "^l(o(g)?)?"){
+    elseif ($otherModes -match "^l(o(g)?)?$"){
         $otherModes = "log"
     }
-    elseif ($otherModes -match "^s(t(a(t(u(s)?)?)?)?)?"){
+    elseif ($otherModes -match "^s(t(a(t(u(s)?)?)?)?)?$"){
         $otherModes = "s"
     }
     elseif ($otherModes -eq ""){
