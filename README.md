@@ -143,6 +143,51 @@ gust -c "Your commit message"
 
 > Note: If you delete the `gust.cmd` file, you'll need to call the script explicitly using `gust.ps1`. In that case, include the full path or ensure the .ps1 file extension is recognized in your environment.
 
+## Modding Support
+
+GUST supports **mods** (external PowerShell scripts) to extend its functionality.  
+Each mod must follow a strict structure and expose specific functions so GUST can load and execute them.
+
+### Mod Structure
+
+A mod is a `.ps1` file placed in the `mods/` directory.  
+It must define these functions:
+
+- **getModificationName** → returns the mod’s name  
+- **getModificationVersion** → returns the mod’s version  
+- **getModifications** → returns a list of regex/string patterns that the mod recognizes as valid "modes"  
+- **behaviourSwitchCheck** → main function called when a mode matches
+
+> Function names **must not be changed**. Renaming them will break the mod system.
+
+### Example Mods
+
+There are already example mods included in the repository:
+
+- `mods/exampleMod1.ps1` (mod tester)
+- `mods/exampleMod2.ps1` (gust importer)
+
+You can use these as a reference to see how mods are structured.
+
+A reusable template is also provided in:
+
+- `mods/modTemplate.ps1`
+
+This file can be copied and modified to create your own mods quickly.
+
+## Mod API
+
+Mod API is stored in the file `modAPI.ps1`.  
+For now, it is only used as an easy way to access user inputs from the main GUST script.
+
+| Function       | Description |
+|----------------|-------------|
+| getMessage     | Returns the input for commit message. |
+| getURL         | Returns the input for repository URL. |
+| getOtherModes  | Returns the input for mode string. |
+| getBranch      | Returns the input for branch name. |
+| getNumber      | Returns the input for numeric input (used in log)|
+
 ## Final Note
 
 This was made mainly for my use, because these are most of the commands I use and it streamlines most of my committing to github.
