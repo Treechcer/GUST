@@ -16,9 +16,9 @@ function behaviourSwitchCheck{
     )
 
     switch ($name) {
-        "gustImport" {
-            . "$PSScriptRoot\..\gust.ps1"
-            status
+        "gustImport" { 
+            # This makes mod able to call other mods
+            . "$PSScriptRoot\..\gust.ps1" -m "status"
         }
         Default {
             Write-Host "$name is not correct input"
