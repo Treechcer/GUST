@@ -199,6 +199,9 @@ function behaviourCheck{
     elseif ($otherModes -match "^s(t(a(t(u(s)?)?)?)?)?$"){
         $otherModes = "s"
     }
+    elseif($otherModes -match "^l(i(s(t)?)?)?$"){
+        $otherModes = "l"
+    }
     elseif ($otherModes -eq ""){
         $otherModes = $config.defaultMode
     }
@@ -225,6 +228,9 @@ function behaviourCheck{
         "log"{
             log
         }
+        "l"{
+            writeMods
+        }
         default {
             if ($config.runModification){
                 runModification $otherModes
@@ -244,6 +250,18 @@ function runModification {
     . "$PSScriptRoot\modLoader.ps1"
 
     loadMods $modname
+}
+
+function writeMods{
+    . "$PSScriptRoot\modLoader.ps1"
+
+    $names = getNames
+
+    $versions = getVersions
+
+    for ($i = 0; $i -lt $names.Length; $i++){
+        Write-Host "[$($i + 1)] $($names[$i]) ($($versions[$i]))"
+    }
 }
 
 checkUser

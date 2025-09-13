@@ -11,8 +11,7 @@ $modifications = @(
 )
 
 function getModificationName{
-    # Returns the name of the mod (can be used for a mod manager or similar)
-    # Currently not used anywhere
+    # Returns the name of the mod (this is used for "mod manager")
     return "modTester"
 }
 

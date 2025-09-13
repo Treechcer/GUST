@@ -18,3 +18,29 @@ function loadMods {
         }
     }
 }
+
+function getNames{
+    $mods = Get-ChildItem -Path "$PSScriptRoot\mods" -Filter *.ps1
+
+    $names = @()
+
+    foreach ($mod in $mods){
+        . $mod.FullName
+        $names += getModificationName
+    }
+
+    return $names
+}
+
+function getVersions{
+    $mods = Get-ChildItem -Path "$PSScriptRoot\mods" -Filter *.ps1
+
+    $versions = @()
+
+    foreach ($mod in $mods){
+        . $mod.FullName
+        $versions += getModificationVersion
+    }
+
+    return $versions
+}
