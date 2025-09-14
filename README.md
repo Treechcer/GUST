@@ -22,7 +22,7 @@
 | gitURL      | Only required when initializing repository | The GitHub repository URL (omit .git at the end it will be added automatically)                                                               | -u (as URL)            |
 | otherModes  | most of the time                           | This is used to change the mode you want to do, also it has configurable default value `"defaultMode" : "c"`                                  | -m (as mode)           |
 | branch      | no                                         | this is for working branches, it has default configurable in config under `"defaultBranch" : "main",`in some cases as `main`                  | -b                     |
-| number      | no                                         | this is used when you need some number as an input (now it's only used in log, it has default configurable in config `"defaultLogLength" : 5,`| -n                     | 
+| number      | no                                         | this is used when you need some number as an input (now it's only used in log, it has default configurable in config `"defaultLogLength" : 5,`| -n                     |
 
 ## Mode parameters
 
@@ -129,7 +129,7 @@ This is showcase you don't need to use `-m` dor mode because you have default mo
 
 ## Set Up To Call GUST Globally
 
-You can make gust.ps1 callable from anywhere by adding its directory to your PATH environment variable. 
+You can make gust.ps1 callable from anywhere by adding its directory to your PATH environment variable.
 
 For example, if the script is located at: `C:\downloads\gust\gust.ps1`
 
