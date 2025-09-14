@@ -29,13 +29,10 @@ function behaviourSwitchCheck{
             . "$PSScriptRoot\..\modAPI.ps1" #you have use this for mod API calls
 
             $message = getMessage
-
-            if ($message -eq $null){
-                Write-Host "$you have to input commit message ('-c')"
-                return
+            $message
+            if ($message -ne ""){
+                . "$PSScriptRoot\..\gust.ps1" -m "c" -c $message
             }
-
-            . "$PSScriptRoot\..\gust.ps1" -m "c" -c $message
 
             $NAS = "\\192.168.0.209\nas\serverScripts"
 
