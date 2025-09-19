@@ -49,7 +49,8 @@
     "defaultCommitMessage" : "small fixes",
     "forceBranchDelete": false,
     "defaultLogLength" : 5,
-    "defaultMode" : "c"
+    "defaultMode" : "c",
+    "runModification" : true
 }
 ```
 
@@ -65,6 +66,7 @@
 | forceBranchDelete    | If `true` uses `-D` (force deletes) branches.                                                                                                                               |
 | defaultLogLength     | Number of commits shown when using the `log` mode.                                                                                                                          |
 | defaultMode          | Default mode used when no mode is inputted.                                                                                                                                 |
+|runModifications| Defaults to `true`, when it's true mods are enabled and can be executed.|
 
 ## Prerequisites
 
