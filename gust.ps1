@@ -75,13 +75,11 @@ function checkUser{
     }
 }
 
-function gitPushCreate{
+function gitPushCreate {
     git pull --no-edit
 
-    if ($gitURL){
-        git push --set-upstream origin main
-        
-        if (-not $branch){
+    if ($gitURL) {
+        if (-not $branch) {
             $branch = $config.defaultBranch
         }
 
@@ -91,21 +89,27 @@ function gitPushCreate{
 
         git remote add $config.defaultRemote "$gitURL.git"
 
-        if ($config.autoPullBeforePush){
-            git pull $config.defaultRemote $branch --allow-unrelated-histories 
+        if ($config.autoPullBeforePush) {
+            git pull $config.defaultRemote $branch --allow-unrelated-histories
         }
-        git push --set-upstream $config.defaultRemote $branch 
+
+        git add .
+        if (-not $message) {
+            $message = $config.defaultCommitMessage
+        }
+
+        git commit -m "$message" *>$null
+        git push --set-upstream $config.defaultRemote $branch
     }
+    else {
+        git add .
+        if (-not $message) {
+            $message = $config.defaultCommitMessage
+        }
 
-    $errAdd = git add . 
-
-    if (-not $message){
-        $message = $config.defaultCommitMessage
+        git commit -m "$message" *>$null
+        git push
     }
-
-    $errCom = git commit -m "$message" 
-
-    git push 
 }
 
 function branchCreateSwitch{
