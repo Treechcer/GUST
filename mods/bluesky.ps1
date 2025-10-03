@@ -194,7 +194,7 @@ function behaviourSwitchCheck{
                 $APIUrl = "https://bsky.social/xrpc/com.atproto.repo.createRecord"
                 $BSkyResponse = Invoke-RestMethod -Uri $APIUrl -Method Post -Headers $AuthHeader -Body $PostBody
                 
-                #callNormalMode "commit"
+                callNormalMode "commit"
             }
             else{
                 Write-Host "you don't have 'bluesky.json'"
