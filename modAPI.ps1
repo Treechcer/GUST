@@ -17,3 +17,12 @@ function getBranch{
 function getNumber{
     return $number
 }
+
+function callNormalMode{
+    #This function can call normal or standard modes from gust.ps1
+    param (
+        $mode
+    )
+    . "$PSScriptRoot\gust.ps1" -m "$mode" -c (getMessage) -u (getURL) -b (getBranch) -n (getNumber)
+    Write-Host "test"
+}

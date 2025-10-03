@@ -1,6 +1,6 @@
 # This mod is just a test to check if mods are enabled and working.
 # Run "gust -m 'modTest'" to verify that mods are active.
-# WARNING: function names: getModificationName, getModifications, and behaviourSwitchCheck must NOT be changed, or the mod will break the whole thing.
+# WARNING: function names: getModificationName, getModifications, behaviourSwitchCheck andversionOfGust must NOT be changed, or the mod will break the whole thing.
 
 $modifications = @(
     # List of all modes this mod recognizes.
@@ -9,6 +9,11 @@ $modifications = @(
     # - or use a pattern, e.g., '^a(n(y)?)?' which matches a, an, or any
     "^m(o(d(T(e(s(t)?)?)?)?)?)?"
 )
+
+function versionOfGust{
+    # This return the version gust had when you made mod, it's there to know for compatibility and other things (because modAPI might be rewriten etc.)
+    return "0.3.0"
+}
 
 function getModificationName{
     # Returns the name of the mod (this is used for "mod manager")
@@ -35,7 +40,7 @@ function behaviourSwitchCheck{
         "modTest" {
             Write-Host "mods work"
             # Any PowerShell action can go here but you have to implement them yourself 
-            # (or use dot-sourcing, you can use predefined GUST functions... NOT RECOMENDET!)
+            # (or you can with modAPI now call any 'normalMode' functions, it's in modAPI.ps1)
             # in newer version there's file 'modAPI.ps1' which contains SOME API for modding
         }
         Default {

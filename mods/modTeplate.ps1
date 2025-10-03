@@ -6,6 +6,10 @@ function getModificationName{
     return "gustImportShowcase"
 }
 
+function versionOfGust{
+    return "current gust version"
+}
+
 function getModifications{
     return $modifications
 }

@@ -12,7 +12,16 @@ function loadMods {
 
                 $modRegs = ($modRegs -replace "[^a-zA-Z]", "")
 
+                if ($Global:version -ne (versionOfGust)){
+                    Write-Host "⚠️ ⚠️ ⚠️"
+                    Write-Host "This mod might not be compatible"
+                    Write-Host "This mod was written for version $(versionOfGust)"
+                    Write-Host "You have $($Global:version)"
+                    Write-Host "⚠️ ⚠️ ⚠️"
+                }
+
                 behaviourSwitchCheck $modRegs
+
                 break
             }
         }

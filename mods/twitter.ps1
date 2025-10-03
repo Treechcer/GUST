@@ -1,9 +1,9 @@
 $modifications = @(
-    "gustImport"
+    "t(w(i(t(t(e(r)?)?)?)?)?)?"
 )
 
 function getModificationName{
-    return "gustImportShowcase"
+    return "twitter uploader"
 }
 
 function versionOfGust{
@@ -15,7 +15,7 @@ function getModifications{
 }
 
 function getModificationVersion{
-    return "1.0.0"
+    return "0.1.0"
 }
 
 function behaviourSwitchCheck{
@@ -24,12 +24,8 @@ function behaviourSwitchCheck{
     )
 
     switch ($name) {
-        "gustImport" { 
-            # This makes mod able to call other mods
-
-            # This example calls "status" but it can call ANY mode
-            . "$PSScriptRoot\..\modAPI.ps1"
-            callNormalMode "status"
+        "twitter" { 
+            #someday...
         }
         Default {
             Write-Host "$name is not correct input"
