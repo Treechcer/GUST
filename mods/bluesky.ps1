@@ -81,7 +81,7 @@ function behaviourSwitchCheck{
                     exit
                 }
 
-                $text = "Pushed new updates to $repoName!`nWith commit message as '$($commitMessage)'`n$repository`n`n#GitHub #Coding #DevLog $($tags[0]) $($tags[1]) $($tags[2]) $($tags[3])"
+                $text = "Pushed new updates to $repoName!`nWith commit message as '$($commitMessage)'`n $repository`n`n#GitHub #Coding #DevLog $($tags[0]) $($tags[1]) $($tags[2]) $($tags[3])"
                 $emojiCount = 0
                 $PostBody = @{
                     repo = $BSkyAccount
@@ -126,7 +126,7 @@ function behaviourSwitchCheck{
                                         tag = "DevLog"
                                     }
                                 )
-                            }
+                            },
                             @{
                                 index = @{
                                     byteStart = $text.IndexOf("#Coding") + ($emojiCount * 2)
@@ -138,7 +138,7 @@ function behaviourSwitchCheck{
                                         tag = "Coding"
                                     }
                                 )
-                            }
+                            },
                             @{
                                 index = @{
                                     byteStart = $text.IndexOf("$($tags[0])") + ($emojiCount * 2)
@@ -150,7 +150,7 @@ function behaviourSwitchCheck{
                                         tag = "$($tags[0].split('#')[1])"
                                     }
                                 )
-                            }
+                            },
                             @{
                                 index = @{
                                     byteStart = $text.IndexOf("$($tags[1])") + ($emojiCount * 2)
@@ -162,7 +162,7 @@ function behaviourSwitchCheck{
                                         tag = "$($tags[1].split('#')[1])"
                                     }
                                 )
-                            }
+                            },
                             @{
                                 index = @{
                                     byteStart = $text.IndexOf("$($tags[2])") + ($emojiCount * 2)
@@ -174,7 +174,7 @@ function behaviourSwitchCheck{
                                         tag = "$($tags[2].split('#')[1])"
                                     }
                                 )
-                            }
+                            },
                             @{
                                 index = @{
                                     byteStart = $text.IndexOf("$($tags[3])") + ($emojiCount * 2)
@@ -194,7 +194,7 @@ function behaviourSwitchCheck{
                 $APIUrl = "https://bsky.social/xrpc/com.atproto.repo.createRecord"
                 $BSkyResponse = Invoke-RestMethod -Uri $APIUrl -Method Post -Headers $AuthHeader -Body $PostBody
                 
-                callNormalMode "commit"
+                #callNormalMode "commit"
             }
             else{
                 Write-Host "you don't have 'bluesky.json'"

@@ -25,7 +25,7 @@ function behaviourSwitchCheck{
 
     switch ($name) {
         "twitter" { 
-            #someday...
+            #someday... later tho
         }
         Default {
             Write-Host "$name is not correct input"
