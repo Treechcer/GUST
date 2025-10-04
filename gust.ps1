@@ -15,7 +15,7 @@ param(
     [int]$number         # this is for any input that needs number, it has some default based on context
 )
 
-$Global:version = "0.3.2"
+$Global:version = "0.3.3"
 
 . "$PSScriptRoot\modAPI.ps1"
 
@@ -36,7 +36,8 @@ else{
         forceBranchDelete = false;
         defaultLogLength = 5;
         defaultMode = "c";
-        runModification = $true
+        runModification = $true;
+        runActions = $true
     }
 }
 
@@ -243,8 +244,13 @@ function behaviourCheck{
             }
             else{
                 Write-Host "$otherModes is not correct input"
+                exit
             }
         }
+    }
+    if ($config.runActions){
+        . "$PSScriptRoot\actions.ps1"
+        runActions
     }
 }
 
@@ -265,6 +271,10 @@ function writeMods {
     $versions = getVersions
     $gVersions = getGVersions
 
+    $names += getNames "actions"
+    $versions += getVersions "actions"
+    $gVersions += getGVersions "actions"
+
     Write-Host ("{0,-4} {1,-25} {2,-12} {3,-12} {4}" -f "#", "Name", "Local", "GUST Ver.", "Note")
     Write-Host ("-"*70)
 
@@ -275,11 +285,11 @@ function writeMods {
         if ($gVersions[$i] -ne $Global:version) {
             $eval = compareModVersions $Global:version $gVersions[$i]
 
-            if ($eval -eq "minor") {
+            if ($eval -eq "minor" -and ($eval -ne $true)) {
                 $bonus = "Minor versions differ"
                 $color = "Yellow"
             }
-            elseif ($eval -eq "release or major") {
+            elseif ($eval -eq "release or major" -and ($eval -ne $true)) {
                 $bonus = "Release or major versions differ"
                 $color = "Red"
             }

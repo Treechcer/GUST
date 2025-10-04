@@ -2,6 +2,26 @@
 
 **Gust** is a PowerShell script that automates common Git tasks for your GitHub repository (managing branches, pushing etc.) with all being configurable in `config.json`.
 
+## Table Of Contents (TOC)
+
+- [Gust – Git Utility Something Tool (PowerShell)](#gust--git-utility-something-tool-powershell)
+  - [Table Of Contents (TOC)](#table-of-contents-toc)
+  - [Features](#features)
+  - [Parameters](#parameters)
+  - [Mode parameters](#mode-parameters)
+  - [configurations](#configurations)
+  - [Prerequisites](#prerequisites)
+  - [Usage](#usage)
+  - [Set Up To Call GUST Globally](#set-up-to-call-gust-globally)
+  - [Modding Support](#modding-support)
+    - [Mod Structure](#mod-structure)
+    - [Example Mods](#example-mods)
+  - [Action Support](#action-support)
+    - [Action Structure](#action-structure)
+    - [Example actions](#example-actions)
+  - [Mod / action API](#mod--action-api)
+  - [Final Note](#final-note)
+
 ## Features
 
 - Verifies if the user has set `user.name` and `user.email` (global and local) - or set their name and email in config with `"changeNameGlobal" : true` (default is false)
@@ -155,6 +175,7 @@ Each mod must follow a strict structure and expose specific functions so GUST ca
 A mod is a `.ps1` file placed in the `mods/` directory.  
 It must define these functions:
 
+- **versionOfGust** → return GUST version the mod is for
 - **getModificationName** → returns the mod’s name  
 - **getModificationVersion** → returns the mod’s version  
 - **getModifications** → returns a list of regex/string patterns that the mod recognizes as valid "modes"  
@@ -177,7 +198,39 @@ A reusable template is also provided in:
 
 This file can be copied and modified to create your own mods quickly.
 
-## Mod API
+## Action Support
+
+GUST supports **actions** (external PowerShell scripts, similar to mods) to extend its functionality.  
+Each action file must follow a strict structure and expose specific functions so GUST can load and execute them.
+
+### Action Structure
+
+A action file is a `.ps1` file placed in the `actions/` directory.  
+It must define these functions:
+
+- **versionOfGust** → return GUST version the mod is for
+- **getActionName** → returns the action’s name  
+- **getActionVersion** → returns the action’s version  
+- **getActions** → returns a list of string names that the mod recognizes as valid "modes"  
+- **behaviourSwitchCheck** → main function called when a mode matches
+
+> Function names **must not be changed**. Renaming them will break the action system.
+
+### Example actions
+
+There are already example actions included in the repository:
+
+- `actions/actionExample.ps1` (action tester)
+
+You can use these as a reference to see how actions are structured.
+
+A reusable template is also provided in:
+
+- `actions/actionTemplate.ps1`
+
+This file can be copied and modified to create your own mods quickly.
+
+## Mod / action API
 
 Mod API is stored in the file `modAPI.ps1`.  
 For now, it is only used as an easy way to access user inputs and GUST functionality from the main GUST script.

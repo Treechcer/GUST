@@ -9,5 +9,6 @@
     "forceBranchDelete": false,
     "defaultLogLength" : 5,
     "defaultMode" : "c",
-    "runModification" : true
+    "runModification" : true,
+    "runActions" : true
 }

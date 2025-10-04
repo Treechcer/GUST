@@ -1,20 +1,20 @@
-$modifications = @(
+$actions = @(
 
 )
 
-function getModificationName{
+function getActionName{
     return "gustModShowCase"
 }
 
 function versionOfGust{
-    return "0.3.3"
+    return "$Global:version"
 }
 
-function getModifications{
-    return $modifications
+function getActions{
+    return $actions
 }
 
-function getModificationVersion{
+function getActionVersion{
     return "0.1.0"
 }
 
@@ -24,7 +24,7 @@ function behaviourSwitchCheck{
     )
 
     switch ($name) {
-        "-" { 
+        "" { 
 
         }
         Default {

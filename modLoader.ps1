@@ -14,14 +14,14 @@ function loadMods {
 
                 $eval = compareModVersions $Global:version (versionOfGust)
 
-                if ($eval -eq "release or major"){
+                if ($eval -eq "release or major" -and ($eval -ne $true)){
                     Write-Host "⚠️ ⚠️ ⚠️"
                     Write-Host "This mod might not be compatible"
                     Write-Host "This mod was written for version $(versionOfGust)"
                     Write-Host "You have $($Global:version)"
                     Write-Host "⚠️ ⚠️ ⚠️"
                 }
-                elseif ($eval -eq "minor"){
+                elseif ($eval -eq "minor" -and ($eval -ne $true)){
                     Write-Host "⚠️ ⚠️ ⚠️"
                     Write-Host "mod isn't updated to the newest minor version"
                     Write-Host "it might have some incompatibilities"
@@ -60,39 +60,70 @@ function compareModVersions {
 }
 
 function getNames{
-    $mods = Get-ChildItem -Path "$PSScriptRoot\mods" -Filter *.ps1
+    param(
+        $folder = "mods"
+    )
+
+    $mods = Get-ChildItem -Path "$PSScriptRoot\$folder" -Filter *.ps1
 
     $names = @()
 
+    if ($folder -eq "mods"){
+        $f = "getModificationName"
+    }
+    elseif ($folder -eq "actions"){
+        $f = "getActionName"
+    }
+
     foreach ($mod in $mods){
         . $mod.FullName
-        $names += getModificationName
+        $names += & $f
     }
 
     return $names
 }
 
 function getVersions{
-    $mods = Get-ChildItem -Path "$PSScriptRoot\mods" -Filter *.ps1
+    param(
+        $folder = "mods"
+    )
+    $mods = Get-ChildItem -Path "$PSScriptRoot\$folder" -Filter *.ps1
+
+    if ($folder -eq "mods"){
+        $f = "getModificationVersion"
+    }
+    elseif ($folder -eq "actions"){
+        $f = "getActionVersion"
+    }
 
     $versions = @()
 
     foreach ($mod in $mods){
         . $mod.FullName
-        $versions += getModificationVersion
+        $versions += & $f
     }
 
     return $versions
 }
 
 function getGVersions{
-    $mods = Get-ChildItem -Path "$PSScriptRoot\mods" -Filter *.ps1
+    param(
+        $folder = "mods"
+    )
+    $mods = Get-ChildItem -Path "$PSScriptRoot\$folder" -Filter *.ps1
+
+    if ($folder -eq "mods"){
+        $f = "versionOfGust"
+    }
+    elseif ($folder -eq "actions"){
+        $f = "versionOfGust"
+    }
 
     $versions = @()
 
     foreach ($mod in $mods){
         . $mod.FullName
-        $versions += versionOfGust
+        $versions += & $f
     }
 
     return $versions
