@@ -85,6 +85,8 @@ function behaviourSwitchCheck{
                 
                 if ($text.Length -gt 300){
                     Write-Host "Input is too long, it can't be more than 300 characters"
+                    Write-Host ($text.Length)
+                    exit
                 }
                 
                 $emojiCount = 0
