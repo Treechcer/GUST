@@ -180,7 +180,7 @@ This file can be copied and modified to create your own mods quickly.
 ## Mod API
 
 Mod API is stored in the file `modAPI.ps1`.  
-For now, it is only used as an easy way to access user inputs from the main GUST script.
+For now, it is only used as an easy way to access user inputs and GUST functionality from the main GUST script.
 
 | Function       | Description |
 |----------------|-------------|
@@ -189,6 +189,8 @@ For now, it is only used as an easy way to access user inputs from the main GUST
 | getOtherModes  | Returns the input for mode string. |
 | getBranch      | Returns the input for branch name. |
 | getNumber      | Returns the input for numeric input (used in log)|
+| callNormalMode | Executes a normal mode with the parameters you passed to GUST. |
+| getConfigValue | Return any value in config variable / config.json. |
 
 ## Final Note
 

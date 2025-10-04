@@ -26,3 +26,11 @@ function callNormalMode{
     . "$PSScriptRoot\gust.ps1" -m "$mode" -c (getMessage) -u (getURL) -b (getBranch) -n (getNumber)
     Write-Host "test"
 }
+
+function getConfigValue {
+    param (
+        $valueName
+    )
+
+    return ($config.$valueName)
+}
