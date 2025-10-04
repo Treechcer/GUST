@@ -82,6 +82,11 @@ function behaviourSwitchCheck{
                 }
 
                 $text = "Pushed new updates to $repoName!`nWith commit message as '$($commitMessage)'`n $repository`n`n#GitHub #Coding #DevLog $($tags[0]) $($tags[1]) $($tags[2]) $($tags[3])"
+                
+                if ($text.Length -gt 300){
+                    Write-Host "Input is too long, it can't be more than 300 characters"
+                }
+                
                 $emojiCount = 0
                 $PostBody = @{
                     repo = $BSkyAccount
