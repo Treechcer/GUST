@@ -15,7 +15,7 @@ param(
     [int]$number         # this is for any input that needs number, it has some default based on context
 )
 
-$Global:version = "0.3.0"
+$Global:version = "0.3.2"
 
 . "$PSScriptRoot\modAPI.ps1"
 
@@ -258,15 +258,36 @@ function runModification {
     loadMods $modname
 }
 
-function writeMods{
+function writeMods {
     . "$PSScriptRoot\modLoader.ps1"
 
     $names = getNames
-
     $versions = getVersions
+    $gVersions = getGVersions
 
-    for ($i = 0; $i -lt $names.Length; $i++){
-        Write-Host "[$($i + 1)] $($names[$i]) ($($versions[$i]))"
+    Write-Host ("{0,-4} {1,-25} {2,-12} {3,-12} {4}" -f "#", "Name", "Local", "GUST Ver.", "Note")
+    Write-Host ("-"*70)
+
+    for ($i = 0; $i -lt $names.Length; $i++) {
+        $bonus = ""
+        $color = "Gray"
+
+        if ($gVersions[$i] -ne $Global:version) {
+            $eval = compareModVersions $Global:version $gVersions[$i]
+
+            if ($eval -eq "minor") {
+                $bonus = "Minor versions differ"
+                $color = "Yellow"
+            }
+            elseif ($eval -eq "release or major") {
+                $bonus = "Release or major versions differ"
+                $color = "Red"
+            }
+        }
+
+        $line = ("[{0}] {1,-25} {2,-12} {3,-12} {4}" -f ($i + 1), $names[$i], "($($versions[$i]))", $gVersions[$i], $bonus)
+
+        Write-Host $line -ForegroundColor $color
     }
 }
 

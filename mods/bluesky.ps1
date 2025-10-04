@@ -10,7 +10,7 @@ function getModificationName{
 }
 
 function versionOfGust{
-    return "0.3.0"
+    return "0.3.2"
 }
 
 function getModificationVersion{

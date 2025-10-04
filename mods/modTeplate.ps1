@@ -3,11 +3,11 @@ $modifications = @(
 )
 
 function getModificationName{
-    return "gustImportShowcase"
+    return "gustModShowCase"
 }
 
 function versionOfGust{
-    return "current gust version"
+    return "0.3.2"
 }
 
 function getModifications{

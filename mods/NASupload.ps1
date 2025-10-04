@@ -11,6 +11,10 @@ function getModificationName{
     return "NAS-uploader"
 }
 
+function versionOfGust{
+    return "0.3.2"
+}
+
 function getModificationVersion{
     return "0.1.0"
 }

@@ -12,7 +12,7 @@ $modifications = @(
 
 function versionOfGust{
     # This return the version gust had when you made mod, it's there to know for compatibility and other things (because modAPI might be rewriten etc.)
-    return "0.3.0"
+    return "$Global:version" # you shouldn't do this because it makes it harder to know if your mod is broken because of changes in mod API but this mod won't change nor uses modAPID much
 }
 
 function getModificationName{
