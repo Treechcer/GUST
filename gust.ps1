@@ -15,31 +15,13 @@ param(
     [int]$number         # this is for any input that needs number, it has some default based on context
 )
 
-$Global:version = "0.3.5"
+$Global:version = "0.3.6"
 
-. "$PSScriptRoot\modAPI.ps1"
-
-$configPath = "$PSScriptRoot/config.json"
-
-if (Test-Path $configPath){
-    $config = Get-Content $configPath | ConvertFrom-Json
-}
-else{
-    $config = [PSCustomObject]@{
-        defaultBranch = "main";
-        defaultRemote = "origin";
-        userName = $null;
-        userEmail = $null;
-        changeNameGlobal = false;
-        autoPullBeforePush = true;
-        defaultCommitMessage = "small fixes";
-        forceBranchDelete = false;
-        defaultLogLength = 5;
-        defaultMode = "c";
-        runModification = $true;
-        runActions = $true
-    }
-}
+#$config = Get-Content $configPath | ConvertFrom-Json
+#
+#$jsonContent = $config | ConvertTo-Json -Depth 3
+#
+#$jsonContent | Set-Content -Path "$PSScriptRoot/config.json" -Encoding UTF8
 
 function checkUser{
     $username = git config --global user.name
@@ -192,6 +174,18 @@ function behaviourCheck{
             $otherModes = "bs"
         }
     }
+    elseif ($otherModes -match "^s(w(i(t(c(h)?)?)?)?)?"){
+        if ($otherModes -match "p(r(o(f(i(l(e)?)?)?)?)?)?"){
+            $otherModes = "swp"
+        }
+    }
+    elseif ($otherModes -match "^c(r(e(a(t(e)?)?)?)?)?"){
+        if ($otherModes -match "n(e(w)?)?"){
+            if ($otherModes -match "p(r(o(f(i(l(e)?)?)?)?)?)?"){
+                $otherModes = "cnp"
+            }
+        }
+    }
     elseif ($otherModes -match "^p(u(l(l)?)?)?$"){
         $otherModes = "p"
     }
@@ -247,6 +241,12 @@ function behaviourCheck{
         }
         "NOMODE"{
 
+        }
+        "swp"{
+            swp
+        }
+        "cnp"{
+            cnp
         }
         default {
             if ($config.runModification){
@@ -325,6 +325,137 @@ function update {
 
 function getVersion {
     return $Global:version
+}
+
+function swp{
+    $okayName = $true
+    while ($okayName){
+        $name = Read-Host "what is the name of profile you want to switch to? if you want to terminate this type /q"
+
+        if ($name -eq "/q"){
+            break
+        }
+
+        $profileName = Get-Content "$PSScriptRoot/profiles/profiles.json" | ConvertFrom-Json
+        $profileName.current = $name
+
+        try {
+            $config = Get-Content "$PSScriptRoot/profiles/$($profileName.current)/config.json" -ErrorAction Stop | ConvertFrom-Json
+            $okayName = $false
+        }
+        catch {
+            $profileName.current = "default"
+            $profileName = $profileName | ConvertTo-Json -Depth 3
+            $profileName | Set-Content -Path "$PSScriptRoot/profiles/profiles.json" -Encoding UTF8
+        }
+    }
+}
+
+function cnp{
+    $okayName = $true
+    while ($okayName){
+        $name = Read-Host "how do you want to name your profile? if you want to terminate this type /q"
+
+        if ($name -eq "/q"){
+            break
+        }
+
+        $profileName = Get-Content "$PSScriptRoot/profiles/profiles.json" | ConvertFrom-Json
+        $profileName.current = $name
+
+        try {
+            $config = Get-Content "$PSScriptRoot/profiles/$($profileName.current)/config.json" -ErrorAction Stop | ConvertFrom-Json
+            Write-Host "Profile already exists"
+        }
+        catch {
+            $profileName.current = "$name"
+            $profileName = $profileName | ConvertTo-Json -Depth 3
+            $profileName | Set-Content -Path "$PSScriptRoot/profiles/profiles.json" -Encoding UTF8
+
+            mkdir $PSScriptRoot/profiles/$name
+            $pConf = getDefaultConf | ConvertTo-Json -Depth 3
+            $pConf | Set-Content -Path "$PSScriptRoot/profiles/$name/config.json" -Encoding UTF8
+
+            $pStats = getDefaultStats | ConvertTo-Json -Depth 3
+            $pStats | Set-Content -Path "$PSScriptRoot/profiles/$name/stats.json" -Encoding UTF8
+
+            $okayName = $false
+        }   
+    }
+}
+
+function profileCheck {
+    #$files = Get-ChildItem -Path "$PSScriptRoot/profiles" -File
+
+    $profileName = Get-Content "$PSScriptRoot/profiles/profiles.json" | ConvertFrom-Json
+    
+    try {
+        $config = Get-Content "$PSScriptRoot/profiles/$($profileName.current)/config.json" -ErrorAction Stop | ConvertFrom-Json   
+    }
+    catch {
+        $profileName.current = "default"
+        $profileName = $profileName | ConvertTo-Json -Depth 3
+        $profileName | Set-Content -Path "$PSScriptRoot/profiles/profiles.json" -Encoding UTF8
+    }
+
+    return "$PSScriptRoot/profiles/$($profileName.current)/config.json"
+
+}
+
+function getDefaultConf{
+    $config = [PSCustomObject]@{
+        defaultBranch = "main";
+        defaultRemote = "origin";
+        userName = $null;
+        userEmail = $null;
+        changeNameGlobal = false;
+        autoPullBeforePush = true;
+        defaultCommitMessage = "small fixes";
+        forceBranchDelete = false;
+        defaultLogLength = 5;
+        defaultMode = "c";
+        runModification = $true;
+        runActions = $true
+    }
+
+    return $config
+}
+
+function getDefaultStats{
+    $stats = [PSCustomObject]@{
+        temp = "None"
+    }
+
+    return $stats
+}
+
+. "$PSScriptRoot\modAPI.ps1"
+
+$configPath = $(profileCheck)
+
+if (Test-Path $configPath){
+    $config = Get-Content $configPath | ConvertFrom-Json
+}
+else{
+    $config = [PSCustomObject]@{
+        defaultBranch = "main";
+        defaultRemote = "origin";
+        userName = $null;
+        userEmail = $null;
+        changeNameGlobal = false;
+        autoPullBeforePush = true;
+        defaultCommitMessage = "small fixes";
+        forceBranchDelete = false;
+        defaultLogLength = 5;
+        defaultMode = "c";
+        runModification = $true;
+        runActions = $true
+    }
+
+    $jsonContent = $config | ConvertTo-Json -Depth 3
+
+    $jsonContent | Set-Content -Path "$PSScriptRoot/config.json" -Encoding UTF8
+
 }
 
 checkUser
