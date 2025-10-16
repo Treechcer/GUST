@@ -15,7 +15,7 @@ param(
     [int]$number         # this is for any input that needs number, it has some default based on context
 )
 
-$Global:version = "0.3.6"
+$Global:version = "0.4.0"
 
 #$config = Get-Content $configPath | ConvertFrom-Json
 #
@@ -262,6 +262,7 @@ function behaviourCheck{
         . "$PSScriptRoot\actions.ps1"
         runActions
     }
+    addStats
 }
 
 function runModification {
@@ -402,6 +403,18 @@ function profileCheck {
 
 }
 
+function addStats{
+    $profile = Get-Content "$PSScriptRoot/profiles/profiles.json" | ConvertFrom-Json
+    
+    $config = Get-Content "$PSScriptRoot/profiles/$($profile.current)/stats.json" -ErrorAction Stop | ConvertFrom-Json
+    if ($config.PSObject.Properties.Match($otherModes).Count -eq 0) {
+        $config | Add-Member -MemberType NoteProperty -Name $otherModes -Value 0
+    }
+    $config.$otherModes += 1
+    $config = $config | ConvertTo-Json -Depth 3
+    $config | Set-Content -Path "$PSScriptRoot/profiles/$($profile.current)/stats.json" -Encoding UTF8 
+}
+
 function getDefaultConf{
     $config = [PSCustomObject]@{
         defaultBranch = "main";
@@ -423,7 +436,7 @@ function getDefaultConf{
 
 function getDefaultStats{
     $stats = [PSCustomObject]@{
-        temp = "None"
+        
     }
 
     return $stats
