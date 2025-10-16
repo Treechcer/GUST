@@ -210,6 +210,9 @@ function behaviourCheck{
     elseif($otherModes -match "^u(p(d(a(t(e)?)?)?)?)?$" -or $otherModes -match "-update"){
         $otherModes = "up"
     }
+    elseif ($otherModes -eq "NOMODE") {
+        $otherModes = "NOMODE"
+    }
     elseif ($otherModes -eq ""){
         $otherModes = $config.defaultMode
     }
@@ -241,6 +244,9 @@ function behaviourCheck{
         }
         "up"{
             update
+        }
+        "NOMODE"{
+
         }
         default {
             if ($config.runModification){
@@ -309,8 +315,8 @@ function update {
     . "$PSScriptRoot\install.ps1"
     install
 
-    . "$PSScriptRoot\temp\gust.ps1"
-    Write-Host getVersion
+    . "$PSScriptRoot\temp\gust.ps1" "NOMODE"
+    Write-Host $(getVersion)
 }
 
 function getVersion {
