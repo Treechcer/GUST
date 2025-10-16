@@ -13,6 +13,8 @@
   - [Prerequisites](#prerequisites)
   - [Usage](#usage)
   - [Set Up To Call GUST Globally](#set-up-to-call-gust-globally)
+    - [automatic setup (recommended)](#automatic-setup-recommended)
+    - [manual GitHub clone](#manual-github-clone)
   - [Modding Support](#modding-support)
     - [Mod Structure](#mod-structure)
     - [Example Mods](#example-mods)
@@ -107,11 +109,15 @@ git config --global user.email "your@email.com"
 
 This is an example of pushing and setting up remote code to your GitHub repository.
 
+---
+
 ```powershell
 .\gust.ps1 -c "Refactor UI"
 ```
 
 This is an example of committing to an already established repository.
+
+---
 
 ``` powershell
 .\gust.ps1 -m "bcs" -b "coolBranch"
@@ -119,11 +125,15 @@ This is an example of committing to an already established repository.
 
 this is example of creating a new branch and switching to the branch
 
+---
+
 ```powershell
 .\gust.ps1 -m "bs" -b "main"
 ```
 
 This is example of switching to a already existing branch.
+
+---
 
 ```powershell
 .\gust.ps1 -m "bd" -b "coolBranch"
@@ -131,11 +141,15 @@ This is example of switching to a already existing branch.
 
 This is example of deleting a existing branch.
 
+---
+
 ```powershell
 .\gust.ps1 -m "s"
 ```
 
 This is example of showing git status.
+
+---
 
 ```powershell
 .\gust.ps1 -m "log" -n 8
@@ -143,13 +157,35 @@ This is example of showing git status.
 
 This is example of showing the log provided the length of how much you want (in this you'l see 8 things in the log).
 
+---
+
 ```powershell
 .\gust.ps1 -c "Bug fixes"
 ```
 
 This is showcase you don't need to use `-m` dor mode because you have default mode in config (which defaults to `c` - commit mode).
 
+---
+
+```powershell
+.\gust.ps1 --update
+```
+
+This automatically updates to the newest version of GUST, by using github commits and downloading from there. This might download unstable version.
+
 ## Set Up To Call GUST Globally
+
+### automatic setup (recommended)
+
+1. Download file `install.ps1` from this repository.
+2. Add it into your desired folder where you want GUST to be saved and downloaded.
+3. After that run the file and it will automatically download and set itself into Path in Windows.
+
+> Note: no linux support for automatic download, because I have no idea how that would work or even if
+
+After this GUST should be fully working and you should be able to use it.
+
+### manual GitHub clone
 
 You can make gust.ps1 callable from anywhere by adding its directory to your PATH environment variable.
 
