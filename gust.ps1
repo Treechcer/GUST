@@ -15,7 +15,7 @@ param(
     [int]$number         # this is for any input that needs number, it has some default based on context
 )
 
-$Global:version = "0.3.4"
+$Global:version = "0.3.5"
 
 . "$PSScriptRoot\modAPI.ps1"
 
