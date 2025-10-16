@@ -15,7 +15,7 @@ param(
     [int]$number         # this is for any input that needs number, it has some default based on context
 )
 
-$Global:version = "0.3.3"
+$Global:version = "0.3.4"
 
 . "$PSScriptRoot\modAPI.ps1"
 
@@ -314,9 +314,13 @@ function writeMods {
 function update {
     . "$PSScriptRoot\install.ps1"
     install
-
+    v = $Global:version
     . "$PSScriptRoot\temp\gust.ps1" "NOMODE"
-    Write-Host $(getVersion)
+    Write-Host $(getVersion) $v
+    if ($(getVersion) -ne $v){
+        robocopy $PSScriptRoot\temp $PSScriptRoot /E /IS /IT
+    }
+    Remove-Item -Path $PSScriptRoot/temp -Recurse -Force
 }
 
 function getVersion {
