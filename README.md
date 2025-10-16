@@ -12,6 +12,9 @@
   - [configurations](#configurations)
   - [Prerequisites](#prerequisites)
   - [Usage](#usage)
+  - [Profiles](#profiles)
+    - [Stats](#stats)
+    - [Project Folder Structure](#project-folder-structure)
   - [Set Up To Call GUST Globally](#set-up-to-call-gust-globally)
     - [automatic setup (recommended)](#automatic-setup-recommended)
     - [manual GitHub clone](#manual-github-clone)
@@ -72,7 +75,8 @@
     "forceBranchDelete": false,
     "defaultLogLength" : 5,
     "defaultMode" : "c",
-    "runModification" : true
+    "runModification" : true,
+    "runActions" : true
 }
 ```
 
@@ -89,6 +93,7 @@
 | defaultLogLength     | Number of commits shown when using the `log` mode.                                                                                                                          |
 | defaultMode          | Default mode used when no mode is inputted.                                                                                                                                 |
 |runModifications| Defaults to `true`, when it's true mods are enabled and can be executed.|
+|runActions| Defaults to `true`, when it's true actions are enabled and will be executed.|
 
 ## Prerequisites
 
@@ -172,6 +177,65 @@ This is showcase you don't need to use `-m` dor mode because you have default mo
 ```
 
 This automatically updates to the newest version of GUST, by using github commits and downloading from there. This might download unstable version.
+
+## Profiles
+
+GUST has it's own profile manager, in `/profiles` is folder for every profile you have currently locally on your disc (in default it comes with `default` profile), you can create as many you want.
+
+```powershell
+gust -m "swp"
+```
+
+This is used to switch profiles from your current profile to other profile that exists.
+
+---
+
+```powershell
+gust -m "cnp"
+```
+
+This is used for creating a new profile that doesn't exists.
+
+> Note : you can't change configs with GUST in version 0.4.0 for now, so you have to change it by hand in `/profiles/'profileName'/config.json`.
+
+### Stats
+
+Every profile has `stats.json` in their respective folder, it counts how many times you used any command.
+
+> Note: it doesn't have any CLI output or any usage in version 0.4.0, it might have in future or you can write mod for it.
+
+### Project Folder Structure
+
+```plaintext
+  GUST/
+    actions/
+      actionTemplate.ps1
+      example.ps1
+    mods/
+      bluesky.ps1
+      exampleMod.ps1
+      exampleMod2.ps1
+      modTeplate.ps1
+      NASupload.ps1
+      twitter.ps1
+    profiles/
+      default/
+        stats.json
+        config.json
+      Custom/
+        stats.json
+        config.json
+    .gitignore
+    actions.ps1
+    config.json # THIS FILE WILL BE DELETED LATER !!!
+    gust.cmd
+    gust.ps1
+    install.ps1
+    LICENSE
+    modAPI.ps1
+    modLoader.ps1
+    README.md
+```
 
 ## Set Up To Call GUST Globally
 
