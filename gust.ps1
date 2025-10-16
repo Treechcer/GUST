@@ -320,7 +320,7 @@ function update {
 }
 
 function getVersion {
-    retrun $Global:version
+    return $Global:version
 }
 
 checkUser
