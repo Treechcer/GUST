@@ -1,5 +1,5 @@
 param(
-    [Boolean]$install = $false
+    [Boolean]$install = $True
 )
 
 function install{

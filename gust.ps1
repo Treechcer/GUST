@@ -312,7 +312,7 @@ function writeMods {
 }
 
 function update {
-    . "$PSScriptRoot\install.ps1"
+    . "$PSScriptRoot\install.ps1" $False
     install
     v = $Global:version
     . "$PSScriptRoot\temp\gust.ps1" "NOMODE"
