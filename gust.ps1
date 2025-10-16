@@ -1,12 +1,12 @@
 param(
+    [Alias("m")]
+    [string]$otherModes, # this adds more possibilities / "modes"
+
     [Alias("c")]
     [string]$message,    # commit message
 
     [Alias("u")]
     [string]$gitURL,     # URL, not necessary if you have alread "git add ."
-
-    [Alias("m")]
-    [string]$otherModes, # this adds more possibilities / "modes"
 
     [Alias("b")]
     [string]$branch,     # this is the name of the branch you'll use if you do branch create switch (bcs) mode
@@ -181,8 +181,6 @@ function log{
 }
 
 function behaviourCheck{
-    #$otherModes
-
     if ($otherModes -match "^b(r(a(n(c(h)?)?)?)?)?"){
         if ($otherModes -match "d(e(l(e(t(e)?)?)?)?)?$"){
             $otherModes = "bd"
@@ -208,6 +206,9 @@ function behaviourCheck{
     }
     elseif($otherModes -match "^l(i(s(t)?)?)?$"){
         $otherModes = "l"
+    }
+    elseif($otherModes -match "^u(p(d(a(t(e)?)?)?)?)?$" -or $otherModes -match "-update"){
+        $otherModes = "up"
     }
     elseif ($otherModes -eq ""){
         $otherModes = $config.defaultMode
@@ -237,6 +238,9 @@ function behaviourCheck{
         }
         "l"{
             writeMods
+        }
+        "up"{
+            update
         }
         default {
             if ($config.runModification){
@@ -299,6 +303,18 @@ function writeMods {
 
         Write-Host $line -ForegroundColor $color
     }
+}
+
+function update {
+    . "$PSScriptRoot\install.ps1"
+    install
+
+    . "$PSScriptRoot\temp\gust.ps1"
+    Write-Host getVersion
+}
+
+function getVersion {
+    retrun $Global:version
 }
 
 checkUser
