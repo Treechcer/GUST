@@ -388,6 +388,12 @@ function cnp{
 function profileCheck {
     #$files = Get-ChildItem -Path "$PSScriptRoot/profiles" -File
 
+    if (-not (Test-Path "$PSScriptRoot/profiles/profiles.json")){
+        $d = getDefaultProfiles
+        $d = $d | ConvertTo-Json -Depth 3
+        $d | Set-Content -Path "$PSScriptRoot/profiles/profiles.json" -Encoding UTF8
+    }
+
     $profileName = Get-Content "$PSScriptRoot/profiles/profiles.json" | ConvertFrom-Json
     
     try {
@@ -404,15 +410,15 @@ function profileCheck {
 }
 
 function addStats{
-    $profile = Get-Content "$PSScriptRoot/profiles/profiles.json" | ConvertFrom-Json
+    $profileF = Get-Content "$PSScriptRoot/profiles/profiles.json" | ConvertFrom-Json
     
-    $config = Get-Content "$PSScriptRoot/profiles/$($profile.current)/stats.json" -ErrorAction Stop | ConvertFrom-Json
+    $config = Get-Content "$PSScriptRoot/profiles/$($profileF.current)/stats.json" -ErrorAction Stop | ConvertFrom-Json
     if ($config.PSObject.Properties.Match($otherModes).Count -eq 0) {
         $config | Add-Member -MemberType NoteProperty -Name $otherModes -Value 0
     }
     $config.$otherModes += 1
     $config = $config | ConvertTo-Json -Depth 3
-    $config | Set-Content -Path "$PSScriptRoot/profiles/$($profile.current)/stats.json" -Encoding UTF8 
+    $config | Set-Content -Path "$PSScriptRoot/profiles/$($profileF.current)/stats.json" -Encoding UTF8 
 }
 
 function getDefaultConf{
@@ -432,6 +438,14 @@ function getDefaultConf{
     }
 
     return $config
+}
+
+function getDefaultProfiles{
+    $profileD = [PSCustomObject]@{
+        current = "default";
+    }
+
+    return $profileD
 }
 
 function getDefaultStats{
