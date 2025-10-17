@@ -273,7 +273,6 @@ function behaviourCheck{
     if ($config.runActions){
         . "$PSScriptRoot\actions.ps1"
         runActions
-        exit
     }
     addStats
 }
