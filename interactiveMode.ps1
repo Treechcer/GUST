@@ -1,5 +1,5 @@
 function startInteractive{
-    . "$PSScriptRoot/gust.ps1" "NOMODE"
+    . "$PSScriptRoot/gust.ps1"
     $running = $true
     Clear-Host
     introWriter
@@ -11,22 +11,8 @@ function startInteractive{
         if ($comm -eq ".exit" -or $comm -eq "3"){
             $running = $false
         }
-        elseif ($comm -match "^\.run" -or $comm[0] -eq "2"){
-            #THIS DOESN'T WORK, I'LL REDO IT LATER!!
-            
-            #if ($comm[0] -eq "2"){
-            #    $split = $comm -split "2"
-            #    $split = $split[1].Trim()
-            #}
-            #else{
-            #    $split = $comm -split "\.run"
-            #    $split = $split[1].Trim()
-            #}
-            #
-            #$cmd = "behaviourCheck " + $split
-            #Write-Host $cmd
-            #
-            #Invoke-Expression $cmd
+        elseif ($comm -match "^.run" -or $comm[0] -eq "2") {
+            # DAMN I CAN'T FIGURE THIS OUT!!! I WANT MOD SUPPORT TOO, I CAN DO IT WITHOUT IT EASILY
         }
         elseif ($comm -match "^\.update" -or $comm -eq "5"){
             . "$PSScriptRoot/gust.ps1" -update
@@ -34,17 +20,17 @@ function startInteractive{
         elseif ($comm -eq ".help" -or $comm -eq "1"){
             Write-Host ""
             Write-Host "Available GUST commands:"
-            Write-Host "  -c [message]         - Commit 'n' push"
-            Write-Host "  -p                   - GitHub pull abstraction"
-            Write-Host "  -s                   - Show git status and branches"
-            Write-Host "  -log [num]           - Show git log (either input num or default count from config)"
-            Write-Host "  -bcs [branch]        - Create and switch to new branch"
-            Write-Host "  -bs [branch]         - Switch to existing branch"
-            Write-Host "  -bd [branch]         - Delete a branch"
-            Write-Host "  -swp                 - Switch profile"
-            Write-Host "  -cnp                 - Create new profile"
-            Write-Host "  -mods                - List mods"
-            Write-Host "  -update              - Update Gust"
+            Write-Host "  c [message]         - Commit 'n' push"
+            Write-Host "  p                   - GitHub pull abstraction"
+            Write-Host "  s                   - Show git status and branches"
+            Write-Host "  log [num]           - Show git log (either input num or default count from config)"
+            Write-Host "  bcs [branch]        - Create and switch to new branch"
+            Write-Host "  bs [branch]         - Switch to existing branch"
+            Write-Host "  bd [branch]         - Delete a branch"
+            Write-Host "  swp                 - Switch profile"
+            Write-Host "  cnp                 - Create new profile"
+            Write-Host "  mods                - List mods"
+            Write-Host "  update              - Update Gust"
             Write-Host ""
             Write-Host "  ---- INTERACtIVE MODE COMMANDS ----"
             Write-Host "  .help or 1           - Shows this menu"

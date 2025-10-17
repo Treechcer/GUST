@@ -19,7 +19,7 @@ param(
     [switch]$interactive
 )
 
-$Global:version = "0.4.1"
+$Global:version = "0.4.2"
 
 #$config = Get-Content $configPath | ConvertFrom-Json
 #

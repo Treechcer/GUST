@@ -174,9 +174,25 @@ This is showcase you don't need to use `-m` dor mode because you have default mo
 
 ```powershell
 .\gust.ps1 --update
+.\gust.ps1 -update
+.\gust.ps1 -m "update"
 ```
 
 This automatically updates to the newest version of GUST, by using github commits and downloading from there. This might download unstable version.
+
+> Note : these are all ways to run update.
+
+---
+
+```powershell
+.\gust.ps1
+```
+
+No inputs in default does (this can be changed in config):
+
+```powershell
+.\gust.ps1 -c "small changes"
+```
 
 ## Profiles
 
