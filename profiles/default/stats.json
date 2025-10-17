@@ -1,4 +1,5 @@
 {
   "--interactive": 2,
-  "-interactive": 3
+  "-interactive": 3,
+  "c": 1
 }

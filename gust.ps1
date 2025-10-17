@@ -12,7 +12,11 @@ param(
     [string]$branch,     # this is the name of the branch you'll use if you do branch create switch (bcs) mode
 
     [Alias("n")]
-    [int]$number         # this is for any input that needs number, it has some default based on context
+    [int]$number,        # this is for any input that needs number, it has some default based on context
+
+    [switch]$update,
+
+    [switch]$interactive
 )
 
 $Global:version = "0.4.1"
@@ -163,7 +167,13 @@ function log{
 }
 
 function behaviourCheck{
-    if ($otherModes -match "^b(r(a(n(c(h)?)?)?)?)?"){
+    if ($interactive){
+        $otherModes = "interactive"
+    }
+    elseif($otherModes -match "^u(p(d(a(t(e)?)?)?)?)?$" -or $otherModes -match "-update" -or $update){
+        $otherModes = "up"
+    }
+    elseif ($otherModes -match "^b(r(a(n(c(h)?)?)?)?)?"){
         if ($otherModes -match "d(e(l(e(t(e)?)?)?)?)?$"){
             $otherModes = "bd"
         }
@@ -201,14 +211,8 @@ function behaviourCheck{
     elseif($otherModes -match "^l(i(s(t)?)?)?$"){
         $otherModes = "l"
     }
-    elseif($otherModes -match "^u(p(d(a(t(e)?)?)?)?)?$" -or $otherModes -match "-update"){
-        $otherModes = "up"
-    }
     elseif ($otherModes -eq "NOMODE") {
         $otherModes = "NOMODE"
-    }
-    elseif ($otherModes -eq "-interactive") {
-        $otherModes = "interactive"
     }
     elseif ($otherModes -eq ""){
         $otherModes = $config.defaultMode
@@ -253,7 +257,7 @@ function behaviourCheck{
         }
         "interactive"{
             . "$PSScriptRoot/interactiveMode.ps1"
-            interactive
+            startInteractive
             exit
         }
         default {
@@ -269,6 +273,7 @@ function behaviourCheck{
     if ($config.runActions){
         . "$PSScriptRoot\actions.ps1"
         runActions
+        exit
     }
     addStats
 }
