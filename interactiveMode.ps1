@@ -13,6 +13,8 @@ function startInteractive{
         }
         elseif ($comm -match "^.run" -or $comm[0] -eq "2") {
             # DAMN I CAN'T FIGURE THIS OUT!!! I WANT MOD SUPPORT TOO, I CAN DO IT WITHOUT IT EASILY
+            $cmd = . "$PSScriptRoot/gust.ps1" -m "log" -n 5
+            Invoke-Command $cmd
         }
         elseif ($comm -match "^\.update" -or $comm -eq "5"){
             . "$PSScriptRoot/gust.ps1" -update
