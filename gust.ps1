@@ -15,7 +15,7 @@ param(
     [int]$number         # this is for any input that needs number, it has some default based on context
 )
 
-$Global:version = "0.4.0"
+$Global:version = "0.4.1"
 
 #$config = Get-Content $configPath | ConvertFrom-Json
 #
@@ -207,6 +207,9 @@ function behaviourCheck{
     elseif ($otherModes -eq "NOMODE") {
         $otherModes = "NOMODE"
     }
+    elseif ($otherModes -eq "-interactive") {
+        $otherModes = "interactive"
+    }
     elseif ($otherModes -eq ""){
         $otherModes = $config.defaultMode
     }
@@ -247,6 +250,11 @@ function behaviourCheck{
         }
         "cnp"{
             cnp
+        }
+        "interactive"{
+            . "$PSScriptRoot/interactiveMode.ps1"
+            interactive
+            exit
         }
         default {
             if ($config.runModification){

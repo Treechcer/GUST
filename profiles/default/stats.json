@@ -1,3 +1,4 @@
 {
-  "NOMODE": 1
+  "--interactive": 2,
+  "-interactive": 3
 }
