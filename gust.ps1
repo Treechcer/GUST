@@ -217,7 +217,6 @@ function behaviourCheck{
     elseif ($otherModes -eq ""){
         $otherModes = $config.defaultMode
     }
-
     switch ($otherModes){
         "c" { # just git add, commit and push :)
             gitPushCreate

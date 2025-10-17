@@ -1,5 +1,6 @@
 {
   "--interactive": 2,
   "-interactive": 3,
-  "c": 1
+  "c": 4,
+  "NOMODE": 43
 }
