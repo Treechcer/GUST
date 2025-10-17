@@ -49,7 +49,7 @@ function compareModVersions {
     $releaseM = $version2.split(".")[0]
     $updateM = $version2.split(".")[1]
     $minorM = $version2.split(".")[2]
-    if (($updateG -ne $updateM) -and ($releaseG -ne $releaseM)){
+    if (($updateG -ne $updateM) -or ($releaseG -ne $releaseM)){
         return "release or major"
     }
     elseif ($minorG -ne $minorM){

@@ -3,7 +3,7 @@ $actions = @(
 )
 
 function getActionName{
-    return "gustModShowCase"
+    return "gustActionTemplate"
 }
 
 function versionOfGust{

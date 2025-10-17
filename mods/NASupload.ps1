@@ -4,7 +4,7 @@
 # 2 -> move specific files to NAS to serverScripts 
 
 $modifications = @(
-    "N(A(S)?)?"
+    "NAS"
 )
 
 function getModificationName{
@@ -12,7 +12,7 @@ function getModificationName{
 }
 
 function versionOfGust{
-    return "0.3.3"
+    return "0.4.3"
 }
 
 function getModificationVersion{

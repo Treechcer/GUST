@@ -19,7 +19,7 @@ param(
     [switch]$interactive
 )
 
-$Global:version = "0.4.2"
+$Global:version = "0.4.3"
 
 #$config = Get-Content $configPath | ConvertFrom-Json
 #
@@ -293,11 +293,13 @@ function writeMods {
     $versions = getVersions
     $gVersions = getGVersions
 
+    $modCount = $names.Length
+    $modCount
     $names += getNames "actions"
     $versions += getVersions "actions"
     $gVersions += getGVersions "actions"
 
-    Write-Host ("{0,-4} {1,-25} {2,-12} {3,-12} {4}" -f "#", "Name", "Local", "GUST Ver.", "Note")
+    Write-Host ("{0,-4} {1,-25} {2,-12} {3,-12} {4}" -f "#", "Mod Name", "Local", "GUST Ver.", "Note")
     Write-Host ("-"*70)
 
     for ($i = 0; $i -lt $names.Length; $i++) {
@@ -317,7 +319,19 @@ function writeMods {
             }
         }
 
-        $line = ("[{0}] {1,-25} {2,-12} {3,-12} {4}" -f ($i + 1), $names[$i], "($($versions[$i]))", $gVersions[$i], $bonus)
+        if ($i -eq $modCount){
+            Write-Host ""
+            Write-Host ("{0,-4} {1,-25} {2,-12} {3,-12} {4}" -f "#", "Action Name", "Local", "GUST Ver.", "Note")
+            Write-Host ("-"*70)
+            #Write-Host $line -ForegroundColor $color
+            $line = ("[{0}] {1,-25} {2,-12} {3,-12} {4}" -f ($i + 1 - $modCount), $names[$i], "($($versions[$i]))", $gVersions[$i], $bonus)
+        }
+        elseif ($i -gt $modCount) {
+            $line = ("[{0}] {1,-25} {2,-12} {3,-12} {4}" -f ($i + 1 - $modCount), $names[$i], "($($versions[$i]))", $gVersions[$i], $bonus)
+        }
+        else{
+            $line = ("[{0}] {1,-25} {2,-12} {3,-12} {4}" -f ($i + 1), $names[$i], "($($versions[$i]))", $gVersions[$i], $bonus)
+        }
 
         Write-Host $line -ForegroundColor $color
     }
