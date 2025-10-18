@@ -10,6 +10,7 @@ class inputs{
         $cfg = getCurrentConf
         $this.mode = $cfg.defaultMode
         $this.message = $cfg.defaultCommitMessage
+        $this.gitURL = "NOT SET"
         $this.branch = $cfg.defaultBranch
         $this.number = $cfg.defaultLogLength
     }
@@ -22,6 +23,10 @@ class inputs{
 $index = 1
 $commands = @(
     ".help", ".run", ".exit", ".clear"
+)
+
+$inputVaNames = @(
+    "mode", "message", "gitURL", "branch", "number"
 )
 
 function startInteractive{
@@ -70,7 +75,7 @@ function startInteractive{
         elseif ($comm -match "^\.run" -or $comm[0] -eq "2") {
             Clear-Host
             $localIndex = 1
-            inputWriter $localIndex
+            inputWriter $localIndex $inputs
             $run = $true
             while ($run){
                 $key = [System.Console]::ReadKey($true)
@@ -90,7 +95,12 @@ function startInteractive{
                     }
                     "Enter" {
                         if ($localIndex -eq 6){
-                            
+                            $inputs.execute()
+                            $run = $false
+                            $running = $false
+                        }
+                        else{
+                            $inputs.PSObject.Properties[$inputVaNames[$localIndex - 1]].Value = Read-Host "Input your value"
                         }
                     }
                     default {
@@ -98,7 +108,7 @@ function startInteractive{
                     }
                 }
                 Clear-Host
-                inputWriter $localIndex
+                inputWriter $localIndex $inputs
             }
         }
         elseif ($comm -match "^\.update" -or $comm -eq "5"){
@@ -119,7 +129,7 @@ function startInteractive{
             Write-Host "  mods                - List mods"
             Write-Host "  update              - Update Gust"
             Write-Host ""
-            Write-Host "  ---- INTERACtIVE MODE COMMANDS ----"
+            Write-Host "  ---- INTERACTIVE MODE COMMANDS ----"
             Write-Host "  .help or 1           - Shows this menu"
             Write-Host "  .run [command] or 2  - runs GUST command"
             Write-Host "  .exit or 3           - Quit interactive mode"
@@ -187,35 +197,36 @@ function introWriter {
 
 function inputWriter {
     param(
-        $localIndex
+        $localIndex,
+        $inputs
     )
     Write-Host "--------------------------------------------"
     Write-Host "Press enter to change the value"
     Write-Host "of property you want to change"
     if ($localIndex -eq 1) {
-        Write-Host "Mode ('m')" -ForegroundColor Red
+        Write-Host "Mode ('m') - Value: $($inputs.mode)" -ForegroundColor Red
     } else {
-        Write-Host "Mode ('m')"
+        Write-Host "Mode ('m') - Value: $($inputs.mode)"
     }
     if ($localIndex -eq 2) {
-        Write-Host "Message ('c')" -ForegroundColor Red
+        Write-Host "Message ('c') - Value: $($inputs.message)" -ForegroundColor Red
     } else {
-        Write-Host "Message ('c')"
+        Write-Host "Message ('c') - Value: $($inputs.message)"
     }
     if ($localIndex -eq 3) {
-        Write-Host "gitURL ('u')" -ForegroundColor Red
+        Write-Host "gitURL ('u') - Value: $($inputs.gitURL)" -ForegroundColor Red
     } else {
-        Write-Host "gitURL ('u')"
+        Write-Host "gitURL ('u') - Value: $($inputs.gitURL)"
     }
     if ($localIndex -eq 4) {
-        Write-Host "Branch ('b')" -ForegroundColor Red
+        Write-Host "Branch ('b') - Value: $($inputs.branch)" -ForegroundColor Red
     } else {
-        Write-Host "Branch ('b')"
+        Write-Host "Branch ('b') - Value: $($inputs.branch)"
     }
     if ($localIndex -eq 5) {
-        Write-Host "Number ('n')" -ForegroundColor Red
+        Write-Host "Number ('n') - Value: $($inputs.number)" -ForegroundColor Red
     } else {
-        Write-Host "Number ('n')"
+        Write-Host "Number ('n') - Value: $($inputs.number)"
     }
     if ($localIndex -eq 6) {
         Write-Host "Execute command" -ForegroundColor Red

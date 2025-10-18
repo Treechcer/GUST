@@ -246,7 +246,7 @@ function behaviourCheck{
             update
         }
         "NOMODE"{
-
+            
         }
         "swp"{
             swp
