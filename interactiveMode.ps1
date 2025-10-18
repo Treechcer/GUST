@@ -32,7 +32,6 @@ $inputVaNames = @(
 function startInteractive{
     . "$PSScriptRoot/gust.ps1" "NOMODE"
     $running = $true
-    Clear-Host
     introWriter
 
     $inputs = [inputs]::new()
@@ -46,16 +45,19 @@ function startInteractive{
             $key = [System.Console]::ReadKey($true)
             switch ($key.Key) {
                 "UpArrow" {
-                    $index += -1
-
                     if ($index -lt 1){
                         $index = 1
                     }
+                    else{
+                        $index += -1
+                    }
                 }
                 "DownArrow" {
-                    $index += +1
                     if ($index -ge $commands.Length + 1){
                         $index = $commands.Length + 1
+                    }
+                    else{
+                        $index += +1
                     }
                 }
                 "Enter" {
@@ -81,23 +83,25 @@ function startInteractive{
                 $key = [System.Console]::ReadKey($true)
                 switch ($key.Key) {
                     "UpArrow" {
-                        $localIndex += -1
-
                         if ($localIndex -lt 1){
                             $localIndex = 1
                         }
+                        else{
+                            $localIndex += -1
+                        }
                     }
                     "DownArrow" {
-                        $localIndex += +1
                         if ($localIndex -ge 6){
                             $localIndex = 6
+                        }
+                        else{
+                            $localIndex += +1
                         }
                     }
                     "Enter" {
                         if ($localIndex -eq 6){
                             $inputs.execute()
                             $run = $false
-                            $running = $false
                         }
                         else{
                             $inputs.PSObject.Properties[$inputVaNames[$localIndex - 1]].Value = Read-Host "Input your value"
@@ -135,6 +139,10 @@ function startInteractive{
             Write-Host "  .exit or 3           - Quit interactive mode"
             Write-Host "  .clear or 4          - Clears interactive mode"
             Write-Host "  .update or 5         - Updates GUST"
+            Write-Host ""
+            Write-Host "  ---- MODS ----"
+            Write-Host "Mods are supported in interactive mode, but they are not listed here."
+            Write-Host "Run GUST with mode = list to see all available mods."
             Write-Host ""
             Write-Host "Press any button to exit." -NoNewline
             while ($run){
