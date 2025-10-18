@@ -5,6 +5,11 @@ function loadMods {
 
     $mods = Get-ChildItem -Path "$PSScriptRoot\mods" -Filter *.ps1
 
+    $found = $false
+    
+    . "$PSScriptRoot\gust.ps1"
+    $language = getLanguageObject
+
     foreach ($mod in $mods){
         . $mod.FullName
         foreach ($modRegs in (getModifications)){
@@ -16,24 +21,26 @@ function loadMods {
 
                 if ($eval -eq "release or major" -and ($eval -ne $true)){
                     Write-Host "⚠️ ⚠️ ⚠️"
-                    Write-Host "This mod might not be compatible"
-                    Write-Host "This mod was written for version $(versionOfGust)"
-                    Write-Host "You have $($Global:version)"
+                    Write-Host "$($language.modNotComapatible)"
+                    Write-Host "$($language.modWasWritten) $(versionOfGust)"
+                    Write-Host "$($language.youHave) $($Global:version)"
                     Write-Host "⚠️ ⚠️ ⚠️"
                 }
                 elseif ($eval -eq "minor" -and ($eval -ne $true)){
                     Write-Host "⚠️ ⚠️ ⚠️"
-                    Write-Host "mod isn't updated to the newest minor version"
-                    Write-Host "it might have some incompatibilities"
+                    Write-Host "$($language.minorModDifference)"
+                    Write-Host "$($language.someIncopabilities)"
                     Write-Host "⚠️ ⚠️ ⚠️"
                 }
                 
                 behaviourSwitchCheck $modRegs
-
+                $found = $true
                 break
             }
         }
     }
+
+    return $found
 }
 
 function compareModVersions {

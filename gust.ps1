@@ -41,22 +41,22 @@ function checkUser{
     if (-not $username -or -not $useremail) {
         if ($config.userEmail -eq $null -and $config.userName -eq $null){
             Write-Host "--------------------------------------------------------------------------------------------------"
-            Write-Host "Please set your username and/or email with:"
-            Write-Host "git config --global user.name 'your name'"
-            Write-Host "git config --global user.email 'your email'"
+            Write-Host $language.logInPrompt[0]
+            Write-Host $language.logInPrompt[1]
+            Write-Host $language.logInPrompt[2]
             Write-Host ""
-            Write-Host "If you want to set local email and username, just skip '--global' and you'll set them for your repository"
+            Write-Host $language.logInPrompt[3]
             Write-Host "--------------------------------------------------------------------------------------------------"
             exit 1
         }
         else{
             if ($config.changeNameGlobal){
-                Write-Host "setting your name and email globaly to $($config.userName) and $($config.userEmail)"
+                Write-Host "$($language.globalSettingEmailName[0]) $($config.userName) $($language.and) $($config.userEmail)"
                 git config --global user.name "$config.userName"
                 git config --global user.email "$config.userEmail"
             }
             else{
-                Write-Host "setting your name and email localy to $($config.userName) and $($config.userEmail)"
+                Write-Host "$($language.globalSettingEmailName[1]) $($config.userName) $($language.and) $($config.userEmail)"
                 git config user.name "$config.userName"
                 git config user.email "$config.userEmail"
             }
@@ -105,13 +105,13 @@ function branchCreateSwitch{
     $exists = git branch --list $branch
 
     if ($exists){
-        Write-Host "$branch -- exist, did not create a new one"
+        Write-Host "$branch -- $($language.branchExists)"
         exit 1
     }
 
     $err0 = git branch $branch *>$null
     $err1 = git checkout $branch *>$null
-    Write-Host "switched"
+    Write-Host $($language.switched)
     git branch
 }
 
@@ -119,7 +119,7 @@ function branchSwitch{
     $exists = git branch --list $branch
 
     if (-not $exists){
-        Write-Host "$branch -- does not exist"
+        Write-Host "$branch -- $($language.branchDoesNotExists)"
         exit 1
     }
 
@@ -131,7 +131,7 @@ function branchDelete{
     $exists = git branch --list $branch
 
     if (-not $exists){
-        Write-Host "$branch -- does not exist"
+        Write-Host "$branch -- $($language.branchDoesNotExists)"
         exit 1
     }
 
@@ -145,11 +145,11 @@ function branchDelete{
     $err0 = & git branch $delType $branch 2>&1
     if ($LASTEXITCODE -ne 0){
         git branch
-        Write-Host "$branch could not be safely delted"
+        Write-Host "$branch $($language.branchSafe)"
         exit 1
     }
     else{
-        Write-Host "$branch was deleted"
+        Write-Host "$branch $($language.wasDeleted)"
     }
 }
 
@@ -261,14 +261,20 @@ function behaviourCheck{
         }
         default {
             if ($config.runModification){
-                runModification $otherModes
+                $found = runModification $otherModes
+
+                if (-not $found){
+                    Write-Host "$otherModes $($language.notCorrectInput)"
+                    exit
+                }
             }
             else{
-                Write-Host "$otherModes is not correct input"
+                Write-Host "$otherModes $($language.notCorrectInput)"
                 exit
             }
         }
     }
+
     if ($config.runActions){
         . "$PSScriptRoot\actions.ps1"
         runActions
@@ -283,7 +289,9 @@ function runModification {
 
     . "$PSScriptRoot\modLoader.ps1"
 
-    loadMods $modname
+    $found = loadMods $modname
+
+    return $found
 }
 
 function writeMods {
@@ -299,7 +307,7 @@ function writeMods {
     $versions += getVersions "actions"
     $gVersions += getGVersions "actions"
 
-    Write-Host ("{0,-4} {1,-25} {2,-12} {3,-12} {4}" -f "#", "Mod Name", "Local", "GUST Ver.", "Note")
+    Write-Host ("{0,-4} {1,-25} {2,-12} {3,-12} {4}" -f "#", "$($language.modName)", "$($language.local)", "$($language.gustVer)", "$($language.note)")
     Write-Host ("-"*70)
 
     for ($i = 0; $i -lt $names.Length; $i++) {
@@ -310,18 +318,18 @@ function writeMods {
             $eval = compareModVersions $Global:version $gVersions[$i]
 
             if ($eval -eq "minor" -and ($eval -ne $true)) {
-                $bonus = "Minor versions differ"
+                $bonus = $language.minorDiff
                 $color = "Yellow"
             }
             elseif ($eval -eq "release or major" -and ($eval -ne $true)) {
-                $bonus = "Release or major versions differ"
+                $bonus = $language.majorDiff
                 $color = "Red"
             }
         }
 
         if ($i -eq $modCount){
             Write-Host ""
-            Write-Host ("{0,-4} {1,-25} {2,-12} {3,-12} {4}" -f "#", "Action Name", "Local", "GUST Ver.", "Note")
+            Write-Host ("{0,-4} {1,-25} {2,-12} {3,-12} {4}" -f "#", "$($language.actionName)", "$($language.local)", "$($language.gustVer)", "$($language.note)")
             Write-Host ("-"*70)
             #Write-Host $line -ForegroundColor $color
             $line = ("[{0}] {1,-25} {2,-12} {3,-12} {4}" -f ($i + 1 - $modCount), $names[$i], "($($versions[$i]))", $gVersions[$i], $bonus)
@@ -356,7 +364,7 @@ function getVersion {
 function swp{
     $okayName = $true
     while ($okayName){
-        $name = Read-Host "what is the name of profile you want to switch to? if you want to terminate this type /q"
+        $name = Read-Host "$(language.profileSwitch) /q"
 
         if ($name -eq "/q"){
             break
@@ -380,7 +388,7 @@ function swp{
 function cnp{
     $okayName = $true
     while ($okayName){
-        $name = Read-Host "how do you want to name your profile? if you want to terminate this type /q"
+        $name = Read-Host "$($language.profileName) /q"
 
         if ($name -eq "/q"){
             break
@@ -391,7 +399,7 @@ function cnp{
 
         try {
             $config = Get-Content "$PSScriptRoot/profiles/$($profileName.current)/config.json" -ErrorAction Stop | ConvertFrom-Json
-            Write-Host "Profile already exists"
+            Write-Host "$($language.profileExists)"
         }
         catch {
             $profileName.current = "$name"
@@ -459,7 +467,8 @@ function getDefaultConf{
         defaultLogLength = 5;
         defaultMode = "c";
         runModification = $true;
-        runActions = $true
+        runActions = $true;
+        language = "english";
     }
 
     return $config
@@ -485,6 +494,18 @@ function getDefaultStats{
     return $stats
 }
 
+function getLanguageJSON{
+    param(
+        $languageName
+    )
+
+    return Get-Content $PSScriptRoot/languages/$($config.language).json | ConvertFrom-Json
+}
+
+function getLanguageObject{
+    return $language
+}
+
 . "$PSScriptRoot\modAPI.ps1"
 
 $configPath = $(profileCheck)
@@ -493,26 +514,15 @@ if (Test-Path $configPath){
     $config = Get-Content $configPath | ConvertFrom-Json
 }
 else{
-    $config = [PSCustomObject]@{
-        defaultBranch = "main";
-        defaultRemote = "origin";
-        userName = $null;
-        userEmail = $null;
-        changeNameGlobal = false;
-        autoPullBeforePush = true;
-        defaultCommitMessage = "small fixes";
-        forceBranchDelete = false;
-        defaultLogLength = 5;
-        defaultMode = "c";
-        runModification = $true;
-        runActions = $true
-    }
+    $config = getDefaultConf
 
     $jsonContent = $config | ConvertTo-Json -Depth 3
 
     $jsonContent | Set-Content -Path "$PSScriptRoot/config.json" -Encoding UTF8
 
 }
+
+$language = getLanguageJSON
 
 checkUser
 behaviourCheck

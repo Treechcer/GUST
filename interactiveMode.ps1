@@ -33,7 +33,7 @@ function startInteractive{
     . "$PSScriptRoot/gust.ps1" "NOMODE"
     $running = $true
     introWriter
-
+    $language = getLanguageObject
     $inputs = [inputs]::new()
 
     while ($running){
@@ -119,32 +119,10 @@ function startInteractive{
             . "$PSScriptRoot/gust.ps1" -update
         }
         elseif ($comm -eq ".help" -or $comm -eq "1"){
-            Write-Host ""
-            Write-Host "Available GUST commands:"
-            Write-Host "  c [message]         - Commit 'n' push"
-            Write-Host "  p                   - GitHub pull abstraction"
-            Write-Host "  s                   - Show git status and branches"
-            Write-Host "  log [num]           - Show git log (either input num or default count from config)"
-            Write-Host "  bcs [branch]        - Create and switch to new branch"
-            Write-Host "  bs [branch]         - Switch to existing branch"
-            Write-Host "  bd [branch]         - Delete a branch"
-            Write-Host "  swp                 - Switch profile"
-            Write-Host "  cnp                 - Create new profile"
-            Write-Host "  mods                - List mods"
-            Write-Host "  update              - Update Gust"
-            Write-Host ""
-            Write-Host "  ---- INTERACTIVE MODE COMMANDS ----"
-            Write-Host "  .help or 1           - Shows this menu"
-            Write-Host "  .run [command] or 2  - runs GUST command"
-            Write-Host "  .exit or 3           - Quit interactive mode"
-            Write-Host "  .clear or 4          - Clears interactive mode"
-            Write-Host "  .update or 5         - Updates GUST"
-            Write-Host ""
-            Write-Host "  ---- MODS ----"
-            Write-Host "Mods are supported in interactive mode, but they are not listed here."
-            Write-Host "Run GUST with mode = list to see all available mods."
-            Write-Host ""
-            Write-Host "Press any button to exit." -NoNewline
+            for ($iterator = 0; $iterator -lt $language.gustInteractiveHelp.Count; $iterator++) {
+                Write-Host $language.gustInteractiveHelp[$iterator]
+            }
+            Write-Host "$($language.buttonToExit)" -NoNewline
             while ($run){
                 $key = [System.Console]::ReadKey($true)
                 switch ($key.Key) {
@@ -170,35 +148,35 @@ function execute{
 
 function introWriter {
     Write-Host "--------------------------------------------"
-    Write-Host "GUST INTERACTIVE MODE - VER $($Global:version)"
+    Write-Host "$($language.interactiveMode) $($Global:version)"
     if ($index -eq 1) {
-        Write-Host "Commands: 1) .help - help commands" -ForegroundColor Red
+        Write-Host "Commands: 1) $($language.help)" -ForegroundColor Red
     } else {
-        Write-Host "Commands: 1) .help - help commands"
+        Write-Host "Commands: 1) $($language.help)"
     }
 
     if ($index -eq 2) {
-        Write-Host "          2) .run [command] - runs command" -ForegroundColor Red
+        Write-Host "          2) $($language.run)" -ForegroundColor Red
     } else {
-        Write-Host "          2) .run [command] - runs command"
+        Write-Host "          2) $($language.run)"
     }
 
     if ($index -eq 3) {
-        Write-Host "          3) .exit - exits interactive mode" -ForegroundColor Red
+        Write-Host "          3) $($language.exit)" -ForegroundColor Red
     } else {
-        Write-Host "          3) .exit - exits interactive mode"
+        Write-Host "          3) $($language.exit)"
     }
 
     if ($index -eq 4) { 
-        Write-Host "          4) .clear - clear the console" -ForegroundColor Red
+        Write-Host "          4) $($language.clear)" -ForegroundColor Red
     } else {
-        Write-Host "          4) .clear - clear the console"
+        Write-Host "          4) $($language.clear)"
     }
 
     if ($index -eq 5) { 
-        Write-Host "          5) .update - updates GUST" -ForegroundColor Red
+        Write-Host "          5) $($language.update)" -ForegroundColor Red
     } else {
-        Write-Host "          5) .update - updates GUST"
+        Write-Host "          5) $($language.update)"
     }
     Write-Host "--------------------------------------------"
 }
@@ -209,37 +187,37 @@ function inputWriter {
         $inputs
     )
     Write-Host "--------------------------------------------"
-    Write-Host "Press enter to change the value"
-    Write-Host "of property you want to change"
+    Write-Host "$($language.pressEnter)"
+    Write-Host "$($language.propertyChange)"
     if ($localIndex -eq 1) {
-        Write-Host "Mode ('m') - Value: $($inputs.mode)" -ForegroundColor Red
+        Write-Host "Mode ('m') - $($language.value): $($inputs.mode)" -ForegroundColor Red
     } else {
-        Write-Host "Mode ('m') - Value: $($inputs.mode)"
+        Write-Host "Mode ('m') - $($language.value): $($inputs.mode)"
     }
     if ($localIndex -eq 2) {
-        Write-Host "Message ('c') - Value: $($inputs.message)" -ForegroundColor Red
+        Write-Host "Message ('c') - $($language.value): $($inputs.message)" -ForegroundColor Red
     } else {
-        Write-Host "Message ('c') - Value: $($inputs.message)"
+        Write-Host "Message ('c') - $($language.value): $($inputs.message)"
     }
     if ($localIndex -eq 3) {
-        Write-Host "gitURL ('u') - Value: $($inputs.gitURL)" -ForegroundColor Red
+        Write-Host "gitURL ('u') - $($language.value): $($inputs.gitURL)" -ForegroundColor Red
     } else {
-        Write-Host "gitURL ('u') - Value: $($inputs.gitURL)"
+        Write-Host "gitURL ('u') - $($language.value): $($inputs.gitURL)"
     }
     if ($localIndex -eq 4) {
-        Write-Host "Branch ('b') - Value: $($inputs.branch)" -ForegroundColor Red
+        Write-Host "Branch ('b') - $($language.value): $($inputs.branch)" -ForegroundColor Red
     } else {
-        Write-Host "Branch ('b') - Value: $($inputs.branch)"
+        Write-Host "Branch ('b') - $($language.value): $($inputs.branch)"
     }
     if ($localIndex -eq 5) {
-        Write-Host "Number ('n') - Value: $($inputs.number)" -ForegroundColor Red
+        Write-Host "Number ('n') - $($language.value): $($inputs.number)" -ForegroundColor Red
     } else {
-        Write-Host "Number ('n') - Value: $($inputs.number)"
+        Write-Host "Number ('n') - $($language.value): $($inputs.number)"
     }
     if ($localIndex -eq 6) {
-        Write-Host "Execute command" -ForegroundColor Red
+        Write-Host "$($language.exeCmd)" -ForegroundColor Red
     } else {
-        Write-Host "Execute command"
+        Write-Host "$($language.exeCmd)"
     }
     Write-Host "--------------------------------------------"
 }

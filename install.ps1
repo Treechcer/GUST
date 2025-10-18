@@ -1,3 +1,5 @@
+#INSTALLER IS ONLY IN ENGLISH NO MORE LANGUAGES
+
 param(
     [Boolean]$install = $True
 )
