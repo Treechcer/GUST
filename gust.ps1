@@ -19,7 +19,7 @@ param(
     [switch]$interactive
 )
 
-$Global:version = "0.5.2"
+$Global:version = "0.5.3"
 
 #$config = Get-Content $configPath | ConvertFrom-Json
 #
@@ -498,8 +498,20 @@ function getLanguageJSON{
     param(
         $languageName
     )
+    if (-not (Test-Path $PSScriptRoot/languages/$($config.language).json)){
+        $config.language = "english"
+        $configPath = $(profileCheck)
+        $config = getDefaultConf
 
-    return Get-Content $PSScriptRoot/languages/$($config.language).json | ConvertFrom-Json
+        $jsonContent = $config | ConvertTo-Json -Depth 3
+
+        $jsonContent | Set-Content -Path $configPath -Encoding UTF8
+
+        return Get-Content $PSScriptRoot/languages/english.json | ConvertFrom-Json
+    }
+    else{
+        return Get-Content $PSScriptRoot/languages/$($config.language).json | ConvertFrom-Json
+    }
 }
 
 function getLanguageObject{
@@ -518,7 +530,7 @@ else{
 
     $jsonContent = $config | ConvertTo-Json -Depth 3
 
-    $jsonContent | Set-Content -Path "$PSScriptRoot/config.json" -Encoding UTF8
+    $jsonContent | Set-Content -Path $configPath -Encoding UTF8
 
 }
 
