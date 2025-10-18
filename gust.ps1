@@ -19,7 +19,7 @@ param(
     [switch]$interactive
 )
 
-$Global:version = "0.5.3"
+$Global:version = "0.5.4"
 
 #$config = Get-Content $configPath | ConvertFrom-Json
 #
@@ -83,7 +83,7 @@ function gitPushCreate {
         }
 
         git add .
-        if (-not $message) {
+        if (-not $message -and $config.useDefaultCommitMessage) {
             $message = $config.defaultCommitMessage
         }
 
@@ -428,17 +428,18 @@ function profileCheck {
     }
 
     $profileName = Get-Content "$PSScriptRoot/profiles/profiles.json" | ConvertFrom-Json
-    
+    $ret = "$PSScriptRoot/profiles/$($profileName.current)/config.json"
     try {
         $config = Get-Content "$PSScriptRoot/profiles/$($profileName.current)/config.json" -ErrorAction Stop | ConvertFrom-Json   
     }
     catch {
+        $ret = "$PSScriptRoot/profiles/default/config.json"
         $profileName.current = "default"
         $profileName = $profileName | ConvertTo-Json -Depth 3
         $profileName | Set-Content -Path "$PSScriptRoot/profiles/profiles.json" -Encoding UTF8
     }
 
-    return "$PSScriptRoot/profiles/$($profileName.current)/config.json"
+    return $ret
 
 }
 
@@ -460,10 +461,11 @@ function getDefaultConf{
         defaultRemote = "origin";
         userName = $null;
         userEmail = $null;
-        changeNameGlobal = false;
-        autoPullBeforePush = true;
+        changeNameGlobal = $false;
+        autoPullBeforePush = $true;
+        useDefaultCommitMessage = $false;
         defaultCommitMessage = "small fixes";
-        forceBranchDelete = false;
+        forceBranchDelete = $false;
         defaultLogLength = 5;
         defaultMode = "c";
         runModification = $true;
