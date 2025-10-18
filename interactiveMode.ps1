@@ -1,13 +1,39 @@
+$index = 1
+$commands = @(
+    ".help", ".run", ".exit", ".clear"
+)
+
 function startInteractive{
-    . "$PSScriptRoot/gust.ps1"
+    . "$PSScriptRoot/gust.ps1" "NOMODE"
     $running = $true
     Clear-Host
     introWriter
     while ($running){
-        Write-Host -NoNewline "GUST> Enter command: "
-        $comm = Read-Host
-        $comm = $comm.Trim()
+        #Write-Host -NoNewline "GUST> Enter command: "
+        #$comm = Read-Host
+        #$comm = $comm.Trim()
+        $run = $true
+        while ($run){
+            $key = [System.Console]::ReadKey($true)
+            switch ($key.Key) {
+                "UpArrow" {
+                    $index += -1
+                }
+                "DownArrow" {
+                    $index += +1
+                }
+                "Enter" {
+                    $comm = $commands[$index - 1]
+                    Write-Host $comm
+                    $run = $false
+                }
+                default {
 
+                }
+            }
+            Clear-Host
+            introWriter
+        }
         if ($comm -eq ".exit" -or $comm -eq "3"){
             $running = $false
         }
@@ -53,9 +79,34 @@ function startInteractive{
 function introWriter {
     Write-Host "--------------------------------------------"
     Write-Host "GUST INTERACTIVE MODE - VER $($Global:version)"
-    Write-Host "Commands: 1) .help - help commands"
-    Write-Host "          2) .run [command] - runs command"
-    Write-Host "          3) .exit - exits interactive mode"
-    Write-Host "          4) .clear - clear the console"
+    if ($index -eq 1) {
+        Write-Host "Commands: 1) .help - help commands" -ForegroundColor Red
+    } else {
+        Write-Host "Commands: 1) .help - help commands"
+    }
+
+    if ($index -eq 2) {
+        Write-Host "          2) .run [command] - runs command" -ForegroundColor Red
+    } else {
+        Write-Host "          2) .run [command] - runs command"
+    }
+
+    if ($index -eq 3) {
+        Write-Host "          3) .exit - exits interactive mode" -ForegroundColor Red
+    } else {
+        Write-Host "          3) .exit - exits interactive mode"
+    }
+
+    if ($index -eq 4) { 
+        Write-Host "          4) .clear - clear the console" -ForegroundColor Red
+    } else {
+        Write-Host "          4) .clear - clear the console"
+    }
+
+    if ($index -eq 5) { 
+        Write-Host "          5) .update - updates GUST" -ForegroundColor Red
+    } else {
+        Write-Host "          5) .update - updates GUST"
+    }
     Write-Host "--------------------------------------------"
 }
