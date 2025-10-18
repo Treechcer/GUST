@@ -7,7 +7,6 @@ function loadMods {
 
     $found = $false
     
-    . "$PSScriptRoot\gust.ps1"
     $language = getLanguageObject
 
     foreach ($mod in $mods){

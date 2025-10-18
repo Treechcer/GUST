@@ -1,7 +1,6 @@
 function runActions{
     . "$PSScriptRoot\modAPI.ps1"
     . "$PSScriptRoot\modLoader.ps1"
-    . "$PSScriptRoot\gust.ps1"
 
     $mode = getOtherModes
     $language = getLanguageObject    
