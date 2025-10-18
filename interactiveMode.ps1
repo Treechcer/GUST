@@ -31,9 +31,9 @@ $inputVaNames = @(
 
 function startInteractive{
     . "$PSScriptRoot/gust.ps1" "NOMODE"
+    $script:language = getLanguageJSON "english"
     $running = $true
     introWriter
-    $language = getLanguageObject
     $inputs = [inputs]::new()
 
     while ($running){
@@ -142,17 +142,13 @@ function startInteractive{
     } 
 }
 
-function execute{
-
-}
-
 function introWriter {
     Write-Host "--------------------------------------------"
     Write-Host "$($language.interactiveMode) $($Global:version)"
     if ($index -eq 1) {
-        Write-Host "Commands: 1) $($language.help)" -ForegroundColor Red
+        Write-Host "$($language.commands):  1) $($language.help)" -ForegroundColor Red
     } else {
-        Write-Host "Commands: 1) $($language.help)"
+        Write-Host "$($language.commands): 1) $($language.help)"
     }
 
     if ($index -eq 2) {

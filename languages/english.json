@@ -70,5 +70,6 @@
         "Run GUST with mode = list to see all available mods.",
         ""
     ],
-    "buttonToExit" : "Press any button to exit."
+    "buttonToExit" : "Press any button to exit.",
+    "commands" : "Commads"
 }

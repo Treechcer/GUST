@@ -19,7 +19,7 @@ param(
     [switch]$interactive
 )
 
-$Global:version = "0.5.0"
+$Global:version = "0.5.1"
 
 #$config = Get-Content $configPath | ConvertFrom-Json
 #
@@ -246,7 +246,7 @@ function behaviourCheck{
             update
         }
         "NOMODE"{
-            
+            exit
         }
         "swp"{
             swp
