@@ -1,3 +1,24 @@
+class inputs{
+    [string]$mode
+    [string]$message
+    [string]$gitURL
+    [string]$branch
+    [int]$number
+
+    inputs() {
+        . "$PSScriptRoot/gust.ps1" "NOMODE"
+        $cfg = getCurrentConf
+        $this.mode = $cfg.defaultMode
+        $this.message = $cfg.defaultCommitMessage
+        $this.branch = $cfg.defaultBranch
+        $this.number = $cfg.defaultLogLength
+    }
+
+    [void]execute(){
+        . "$PSScriptRoot/gust.ps1" -m $this.mode -c $this.message -u $this.gitURL -b $this.branch -n $this.number
+    }
+}
+
 $index = 1
 $commands = @(
     ".help", ".run", ".exit", ".clear"
@@ -8,6 +29,9 @@ function startInteractive{
     $running = $true
     Clear-Host
     introWriter
+
+    $inputs = [inputs]::new()
+
     while ($running){
         #Write-Host -NoNewline "GUST> Enter command: "
         #$comm = Read-Host
@@ -18,13 +42,19 @@ function startInteractive{
             switch ($key.Key) {
                 "UpArrow" {
                     $index += -1
+
+                    if ($index -lt 1){
+                        $index = 1
+                    }
                 }
                 "DownArrow" {
                     $index += +1
+                    if ($index -ge $commands.Length + 1){
+                        $index = $commands.Length + 1
+                    }
                 }
                 "Enter" {
                     $comm = $commands[$index - 1]
-                    Write-Host $comm
                     $run = $false
                 }
                 default {
@@ -38,7 +68,38 @@ function startInteractive{
             $running = $false
         }
         elseif ($comm -match "^\.run" -or $comm[0] -eq "2") {
-            #NOT WORKING I HATE THIS HASHFAJFAFHGBLOAHFBAKJFG AL I'LL DO IT ONE DAY I TRUST IN MYSELF
+            Clear-Host
+            $localIndex = 1
+            inputWriter $localIndex
+            $run = $true
+            while ($run){
+                $key = [System.Console]::ReadKey($true)
+                switch ($key.Key) {
+                    "UpArrow" {
+                        $localIndex += -1
+
+                        if ($localIndex -lt 1){
+                            $localIndex = 1
+                        }
+                    }
+                    "DownArrow" {
+                        $localIndex += +1
+                        if ($localIndex -ge 6){
+                            $localIndex = 6
+                        }
+                    }
+                    "Enter" {
+                        if ($localIndex -eq 6){
+                            
+                        }
+                    }
+                    default {
+
+                    }
+                }
+                Clear-Host
+                inputWriter $localIndex
+            }
         }
         elseif ($comm -match "^\.update" -or $comm -eq "5"){
             . "$PSScriptRoot/gust.ps1" -update
@@ -65,6 +126,15 @@ function startInteractive{
             Write-Host "  .clear or 4          - Clears interactive mode"
             Write-Host "  .update or 5         - Updates GUST"
             Write-Host ""
+            Write-Host "Press any button to exit." -NoNewline
+            while ($run){
+                $key = [System.Console]::ReadKey($true)
+                switch ($key.Key) {
+                    default {
+                        $run = $false
+                    }
+                }
+            }
         }
         elseif ($comm -eq ".clear" -or $comm -eq "4"){
             Clear-Host
@@ -74,6 +144,10 @@ function startInteractive{
             Write-Host "'$($comm)' is not recognised command"
         }
     } 
+}
+
+function execute{
+
 }
 
 function introWriter {
@@ -107,6 +181,46 @@ function introWriter {
         Write-Host "          5) .update - updates GUST" -ForegroundColor Red
     } else {
         Write-Host "          5) .update - updates GUST"
+    }
+    Write-Host "--------------------------------------------"
+}
+
+function inputWriter {
+    param(
+        $localIndex
+    )
+    Write-Host "--------------------------------------------"
+    Write-Host "Press enter to change the value"
+    Write-Host "of property you want to change"
+    if ($localIndex -eq 1) {
+        Write-Host "Mode ('m')" -ForegroundColor Red
+    } else {
+        Write-Host "Mode ('m')"
+    }
+    if ($localIndex -eq 2) {
+        Write-Host "Message ('c')" -ForegroundColor Red
+    } else {
+        Write-Host "Message ('c')"
+    }
+    if ($localIndex -eq 3) {
+        Write-Host "gitURL ('u')" -ForegroundColor Red
+    } else {
+        Write-Host "gitURL ('u')"
+    }
+    if ($localIndex -eq 4) {
+        Write-Host "Branch ('b')" -ForegroundColor Red
+    } else {
+        Write-Host "Branch ('b')"
+    }
+    if ($localIndex -eq 5) {
+        Write-Host "Number ('n')" -ForegroundColor Red
+    } else {
+        Write-Host "Number ('n')"
+    }
+    if ($localIndex -eq 6) {
+        Write-Host "Execute command" -ForegroundColor Red
+    } else {
+        Write-Host "Execute command"
     }
     Write-Host "--------------------------------------------"
 }

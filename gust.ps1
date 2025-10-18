@@ -465,6 +465,10 @@ function getDefaultConf{
     return $config
 }
 
+function getCurrentConf{
+    return $config
+}
+
 function getDefaultProfiles{
     $profileD = [PSCustomObject]@{
         current = "default";
