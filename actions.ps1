@@ -1,4 +1,7 @@
 function runActions{
+    param (
+        [boolean] $isLast
+    )
     . "$PSScriptRoot\modAPI.ps1"
     . "$PSScriptRoot\modLoader.ps1"
 
@@ -24,7 +27,7 @@ function runActions{
                     Write-Host "⚠️ ⚠️ ⚠️"
                 }
 
-                behaviourSwitchCheck $actions
+                behaviourSwitchCheck $actions $isLast
             }
         }
     }

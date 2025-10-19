@@ -19,7 +19,7 @@ param(
     [switch]$interactive
 )
 
-$Global:version = "0.5.4"
+$Global:version = "0.5.5"
 
 #$config = Get-Content $configPath | ConvertFrom-Json
 #
@@ -217,6 +217,12 @@ function behaviourCheck{
     elseif ($otherModes -eq ""){
         $otherModes = $config.defaultMode
     }
+
+    if ($config.runActions){
+        . "$PSScriptRoot\actions.ps1"
+        runActions $false
+    }
+
     switch ($otherModes){
         "c" { # just git add, commit and push :)
             gitPushCreate
@@ -277,7 +283,7 @@ function behaviourCheck{
 
     if ($config.runActions){
         . "$PSScriptRoot\actions.ps1"
-        runActions
+        runActions $true
     }
     addStats
 }

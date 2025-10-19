@@ -20,7 +20,8 @@ function getActionVersion{
 
 function behaviourSwitchCheck{
     param(
-        $name
+        $name,
+        $isLast
     )
 
     switch ($name) {
