@@ -19,7 +19,7 @@ param(
     [switch]$interactive
 )
 
-$Global:version = "0.5.5"
+$Global:version = "0.5.6"
 
 #$config = Get-Content $configPath | ConvertFrom-Json
 #
@@ -218,7 +218,7 @@ function behaviourCheck{
         $otherModes = $config.defaultMode
     }
 
-    if ($config.runActions){
+    if ($config.runBeforeActions){
         . "$PSScriptRoot\actions.ps1"
         runActions $false
     }
@@ -281,7 +281,7 @@ function behaviourCheck{
         }
     }
 
-    if ($config.runActions){
+    if ($config.runAfterActions){
         . "$PSScriptRoot\actions.ps1"
         runActions $true
     }
@@ -475,7 +475,8 @@ function getDefaultConf{
         defaultLogLength = 5;
         defaultMode = "c";
         runModification = $true;
-        runActions = $true;
+        runAfterActions = $true;
+        runBeforeActions = $true;
         language = "english";
     }
 
@@ -522,6 +523,44 @@ function getLanguageJSON{
     }
 }
 
+function validadateConfig{
+    param (
+        $config
+    )
+
+    $defaultCFG = getDefaultConf
+    
+    $defaultCFG | ConvertTo-Json -Depth 5 | Out-Null
+    $config | ConvertTo-Json -Depth 5 | Out-Null
+
+    $keys1 = $defaultCFG.PSObject.Properties.Name
+    $keys2 = $config.PSObject.Properties.Name
+
+    for ($i = 0; $i -lt $keys1.Length; $i++){
+        if (-not ($keys2 -contains $keys1[$i])){
+            $key = $keys1[$i]
+            $config | Add-Member -MemberType NoteProperty -Name $keys1[$i] -Value $defaultCFG.$key -Force
+        }
+    }
+
+    $config | ConvertTo-Json -Depth 5 | Out-Null
+    
+    writeToCurrentConf $config
+
+    return $config
+}
+
+function writeToCurrentConf {
+    param (
+        $newConf
+    )
+
+    $profileF = Get-Content "$PSScriptRoot/profiles/profiles.json" | ConvertFrom-Json
+    
+    $config = $newConf | ConvertTo-Json -Depth 3
+    $config | Set-Content -Path "$PSScriptRoot/profiles/$($profileF.current)/config.json" -Encoding UTF8 
+}
+
 function getLanguageObject{
     return $language
 }
@@ -543,6 +582,8 @@ else{
 }
 
 $language = getLanguageJSON
+
+$config = validadateConfig $config # updating config adds uncecesarry things to profile configs that won't be used but whatever it's not really that big problem
 
 checkUser
 behaviourCheck

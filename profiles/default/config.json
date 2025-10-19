@@ -11,6 +11,7 @@
   "defaultLogLength": 5,
   "defaultMode": "c",
   "runModification": true,
-  "runActions": true,
+  "runAfterActions": true,
+  "runBeforeActions" : true,
   "language": "english"
 }
