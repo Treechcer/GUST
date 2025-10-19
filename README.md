@@ -318,6 +318,7 @@ This file can be copied and modified to create your own mods quickly.
 
 GUST supports **actions** (external PowerShell scripts, similar to mods) to extend its functionality.  
 Each action file must follow a strict structure and expose specific functions so GUST can load and execute them.
+Actions are scripts that run before / after specific mode you programme it for, it can be useful to extend features of default functionality or without changing source code of mod from somebody else change what it does (which is limited but I can be really helpful).
 
 ### Action Structure
 
