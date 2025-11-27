@@ -317,6 +317,9 @@ function holiday {
     elseif ($now.day -eq 1 -and $now.Month -eq 11) {
         Write-Host $language.saintDay
     }
+    elseif ($now.day -eq 19 -and $now.Month -eq 11) {
+        Write-Host $language.manDay
+    }
     elseif (($now.day -eq 24 -or $now.day -eq 25) -and $now.Month -eq 12 ) {
         Write-Host $language.christmas
     }
