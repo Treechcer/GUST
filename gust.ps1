@@ -291,41 +291,42 @@ function behaviourCheck{
 }
 
 function holiday {
+    #$language
     $now = Get-Date
     if (($now.day -eq 1 -and $now.Month -eq 1) || ($now.day -eq 31 -and $now.Month -eq 12)){
-        Write-Host "Happy New Year!"
+        Write-Host $language.newYear
     }
     elseif ($now.day -eq 14 -and $now.Month -eq 2){
-        Write-Host "Happy Valentine's Day!"
+        Write-Host $language.valentine
     }
     elseif ($now.day -eq 8 -and $now.Month -eq 3){
-        Write-Host "Happy International Women's Day!"
+        Write-Host $language.womenDay
     }
     elseif ($now.day -eq 17 -and $now.Month -eq 3) {
-        Write-Host "Happy St. Patrick's Day!"
+        Write-Host $language.patrickDay
     }
     elseif ($now.day -eq 1 -and $now.Month -eq 4) {
-        Write-Host "Happy April Fools' Day!"
+        Write-Host $language.aprilFools
     }
     elseif ($now.day -eq 1 -and $now.Month -eq 5) {
-        Write-Host "Happy Labour Day / International Workers' Day!"
+        Write-Host $language.labourDay
     }
     elseif ($now.day -eq 31 -and $now.Month -eq 10) {
-        Write-Host "Happy Halloween!"
+        Write-Host $language.haloween
     }
     elseif ($now.day -eq 1 -and $now.Month -eq 11) {
-        Write-Host "Happy All Saints' Day!"
+        Write-Host $language.saintDay
     }
     elseif (($now.day -eq 24 -or $now.day -eq 25) -and $now.Month -eq 12 ) {
-        Write-Host "Merry Christmas!"
+        Write-Host $language.christmas
     }
     # I HATE THINGS THAT CHNAGES YEARLY LIKE WHY DON'T YOU JUST IDK HAVE DATE???
 
     elseif (($now.day -ge 22 -and $now.day -le 28) -and $now.Month -eq 11 -and $now.DayOfWeek -eq "Thursday") {
-        Write-Host "Happy Thanksgiving (USA)!"
+        Write-Host $language.thanksgivingUSA
     }
     elseif (($now.day -ge 8 -and $now.day -le 14) -and $now.Month -eq 11 -and $now.DayOfWeek -eq "Monday") {
-        Write-Host "Happy Thanksgiving (Canada)!"
+        Write-Host $language.thanksgivingCAN
     }
 }
 

@@ -71,5 +71,17 @@
         ""
     ],
     "buttonToExit" : "Press any button to exit.",
-    "commands" : "Commads"
+    "commands" : "Commads",
+
+    "newYear" : "Happy New Year!",
+    "valentine" : "Happy Valentine's Day!",
+    "womenDay" : "Happy International Women's Day!",
+    "patrickDay" : "Happy St. Patrick's Day!",
+    "aprilFools" : "Happy April Fools' Day!",
+    "labourDay" : "Happy Labour Day / International Workers' Day!",
+    "haloween" : "Happy Halloween!",
+    "saintDay" : "Happy All Saints' Day!",
+    "christmas" : "Merry Christmas!",
+    "thanksgivingUSA" : "Happy Thanksgiving (USA)!",
+    "thanksgivingCAN" : "Happy Thanksgiving (Canada)!"
 }
