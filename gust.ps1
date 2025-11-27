@@ -167,6 +167,8 @@ function log{
 }
 
 function behaviourCheck{
+    holiday
+
     if ($interactive){
         $otherModes = "interactive"
     }
@@ -286,6 +288,45 @@ function behaviourCheck{
         runActions $true
     }
     addStats
+}
+
+function holiday {
+    $now = Get-Date
+    if (($now.day -eq 1 -and $now.Month -eq 1) || ($now.day -eq 31 -and $now.Month -eq 12)){
+        Write-Host "Happy New Year!"
+    }
+    elseif ($now.day -eq 14 -and $now.Month -eq 2){
+        Write-Host "Happy Valentine's Day!"
+    }
+    elseif ($now.day -eq 8 -and $now.Month -eq 3){
+        Write-Host "Happy International Women's Day!"
+    }
+    elseif ($now.day -eq 17 -and $now.Month -eq 3) {
+        Write-Host "Happy St. Patrick's Day!"
+    }
+    elseif ($now.day -eq 1 -and $now.Month -eq 4) {
+        Write-Host "Happy April Fools' Day!"
+    }
+    elseif ($now.day -eq 1 -and $now.Month -eq 5) {
+        Write-Host "Happy Labour Day / International Workers' Day!"
+    }
+    elseif ($now.day -eq 31 -and $now.Month -eq 10) {
+        Write-Host "Happy Halloween!"
+    }
+    elseif ($now.day -eq 1 -and $now.Month -eq 11) {
+        Write-Host "Happy All Saints' Day!"
+    }
+    elseif (($now.day -eq 24 -or $now.day -eq 25) -and $now.Month -eq 12 ) {
+        Write-Host "Merry Christmas!"
+    }
+    # I HATE THINGS THAT CHNAGES YEARLY LIKE WHY DON'T YOU JUST IDK HAVE DATE???
+
+    elseif (($now.day -ge 22 -and $now.day -le 28) -and $now.Month -eq 11 -and $now.DayOfWeek -eq "Thursday") {
+        Write-Host "Happy Thanksgiving (USA)!"
+    }
+    elseif (($now.day -ge 8 -and $now.day -le 14) -and $now.Month -eq 11 -and $now.DayOfWeek -eq "Monday") {
+        Write-Host "Happy Thanksgiving (Canada)!"
+    }
 }
 
 function runModification {
