@@ -148,7 +148,7 @@ function introWriter {
     if ($index -eq 1) {
         Write-Host "$($language.commands):  1) $($language.help)" -ForegroundColor Red
     } else {
-        Write-Host "$($language.commands): 1) $($language.help)"
+        Write-Host "$($language.commands):  1) $($language.help)"
     }
 
     if ($index -eq 2) {
