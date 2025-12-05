@@ -293,7 +293,7 @@ function behaviourCheck{
 function holiday {
     #$language
     $now = Get-Date
-    if (($now.day -eq 1 -and $now.Month -eq 1) || ($now.day -eq 31 -and $now.Month -eq 12)){
+    if (($now.day -eq 1 -and $now.Month -eq 1) -or ($now.day -eq 31 -and $now.Month -eq 12)){
         Write-Host $language.newYear
     }
     elseif ($now.day -eq 14 -and $now.Month -eq 2){
