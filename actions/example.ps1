@@ -10,23 +10,23 @@ $actions = @(
     "log"
 )
 
-function getActionName{
+function getActionName {
     return "gustActionShowCase"
 }
 
-function versionOfGust{
+function versionOfGust {
     return "0.4.3"
 }
 
-function getActions{
+function getActions {
     return $actions
 }
 
-function getActionVersion{
+function getActionVersion {
     return "0.1.0"
 }
 
-function behaviourSwitchCheck{
+function behaviourSwitchCheck {
     param(
         $name,
         [boolean]$isLast
@@ -34,10 +34,10 @@ function behaviourSwitchCheck{
 
     switch ($name) {
         "log" {
-            if ($isLast){
+            if ($isLast) {
                 Write-Host "actions are working - this last action"
             }
-            else{
+            else {
                 Write-Host "actions are working - this is first action"
             }
         }

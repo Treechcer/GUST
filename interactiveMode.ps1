@@ -1,4 +1,4 @@
-class inputs{
+class inputs {
     [string]$mode
     [string]$message
     [string]$gitURL
@@ -15,7 +15,7 @@ class inputs{
         $this.number = $cfg.defaultLogLength
     }
 
-    [void]execute(){
+    [void]execute() {
         . "$PSScriptRoot/gust.ps1" -m $this.mode -c $this.message -u $this.gitURL -b $this.branch -n $this.number
     }
 }
@@ -29,34 +29,34 @@ $inputVaNames = @(
     "mode", "message", "gitURL", "branch", "number"
 )
 
-function startInteractive{
+function startInteractive {
     . "$PSScriptRoot/gust.ps1" "NOMODE"
     $script:language = getLanguageJSON "english"
     $running = $true
     introWriter
     $inputs = [inputs]::new()
 
-    while ($running){
+    while ($running) {
         #Write-Host -NoNewline "GUST> Enter command: "
         #$comm = Read-Host
         #$comm = $comm.Trim()
         $run = $true
-        while ($run){
+        while ($run) {
             $key = [System.Console]::ReadKey($true)
             switch ($key.Key) {
                 "UpArrow" {
-                    if ($index -lt 1){
+                    if ($index -lt 1) {
                         $index = 1
                     }
-                    else{
+                    else {
                         $index += -1
                     }
                 }
                 "DownArrow" {
-                    if ($index -ge $commands.Length + 1){
+                    if ($index -ge $commands.Length + 1) {
                         $index = $commands.Length + 1
                     }
-                    else{
+                    else {
                         $index += +1
                     }
                 }
@@ -71,7 +71,7 @@ function startInteractive{
             Clear-Host
             introWriter
         }
-        if ($comm -eq ".exit" -or $comm -eq "3"){
+        if ($comm -eq ".exit" -or $comm -eq "3") {
             $running = $false
         }
         elseif ($comm -match "^\.run" -or $comm[0] -eq "2") {
@@ -79,31 +79,31 @@ function startInteractive{
             $localIndex = 1
             inputWriter $localIndex $inputs
             $run = $true
-            while ($run){
+            while ($run) {
                 $key = [System.Console]::ReadKey($true)
                 switch ($key.Key) {
                     "UpArrow" {
-                        if ($localIndex -lt 1){
+                        if ($localIndex -lt 1) {
                             $localIndex = 1
                         }
-                        else{
+                        else {
                             $localIndex += -1
                         }
                     }
                     "DownArrow" {
-                        if ($localIndex -ge 6){
+                        if ($localIndex -ge 6) {
                             $localIndex = 6
                         }
-                        else{
+                        else {
                             $localIndex += +1
                         }
                     }
                     "Enter" {
-                        if ($localIndex -eq 6){
+                        if ($localIndex -eq 6) {
                             $inputs.execute()
                             $run = $false
                         }
-                        else{
+                        else {
                             $inputs.PSObject.Properties[$inputVaNames[$localIndex - 1]].Value = Read-Host "Input your value"
                         }
                     }
@@ -115,15 +115,15 @@ function startInteractive{
                 inputWriter $localIndex $inputs
             }
         }
-        elseif ($comm -match "^\.update" -or $comm -eq "5"){
+        elseif ($comm -match "^\.update" -or $comm -eq "5") {
             . "$PSScriptRoot/gust.ps1" -update
         }
-        elseif ($comm -eq ".help" -or $comm -eq "1"){
+        elseif ($comm -eq ".help" -or $comm -eq "1") {
             for ($iterator = 0; $iterator -lt $language.gustInteractiveHelp.Count; $iterator++) {
                 Write-Host $language.gustInteractiveHelp[$iterator]
             }
             Write-Host "$($language.buttonToExit)" -NoNewline
-            while ($run){
+            while ($run) {
                 $key = [System.Console]::ReadKey($true)
                 switch ($key.Key) {
                     default {
@@ -132,11 +132,11 @@ function startInteractive{
                 }
             }
         }
-        elseif ($comm -eq ".clear" -or $comm -eq "4"){
+        elseif ($comm -eq ".clear" -or $comm -eq "4") {
             Clear-Host
             introWriter
         }
-        else{
+        else {
             Write-Host "'$($comm)' is not recognised command"
         }
     } 
@@ -147,31 +147,36 @@ function introWriter {
     Write-Host "$($language.interactiveMode) $($Global:version)"
     if ($index -eq 1) {
         Write-Host "$($language.commands):  1) $($language.help)" -ForegroundColor Red
-    } else {
+    }
+    else {
         Write-Host "$($language.commands):  1) $($language.help)"
     }
 
     if ($index -eq 2) {
         Write-Host "          2) $($language.run)" -ForegroundColor Red
-    } else {
+    }
+    else {
         Write-Host "          2) $($language.run)"
     }
 
     if ($index -eq 3) {
         Write-Host "          3) $($language.exit)" -ForegroundColor Red
-    } else {
+    }
+    else {
         Write-Host "          3) $($language.exit)"
     }
 
     if ($index -eq 4) { 
         Write-Host "          4) $($language.clear)" -ForegroundColor Red
-    } else {
+    }
+    else {
         Write-Host "          4) $($language.clear)"
     }
 
     if ($index -eq 5) { 
         Write-Host "          5) $($language.update)" -ForegroundColor Red
-    } else {
+    }
+    else {
         Write-Host "          5) $($language.update)"
     }
     Write-Host "--------------------------------------------"
@@ -187,32 +192,38 @@ function inputWriter {
     Write-Host "$($language.propertyChange)"
     if ($localIndex -eq 1) {
         Write-Host "Mode ('m') - $($language.value): $($inputs.mode)" -ForegroundColor Red
-    } else {
+    }
+    else {
         Write-Host "Mode ('m') - $($language.value): $($inputs.mode)"
     }
     if ($localIndex -eq 2) {
         Write-Host "Message ('c') - $($language.value): $($inputs.message)" -ForegroundColor Red
-    } else {
+    }
+    else {
         Write-Host "Message ('c') - $($language.value): $($inputs.message)"
     }
     if ($localIndex -eq 3) {
         Write-Host "gitURL ('u') - $($language.value): $($inputs.gitURL)" -ForegroundColor Red
-    } else {
+    }
+    else {
         Write-Host "gitURL ('u') - $($language.value): $($inputs.gitURL)"
     }
     if ($localIndex -eq 4) {
         Write-Host "Branch ('b') - $($language.value): $($inputs.branch)" -ForegroundColor Red
-    } else {
+    }
+    else {
         Write-Host "Branch ('b') - $($language.value): $($inputs.branch)"
     }
     if ($localIndex -eq 5) {
         Write-Host "Number ('n') - $($language.value): $($inputs.number)" -ForegroundColor Red
-    } else {
+    }
+    else {
         Write-Host "Number ('n') - $($language.value): $($inputs.number)"
     }
     if ($localIndex -eq 6) {
         Write-Host "$($language.exeCmd)" -ForegroundColor Red
-    } else {
+    }
+    else {
         Write-Host "$($language.exeCmd)"
     }
     Write-Host "--------------------------------------------"

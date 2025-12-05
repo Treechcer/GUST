@@ -1,24 +1,24 @@
-function getMessage{
+function getMessage {
     return $message
 }
 
-function getURL{
+function getURL {
     return $gitURL
 }
 
-function getOtherModes{
+function getOtherModes {
     return $otherModes
 }
 
-function getBranch{
+function getBranch {
     return $branch
 }
 
-function getNumber{
+function getNumber {
     return $number
 }
 
-function callNormalMode{
+function callNormalMode {
     #This function can call normal or standard modes from gust.ps1
     param (
         $mode

@@ -5,23 +5,23 @@ $modifications = @(
     "b(s(k)?)?"
 )
 
-function getModificationName{
+function getModificationName {
     return "bluesky Poster"
 }
 
-function versionOfGust{
+function versionOfGust {
     return "0.4.3"
 }
 
-function getModificationVersion{
+function getModificationVersion {
     return "0.1.0"
 }
 
-function getModifications{
+function getModifications {
     return $modifications
 }
 
-function behaviourSwitchCheck{
+function behaviourSwitchCheck {
     param(
         $name
     )
@@ -30,14 +30,14 @@ function behaviourSwitchCheck{
         "bsk" {
             $bluesky = "$PSScriptRoot/bluesky.json"
 
-            if (Test-Path $bluesky){
+            if (Test-Path $bluesky) {
                 $bsk = Get-Content $bluesky | ConvertFrom-Json
 
                 $BSkyAuthKey = "$($bsk.API)"
                 $BSkyAccount = "$($bsk.handle)"
 
                 $Body =
-@"
+                @"
     {
         "identifier": "$BSkyAccount",
         "password": "$BSkyAuthKey"
@@ -61,7 +61,7 @@ function behaviourSwitchCheck{
 
                 #Write-Host "$($isPrivate.language)"
 
-                if ($isPrivate.language -eq "PowerShell"){
+                if ($isPrivate.language -eq "PowerShell") {
                     $tags = @("#PowerShell", "#Scripting", "#Automation", "#Shell")
                 }
                 elseif ($isPrivate.language -eq "lua") {
@@ -70,12 +70,12 @@ function behaviourSwitchCheck{
                 elseif ($isPrivate.language -eq "python") {
                     $tags = @("#Python", "#Programming", "#Automation", "#Scripting")
                 }
-                else{
+                else {
                     Write-Host "Incorrect language, not set up"
                     exit
                 }
 
-                if ($isPrivate.private){
+                if ($isPrivate.private) {
                     Write-Host "this is private repo"
                     Write-Host "⚠️ ⚠️ ⚠️"
                     exit
@@ -83,7 +83,7 @@ function behaviourSwitchCheck{
 
                 $text = "Pushed new updates to $repoName!`nWith commit message as '$($commitMessage)'`n $repository`n`n#GitHub #Coding #DevLog $($tags[0]) $($tags[1]) $($tags[2]) $($tags[3])"
                 
-                if ($text.Length -gt 300){
+                if ($text.Length -gt 300) {
                     Write-Host "Input is too long, it can't be more than 300 characters"
                     Write-Host ($text.Length)
                     exit
@@ -91,106 +91,106 @@ function behaviourSwitchCheck{
                 
                 $emojiCount = 0
                 $PostBody = @{
-                    repo = $BSkyAccount
+                    repo       = $BSkyAccount
                     collection = "app.bsky.feed.post"
-                    record = @{
-                        text = $text
+                    record     = @{
+                        text      = $text
                         createdAt = (Get-Date).ToString("o")
-                        langs = @("en-US")
-                        facets = @(
+                        langs     = @("en-US")
+                        facets    = @(
                             @{
-                                index = @{
+                                index    = @{
                                     byteStart = $text.IndexOf($repository) + ($emojiCount * 2)
-                                    byteEnd = $text.IndexOf($repository) + $repository.Length + ($emojiCount * 2)
+                                    byteEnd   = $text.IndexOf($repository) + $repository.Length + ($emojiCount * 2)
                                 }
                                 features = @(
                                     @{
                                         "`$type" = "app.bsky.richtext.facet#link"
-                                        uri = $repository
+                                        uri      = $repository
                                     }
                                 )
                             },
                             @{
-                                index = @{
+                                index    = @{
                                     byteStart = $text.IndexOf("#GitHub") + ($emojiCount * 2)
-                                    byteEnd = $text.IndexOf("#GitHub") + "#GitHub".Length + ($emojiCount * 2)
+                                    byteEnd   = $text.IndexOf("#GitHub") + "#GitHub".Length + ($emojiCount * 2)
                                 }
                                 features = @(
                                     @{
                                         "`$type" = "app.bsky.richtext.facet#tag"
-                                        tag = "GitHub"
+                                        tag      = "GitHub"
                                     }
                                 )
                             },
                             @{
-                                index = @{
+                                index    = @{
                                     byteStart = $text.IndexOf("#DevLog") + ($emojiCount * 2)
                                     byteEnd   = $text.IndexOf("#DevLog") + "#DevLog".Length + ($emojiCount * 2)
                                 }
                                 features = @(
                                     @{
                                         "`$type" = "app.bsky.richtext.facet#tag"
-                                        tag = "DevLog"
+                                        tag      = "DevLog"
                                     }
                                 )
                             },
                             @{
-                                index = @{
+                                index    = @{
                                     byteStart = $text.IndexOf("#Coding") + ($emojiCount * 2)
                                     byteEnd   = $text.IndexOf("#Coding") + "#Coding".Length + ($emojiCount * 2)
                                 }
                                 features = @(
                                     @{
                                         "`$type" = "app.bsky.richtext.facet#tag"
-                                        tag = "Coding"
+                                        tag      = "Coding"
                                     }
                                 )
                             },
                             @{
-                                index = @{
+                                index    = @{
                                     byteStart = $text.IndexOf("$($tags[0])") + ($emojiCount * 2)
                                     byteEnd   = $text.IndexOf("$($tags[0])") + "$($tags[0])".Length + ($emojiCount * 2)
                                 }
                                 features = @(
                                     @{
                                         "`$type" = "app.bsky.richtext.facet#tag"
-                                        tag = "$($tags[0].split('#')[1])"
+                                        tag      = "$($tags[0].split('#')[1])"
                                     }
                                 )
                             },
                             @{
-                                index = @{
+                                index    = @{
                                     byteStart = $text.IndexOf("$($tags[1])") + ($emojiCount * 2)
                                     byteEnd   = $text.IndexOf("$($tags[1])") + "$($tags[1])".Length + ($emojiCount * 2)
                                 }
                                 features = @(
                                     @{
                                         "`$type" = "app.bsky.richtext.facet#tag"
-                                        tag = "$($tags[1].split('#')[1])"
+                                        tag      = "$($tags[1].split('#')[1])"
                                     }
                                 )
                             },
                             @{
-                                index = @{
+                                index    = @{
                                     byteStart = $text.IndexOf("$($tags[2])") + ($emojiCount * 2)
                                     byteEnd   = $text.IndexOf("$($tags[2])") + "$($tags[2])".Length + ($emojiCount * 2)
                                 }
                                 features = @(
                                     @{
                                         "`$type" = "app.bsky.richtext.facet#tag"
-                                        tag = "$($tags[2].split('#')[1])"
+                                        tag      = "$($tags[2].split('#')[1])"
                                     }
                                 )
                             },
                             @{
-                                index = @{
+                                index    = @{
                                     byteStart = $text.IndexOf("$($tags[3])") + ($emojiCount * 2)
                                     byteEnd   = $text.IndexOf("$($tags[3])") + "$($tags[3])".Length + ($emojiCount * 2)
                                 }
                                 features = @(
                                     @{
                                         "`$type" = "app.bsky.richtext.facet#tag"
-                                        tag = "$($tags[3].split('#')[1])"
+                                        tag      = "$($tags[3].split('#')[1])"
                                     }
                                 )
                             }
@@ -203,7 +203,7 @@ function behaviourSwitchCheck{
                 
                 callNormalMode "commit"
             }
-            else{
+            else {
                 Write-Host "you don't have 'bluesky.json'"
             }
         }

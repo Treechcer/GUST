@@ -10,26 +10,26 @@ $modifications = @(
     "^m(o(d(T(e(s(t)?)?)?)?)?)?"
 )
 
-function versionOfGust{
+function versionOfGust {
     # This return the version gust had when you made mod, it's there to know for compatibility and other things (because modAPI might be rewriten etc.)
     return "$Global:version" # you shouldn't do this because it makes it harder to know if your mod is broken because of changes in mod API but this mod won't change nor uses modAPID much
 }
 
-function getModificationName{
+function getModificationName {
     # Returns the name of the mod (this is used for "mod manager")
     return "modTester"
 }
 
-function getModificationVersion{
+function getModificationVersion {
     return "1.0.0"
 }
 
-function getModifications{
+function getModifications {
     # Returns all modes (as regEx / string) this mod provides
     return $modifications
 }
 
-function behaviourSwitchCheck{
+function behaviourSwitchCheck {
     param(
         # Function must have a single input: the mode name
         $name

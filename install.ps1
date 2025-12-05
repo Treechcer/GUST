@@ -4,7 +4,7 @@ param(
     [Boolean]$install = $True
 )
 
-function install{
+function install {
     mkdir temp
     git clone https://github.com/Treechcer/GUST temp
 }
@@ -18,11 +18,11 @@ function installAuto {
         [Environment]::SetEnvironmentVariable("Path", "$currentPath;$PSScriptRoot", "User")
         Write-Host "Gust, from folder $PSScriptRoot was added do PATH. Restart your terminal."
     }
-    else{
+    else {
         Write-Host "Already in path"
     }
 }
 
-if ($install){
+if ($install) {
     installAuto
 }

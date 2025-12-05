@@ -2,23 +2,23 @@ $actions = @(
 
 )
 
-function getActionName{
+function getActionName {
     return "gustActionTemplate"
 }
 
-function versionOfGust{
+function versionOfGust {
     return "$Global:version"
 }
 
-function getActions{
+function getActions {
     return $actions
 }
 
-function getActionVersion{
+function getActionVersion {
     return "0.1.0"
 }
 
-function behaviourSwitchCheck{
+function behaviourSwitchCheck {
     param(
         $name,
         $isLast

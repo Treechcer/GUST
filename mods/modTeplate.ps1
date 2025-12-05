@@ -2,23 +2,23 @@ $modifications = @(
 
 )
 
-function getModificationName{
+function getModificationName {
     return "gustModShowCase"
 }
 
-function versionOfGust{
+function versionOfGust {
     return "0.4.3"
 }
 
-function getModifications{
+function getModifications {
     return $modifications
 }
 
-function getModificationVersion{
+function getModificationVersion {
     return "0.1.0"
 }
 
-function behaviourSwitchCheck{
+function behaviourSwitchCheck {
     param(
         $name
     )

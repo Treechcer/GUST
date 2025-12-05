@@ -7,23 +7,23 @@ $modifications = @(
     "NAS"
 )
 
-function getModificationName{
+function getModificationName {
     return "NAS-uploader"
 }
 
-function versionOfGust{
+function versionOfGust {
     return "0.4.3"
 }
 
-function getModificationVersion{
+function getModificationVersion {
     return "0.1.0"
 }
 
-function getModifications{
+function getModifications {
     return $modifications
 }
 
-function behaviourSwitchCheck{
+function behaviourSwitchCheck {
     param(
         $name
     )
@@ -34,7 +34,7 @@ function behaviourSwitchCheck{
 
             $message = getMessage
             $message
-            if ($message -ne ""){
+            if ($message -ne "") {
                 . "$PSScriptRoot\..\gust.ps1" -m "c" -c $message
             }
 

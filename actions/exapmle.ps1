@@ -10,23 +10,23 @@ $actions = @(
     "log"
 )
 
-function getActionName{
+function getActionName {
     return "gustActionShowCase"
 }
 
-function versionOfGust{
+function versionOfGust {
     return "0.3.3"
 }
 
-function getActions{
+function getActions {
     return $actions
 }
 
-function getActionVersion{
+function getActionVersion {
     return "0.1.0"
 }
 
-function behaviourSwitchCheck{
+function behaviourSwitchCheck {
     param(
         $name
     )

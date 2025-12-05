@@ -30,7 +30,7 @@ $Global:version = "0.5.7"
 #
 #$jsonContent | Set-Content -Path "$PSScriptRoot/config.json" -Encoding UTF8
 
-function checkUser{
+function checkUser {
     $username = git config --global user.name
     $useremail = git config --global user.email
 
@@ -42,7 +42,7 @@ function checkUser{
     }
 
     if (-not $username -or -not $useremail) {
-        if ($config.userEmail -eq $null -and $config.userName -eq $null){
+        if ($config.userEmail -eq $null -and $config.userName -eq $null) {
             Write-Host "--------------------------------------------------------------------------------------------------"
             Write-Host $language.logInPrompt[0]
             Write-Host $language.logInPrompt[1]
@@ -52,13 +52,13 @@ function checkUser{
             Write-Host "--------------------------------------------------------------------------------------------------"
             exit 1
         }
-        else{
-            if ($config.changeNameGlobal){
+        else {
+            if ($config.changeNameGlobal) {
                 Write-Host "$($language.globalSettingEmailName[0]) $($config.userName) $($language.and) $($config.userEmail)"
                 git config --global user.name "$config.userName"
                 git config --global user.email "$config.userEmail"
             }
-            else{
+            else {
                 Write-Host "$($language.globalSettingEmailName[1]) $($config.userName) $($language.and) $($config.userEmail)"
                 git config user.name "$config.userName"
                 git config user.email "$config.userEmail"
@@ -104,10 +104,10 @@ function gitPushCreate {
     }
 }
 
-function branchCreateSwitch{
+function branchCreateSwitch {
     $exists = git branch --list $branch
 
-    if ($exists){
+    if ($exists) {
         Write-Host "$branch -- $($language.branchExists)"
         exit 1
     }
@@ -118,10 +118,10 @@ function branchCreateSwitch{
     git branch
 }
 
-function branchSwitch{
+function branchSwitch {
     $exists = git branch --list $branch
 
-    if (-not $exists){
+    if (-not $exists) {
         Write-Host "$branch -- $($language.branchDoesNotExists)"
         exit 1
     }
@@ -130,90 +130,90 @@ function branchSwitch{
     git branch
 }
 
-function branchDelete{
+function branchDelete {
     $exists = git branch --list $branch
 
-    if (-not $exists){
+    if (-not $exists) {
         Write-Host "$branch -- $($language.branchDoesNotExists)"
         exit 1
     }
 
-    if ($config.forceBranchDelete){
+    if ($config.forceBranchDelete) {
         $delType = "-D"
     }
-    else{
+    else {
         $delType = "-d"
     }
 
     $err0 = & git branch $delType $branch 2>&1
-    if ($LASTEXITCODE -ne 0){
+    if ($LASTEXITCODE -ne 0) {
         git branch
         Write-Host "$branch $($language.branchSafe)"
         exit 1
     }
-    else{
+    else {
         Write-Host "$branch $($language.wasDeleted)"
     }
 }
 
-function status{
+function status {
     git status
     git branch
 }
 
-function log{
-    if (-not $number){
+function log {
+    if (-not $number) {
         $number = $config.defaultLogLength
     }
 
     git log --oneline -n $number
 }
 
-function behaviourCheck{
+function behaviourCheck {
     holiday
 
-    if ($interactive){
+    if ($interactive) {
         $otherModes = "interactive"
     }
-    elseif($otherModes -match "^u(p(d(a(t(e)?)?)?)?)?$" -or $otherModes -match "-update" -or $update){
+    elseif ($otherModes -match "^u(p(d(a(t(e)?)?)?)?)?$" -or $otherModes -match "-update" -or $update) {
         $otherModes = "up"
     }
-    elseif ($otherModes -match "^b(r(a(n(c(h)?)?)?)?)?"){
-        if ($otherModes -match "d(e(l(e(t(e)?)?)?)?)?$"){
+    elseif ($otherModes -match "^b(r(a(n(c(h)?)?)?)?)?") {
+        if ($otherModes -match "d(e(l(e(t(e)?)?)?)?)?$") {
             $otherModes = "bd"
         }
-        elseif($otherModes -match "c(r(e(a(t(e)?)?)?)?)?" -and $otherModes -match "s(w(i(t(c(h)?)?)?)?)?"){
+        elseif ($otherModes -match "c(r(e(a(t(e)?)?)?)?)?" -and $otherModes -match "s(w(i(t(c(h)?)?)?)?)?") {
             $otherModes = "bcs"
         }
-        elseif($otherModes -match "s(w(i(t(c(h)?)?)?)?)?$"){
+        elseif ($otherModes -match "s(w(i(t(c(h)?)?)?)?)?$") {
             $otherModes = "bs"
         }
     }
-    elseif ($otherModes -match "^s(w(i(t(c(h)?)?)?)?)?"){
-        if ($otherModes -match "p(r(o(f(i(l(e)?)?)?)?)?)?"){
+    elseif ($otherModes -match "^s(w(i(t(c(h)?)?)?)?)?") {
+        if ($otherModes -match "p(r(o(f(i(l(e)?)?)?)?)?)?") {
             $otherModes = "swp"
         }
     }
-    elseif ($otherModes -match "^c(r(e(a(t(e)?)?)?)?)?"){
-        if ($otherModes -match "n(e(w)?)?"){
-            if ($otherModes -match "p(r(o(f(i(l(e)?)?)?)?)?)?"){
+    elseif ($otherModes -match "^c(r(e(a(t(e)?)?)?)?)?") {
+        if ($otherModes -match "n(e(w)?)?") {
+            if ($otherModes -match "p(r(o(f(i(l(e)?)?)?)?)?)?") {
                 $otherModes = "cnp"
             }
         }
     }
-    elseif ($otherModes -match "^p(u(l(l)?)?)?$"){
+    elseif ($otherModes -match "^p(u(l(l)?)?)?$") {
         $otherModes = "p"
     }
-    elseif ($otherModes -match "^c(o(m(m(i(t)?)?)?)?)?$"){
+    elseif ($otherModes -match "^c(o(m(m(i(t)?)?)?)?)?$") {
         $otherModes = "c"
     }
-    elseif ($otherModes -match "^l(o(g)?)?$"){
+    elseif ($otherModes -match "^l(o(g)?)?$") {
         $otherModes = "log"
     }
-    elseif ($otherModes -match "^s(t(a(t(u(s)?)?)?)?)?$"){
+    elseif ($otherModes -match "^s(t(a(t(u(s)?)?)?)?)?$") {
         $otherModes = "s"
     }
-    elseif($otherModes -match "^l(i(s(t)?)?)?$"){
+    elseif ($otherModes -match "^l(i(s(t)?)?)?$") {
         $otherModes = "l"
     }
     elseif ($otherModes -eq "NOMODE") {
@@ -222,77 +222,83 @@ function behaviourCheck{
     elseif ($otherModes -eq "autoCommit") {
         $otherModes = "AC"
     }
-    elseif ($otherModes -eq ""){
+    elseif ($otherModes -eq "") {
         $otherModes = $config.defaultMode
     }
 
-    if ($config.runBeforeActions){
+    if ($config.runBeforeActions) {
         . "$PSScriptRoot\actions.ps1"
         runActions $false
     }
 
-    switch ($otherModes){
-        "c" { # just git add, commit and push :)
+    switch ($otherModes) {
+        "c" {
+            # just git add, commit and push :)
             gitPushCreate
         }
-        "bcs" { # branch create switch
+        "bcs" {
+            # branch create switch
             branchCreateSwitch
         }
-        "bs" { # branch switch
+        "bs" {
+            # branch switch
             branchSwitch
         }
-        "bd" { # branch delete
+        "bd" {
+            # branch delete
             branchDelete
         }
-        "s" { # status + branch
+        "s" {
+            # status + branch
             status
         }
-        "p" { # git pull
+        "p" {
+            # git pull
             git pull
         }
-        "log"{
+        "log" {
             log
         }
-        "l"{
+        "l" {
             writeMods
         }
-        "up"{
+        "up" {
             update
         }
-        "NOMODE"{
+        "NOMODE" {
             exit
         }
-        "swp"{
+        "swp" {
             swp
         }
-        "cnp"{
+        "cnp" {
             cnp
         }
-        "interactive"{
+        "interactive" {
             . "$PSScriptRoot/interactiveMode.ps1"
             startInteractive
             exit
         }
-        "AC"{
+        "AC" {
             autoCommit
         }
         default {
-            if ($config.runModification){
+            if ($config.runModification) {
                 $found = runModification $otherModes
 
-                if (-not $found){
+                if (-not $found) {
                     Write-Host "$otherModes $($language.notCorrectInput)"
                     exit
                 }
             }
-            else{
+            else {
                 Write-Host "$otherModes $($language.notCorrectInput)"
                 exit
             }
         }
     }
 
-    if ($config.runAfterActions){
+    if ($config.runAfterActions) {
         . "$PSScriptRoot\actions.ps1"
         runActions $true
     }
@@ -307,13 +313,13 @@ function autoCommit {
 function holiday {
     #$language
     $now = Get-Date
-    if (($now.day -eq 1 -and $now.Month -eq 1) -or ($now.day -eq 31 -and $now.Month -eq 12)){
+    if (($now.day -eq 1 -and $now.Month -eq 1) -or ($now.day -eq 31 -and $now.Month -eq 12)) {
         Write-Host $language.newYear
     }
-    elseif ($now.day -eq 14 -and $now.Month -eq 2){
+    elseif ($now.day -eq 14 -and $now.Month -eq 2) {
         Write-Host $language.valentine
     }
-    elseif ($now.day -eq 8 -and $now.Month -eq 3){
+    elseif ($now.day -eq 8 -and $now.Month -eq 3) {
         Write-Host $language.womenDay
     }
     elseif ($now.day -eq 17 -and $now.Month -eq 3) {
@@ -373,7 +379,7 @@ function writeMods {
     $gVersions += getGVersions "actions"
 
     Write-Host ("{0,-4} {1,-25} {2,-12} {3,-12} {4}" -f "#", "$($language.modName)", "$($language.local)", "$($language.gustVer)", "$($language.note)")
-    Write-Host ("-"*70)
+    Write-Host ("-" * 70)
 
     for ($i = 0; $i -lt $names.Length; $i++) {
         $bonus = ""
@@ -392,17 +398,17 @@ function writeMods {
             }
         }
 
-        if ($i -eq $modCount){
+        if ($i -eq $modCount) {
             Write-Host ""
             Write-Host ("{0,-4} {1,-25} {2,-12} {3,-12} {4}" -f "#", "$($language.actionName)", "$($language.local)", "$($language.gustVer)", "$($language.note)")
-            Write-Host ("-"*70)
+            Write-Host ("-" * 70)
             #Write-Host $line -ForegroundColor $color
             $line = ("[{0}] {1,-25} {2,-12} {3,-12} {4}" -f ($i + 1 - $modCount), $names[$i], "($($versions[$i]))", $gVersions[$i], $bonus)
         }
         elseif ($i -gt $modCount) {
             $line = ("[{0}] {1,-25} {2,-12} {3,-12} {4}" -f ($i + 1 - $modCount), $names[$i], "($($versions[$i]))", $gVersions[$i], $bonus)
         }
-        else{
+        else {
             $line = ("[{0}] {1,-25} {2,-12} {3,-12} {4}" -f ($i + 1), $names[$i], "($($versions[$i]))", $gVersions[$i], $bonus)
         }
 
@@ -416,7 +422,7 @@ function update {
     v = $Global:version
     . "$PSScriptRoot\temp\gust.ps1" "NOMODE"
     Write-Host $(getVersion) $v
-    if ($(getVersion) -ne $v){
+    if ($(getVersion) -ne $v) {
         robocopy $PSScriptRoot\temp $PSScriptRoot /E /IS /IT
     }
     Remove-Item -Path $PSScriptRoot/temp -Recurse -Force
@@ -426,12 +432,12 @@ function getVersion {
     return $Global:version
 }
 
-function swp{
+function swp {
     $okayName = $true
-    while ($okayName){
+    while ($okayName) {
         $name = Read-Host "$(language.profileSwitch) /q"
 
-        if ($name -eq "/q"){
+        if ($name -eq "/q") {
             break
         }
 
@@ -450,12 +456,12 @@ function swp{
     }
 }
 
-function cnp{
+function cnp {
     $okayName = $true
-    while ($okayName){
+    while ($okayName) {
         $name = Read-Host "$($language.profileName) /q"
 
-        if ($name -eq "/q"){
+        if ($name -eq "/q") {
             break
         }
 
@@ -486,7 +492,7 @@ function cnp{
 function profileCheck {
     #$files = Get-ChildItem -Path "$PSScriptRoot/profiles" -File
 
-    if (-not (Test-Path "$PSScriptRoot/profiles/profiles.json")){
+    if (-not (Test-Path "$PSScriptRoot/profiles/profiles.json")) {
         $d = getDefaultProfiles
         $d = $d | ConvertTo-Json -Depth 3
         $d | Set-Content -Path "$PSScriptRoot/profiles/profiles.json" -Encoding UTF8
@@ -508,7 +514,7 @@ function profileCheck {
 
 }
 
-function addStats{
+function addStats {
     $profileF = Get-Content "$PSScriptRoot/profiles/profiles.json" | ConvertFrom-Json
     
     $config = Get-Content "$PSScriptRoot/profiles/$($profileF.current)/stats.json" -ErrorAction Stop | ConvertFrom-Json
@@ -520,33 +526,33 @@ function addStats{
     $config | Set-Content -Path "$PSScriptRoot/profiles/$($profileF.current)/stats.json" -Encoding UTF8 
 }
 
-function getDefaultConf{
+function getDefaultConf {
     $config = [PSCustomObject]@{
-        defaultBranch = "main";
-        defaultRemote = "origin";
-        userName = $null;
-        userEmail = $null;
-        changeNameGlobal = $false;
-        autoPullBeforePush = $true;
+        defaultBranch           = "main";
+        defaultRemote           = "origin";
+        userName                = $null;
+        userEmail               = $null;
+        changeNameGlobal        = $false;
+        autoPullBeforePush      = $true;
         useDefaultCommitMessage = $false;
-        defaultCommitMessage = "small fixes";
-        forceBranchDelete = $false;
-        defaultLogLength = 5;
-        defaultMode = "c";
-        runModification = $true;
-        runAfterActions = $true;
-        runBeforeActions = $true;
-        language = "english";
+        defaultCommitMessage    = "small fixes";
+        forceBranchDelete       = $false;
+        defaultLogLength        = 5;
+        defaultMode             = "c";
+        runModification         = $true;
+        runAfterActions         = $true;
+        runBeforeActions        = $true;
+        language                = "english";
     }
 
     return $config
 }
 
-function getCurrentConf{
+function getCurrentConf {
     return $config
 }
 
-function getDefaultProfiles{
+function getDefaultProfiles {
     $profileD = [PSCustomObject]@{
         current = "default";
     }
@@ -554,7 +560,7 @@ function getDefaultProfiles{
     return $profileD
 }
 
-function getDefaultStats{
+function getDefaultStats {
     $stats = [PSCustomObject]@{
         
     }
@@ -562,11 +568,11 @@ function getDefaultStats{
     return $stats
 }
 
-function getLanguageJSON{
+function getLanguageJSON {
     param(
         $languageName
     )
-    if (-not (Test-Path $PSScriptRoot/languages/$($config.language).json)){
+    if (-not (Test-Path $PSScriptRoot/languages/$($config.language).json)) {
         $config.language = "english"
         $configPath = $(profileCheck)
         $config = getDefaultConf
@@ -577,12 +583,12 @@ function getLanguageJSON{
 
         return Get-Content $PSScriptRoot/languages/english.json | ConvertFrom-Json
     }
-    else{
+    else {
         return Get-Content $PSScriptRoot/languages/$($config.language).json | ConvertFrom-Json
     }
 }
 
-function validadateConfig{
+function validadateConfig {
     param (
         $config
     )
@@ -595,8 +601,8 @@ function validadateConfig{
     $keys1 = $defaultCFG.PSObject.Properties.Name
     $keys2 = $config.PSObject.Properties.Name
 
-    for ($i = 0; $i -lt $keys1.Length; $i++){
-        if (-not ($keys2 -contains $keys1[$i])){
+    for ($i = 0; $i -lt $keys1.Length; $i++) {
+        if (-not ($keys2 -contains $keys1[$i])) {
             $key = $keys1[$i]
             $config | Add-Member -MemberType NoteProperty -Name $keys1[$i] -Value $defaultCFG.$key -Force
         }
@@ -620,7 +626,7 @@ function writeToCurrentConf {
     $config | Set-Content -Path "$PSScriptRoot/profiles/$($profileF.current)/config.json" -Encoding UTF8 
 }
 
-function getLanguageObject{
+function getLanguageObject {
     return $language
 }
 
@@ -628,10 +634,10 @@ function getLanguageObject{
 
 $configPath = $(profileCheck)
 
-if (Test-Path $configPath){
+if (Test-Path $configPath) {
     $config = Get-Content $configPath | ConvertFrom-Json
 }
-else{
+else {
     $config = getDefaultConf
 
     $jsonContent = $config | ConvertTo-Json -Depth 3
