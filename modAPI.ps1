@@ -18,6 +18,18 @@ function getNumber {
     return $number
 }
 
+function getUpdate {
+    return $update
+}
+
+function getInteractive {
+    return $interactive
+}
+
+function getPath {
+    return $path
+}
+
 function callNormalMode {
     #This function can call normal or standard modes from gust.ps1
     param (

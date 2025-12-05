@@ -22,7 +22,7 @@ param(
     [string]$path # this has to be absolute path
 )
 
-$Global:version = "0.5.7"
+$Global:version = "0.5.8"
 
 #$config = Get-Content $configPath | ConvertFrom-Json
 #
