@@ -9,6 +9,7 @@
   - [Features](#features)
   - [Parameters](#parameters)
   - [Mode parameters](#mode-parameters)
+    - [autoCommit setup](#autocommit-setup)
   - [configurations](#configurations)
   - [Prerequisites](#prerequisites)
   - [Usage](#usage)
@@ -51,8 +52,8 @@
 
 ## Mode parameters
 
-|Name | Description |
-|-----|-------------|
+| Name                      | Description                                                                          |
+|---------------------------|--------------------------------------------------------------------------------------|
 | c(commit)                 | This is configs default. Adds a commit message and pushes to your GitHub repository. |
 | b(ranch)s(witch)c(create) | Creates a new branch and switches to the new branch.                                 |
 | b(ranch)s(witch)          | Switches to an existing branch.                                                      |
@@ -60,6 +61,18 @@
 | s(tatus)                  | Shows the status of current branch.                                                  |
 | p(ull)                    | Pulls the latest changes from your remote repository.                                |
 | l(og)                     | Shows recent commits (default number or set with -number / -n).                      |
+| autoCommit                | Use this for automatically commit (Task Scheduler)                                   |
+| p(ath)                    | This is used for autoCommit to automatically commit specific folder                  |
+
+### autoCommit setup
+
+You can use auto-commit like this:
+
+```pwsh
+gust -m "autoCommit" -c "auto commit message" -p "C:/some/folder/
+```
+
+I recommend using this with `Task Scheduler`, you'll have to look into it if you want to use it, but it's really useful and probably easiest Windows way to do it.
 
 ## configurations
 
@@ -80,8 +93,8 @@
 }
 ```
 
-| key | description |
-| --- | ----------- |
+| key                  | description                                                                                                                                                                 |
+|----------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | defaultBranch        | Default branch to push to.                                                                                                                                                  |
 | defaultRemote        | Default git remote name.                                                                                                                                                    |
 | userName             | Used if no git config is set for user.name.                                                                                                                                 |
@@ -92,8 +105,8 @@
 | forceBranchDelete    | If `true` uses `-D` (force deletes) branches.                                                                                                                               |
 | defaultLogLength     | Number of commits shown when using the `log` mode.                                                                                                                          |
 | defaultMode          | Default mode used when no mode is inputted.                                                                                                                                 |
-|runModifications| Defaults to `true`, when it's true mods are enabled and can be executed.|
-|runActions| Defaults to `true`, when it's true actions are enabled and will be executed.|
+| runModifications     | Defaults to `true`, when it's true mods are enabled and can be executed.                                                                                                    |
+| runActions           | Defaults to `true`, when it's true actions are enabled and will be executed.                                                                                                |
 
 ## Prerequisites
 
@@ -352,15 +365,15 @@ This file can be copied and modified to create your own mods quickly.
 Mod API is stored in the file `modAPI.ps1`.  
 For now, it is only used as an easy way to access user inputs and GUST functionality from the main GUST script.
 
-| Function       | Description |
-|----------------|-------------|
-| getMessage     | Returns the input for commit message. |
-| getURL         | Returns the input for repository URL. |
-| getOtherModes  | Returns the input for mode string. |
-| getBranch      | Returns the input for branch name. |
-| getNumber      | Returns the input for numeric input (used in log)|
+| Function       | Description                                                    |
+|----------------|----------------------------------------------------------------|
+| getMessage     | Returns the input for commit message.                          |
+| getURL         | Returns the input for repository URL.                          |
+| getOtherModes  | Returns the input for mode string.                             |
+| getBranch      | Returns the input for branch name.                             |
+| getNumber      | Returns the input for numeric input (used in log)              |
 | callNormalMode | Executes a normal mode with the parameters you passed to GUST. |
-| getConfigValue | Return any value in config variable / config.json. |
+| getConfigValue | Return any value in config variable / config.json.             |
 
 ## Final Note
 

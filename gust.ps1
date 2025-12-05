@@ -16,10 +16,13 @@ param(
 
     [switch]$update,
 
-    [switch]$interactive
+    [switch]$interactive,
+
+    [Alias("p")]
+    [string]$path # this has to be absolute path
 )
 
-$Global:version = "0.5.6"
+$Global:version = "0.5.7"
 
 #$config = Get-Content $configPath | ConvertFrom-Json
 #
@@ -216,6 +219,9 @@ function behaviourCheck{
     elseif ($otherModes -eq "NOMODE") {
         $otherModes = "NOMODE"
     }
+    elseif ($otherModes -eq "autoCommit") {
+        $otherModes = "AC"
+    }
     elseif ($otherModes -eq ""){
         $otherModes = $config.defaultMode
     }
@@ -267,6 +273,9 @@ function behaviourCheck{
             startInteractive
             exit
         }
+        "AC"{
+            autoCommit
+        }
         default {
             if ($config.runModification){
                 $found = runModification $otherModes
@@ -288,6 +297,11 @@ function behaviourCheck{
         runActions $true
     }
     addStats
+}
+
+function autoCommit {
+    Set-Location $path
+    gitPushCreate
 }
 
 function holiday {
