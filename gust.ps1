@@ -16,6 +16,7 @@ param(
 
     [switch]$update,
 
+    [Alias("i")]
     [switch]$interactive,
 
     [Alias("p")]
