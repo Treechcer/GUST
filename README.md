@@ -63,6 +63,7 @@
 | l(og)                     | Shows recent commits (default number or set with -number / -n).                      |
 | autoCommit                | Use this for automatically commit (Task Scheduler)                                   |
 | p(ath)                    | This is used for autoCommit to automatically commit specific folder                  |
+| d(escription)             | This shows you this description in terminal                                          |
 
 ### autoCommit setup
 
@@ -80,33 +81,37 @@ I recommend using this with `Task Scheduler`, you'll have to look into it if you
 {
     "defaultBranch" : "main",
     "defaultRemote" : "origin",
-    "userName" : "$null",
-    "userEmail" : "$null",
-    "changeNameGlobal" : false,
+    "userName" : null,
+    "userEmail" : null,
+    "changeNameGlobal": false,
     "autoPullBeforePush": true,
-    "defaultCommitMessage" : "small fixes",
+    "useDefaultCommitMessage": false,
+    "defaultCommitMessage": "small fixes",
     "forceBranchDelete": false,
-    "defaultLogLength" : 5,
-    "defaultMode" : "c",
-    "runModification" : true,
-    "runActions" : true
+    "defaultLogLength": 5,
+    "defaultMode": "c",
+    "runModification": true,
+    "runAfterActions": true,
+    "runBeforeActions" : true,
+    "language": "english"
 }
 ```
 
-| key                  | description                                                                                                                                                                 |
-|----------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| defaultBranch        | Default branch to push to.                                                                                                                                                  |
-| defaultRemote        | Default git remote name.                                                                                                                                                    |
-| userName             | Used if no git config is set for user.name.                                                                                                                                 |
-| userEmail            | Used if no git config is set for user.email.                                                                                                                                |
-| changeNameGlobal     | Boolean value that makes the name / email change global or local (to enable name changing you have to change the userEmail to your email address and userName to your name) |
-| autoPullBeforePush   | If `True` this sets if you automatically pull before pushing.                                                                                                               |
-| defaultCommitMessage | Used as no commit message is inputted.                                                                                                                                      |
-| forceBranchDelete    | If `true` uses `-D` (force deletes) branches.                                                                                                                               |
-| defaultLogLength     | Number of commits shown when using the `log` mode.                                                                                                                          |
-| defaultMode          | Default mode used when no mode is inputted.                                                                                                                                 |
-| runModifications     | Defaults to `true`, when it's true mods are enabled and can be executed.                                                                                                    |
-| runActions           | Defaults to `true`, when it's true actions are enabled and will be executed.                                                                                                |
+| key                  | description                                                                                                                                                                                                                                          |
+|----------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| defaultBranch        | Default branch to push to.                                                                                                                                                                                                                           |
+| defaultRemote        | Default git remote name.                                                                                                                                                                                                                             |
+| userName             | Used if no git config is set for user.name.                                                                                                                                                                                                          |
+| userEmail            | Used if no git config is set for user.email.                                                                                                                                                                                                         |
+| changeNameGlobal     | Boolean value that makes the name / email change global or local (to enable name changing you have to change the userEmail to your email address and userName to your name)                                                                          |
+| autoPullBeforePush   | If `True` this sets if you automatically pull before pushing.                                                                                                                                                                                        |
+| defaultCommitMessage | Used as no commit message is inputted.                                                                                                                                                                                                               |
+| forceBranchDelete    | If `true` uses `-D` (force deletes) branches.                                                                                                                                                                                                        |
+| defaultLogLength     | Number of commits shown when using the `log` mode.                                                                                                                                                                                                   |
+| defaultMode          | Default mode used when no mode is inputted.                                                                                                                                                                                                          |
+| runModifications     | Defaults to `true`, when it's true mods are enabled and can be executed.                                                                                                                                                                             |
+| runActions           | Defaults to `true`, when it's true actions are enabled and will be executed.                                                                                                                                                                         |
+| language             | Defaults to `english`, if you have another json in other language than english that translates GUST, you can add it, if it was named `czech.json` you would change the english to Czech (it works that it adds **.json** to whatever you add there). |
 
 ## Prerequisites
 
