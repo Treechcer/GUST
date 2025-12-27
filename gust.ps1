@@ -23,7 +23,10 @@ param(
     [string]$path, # this has to be absolute path
 
     [Alias("r")]
-    [string]$release # this this is for github releases, you can make a new release from this! this will be the name of it
+    [string]$release, # this this is for github releases, you can make a new release from this! this will be the name of it
+
+    [Alias("t")]
+    [string]$title # title for relases, like "name" but you have to have github CLI
 )
 
 $Global:version = "0.5.8"
@@ -46,7 +49,7 @@ function checkUser {
     }
 
     if (-not $username -or -not $useremail) {
-        if ($config.userEmail -eq $null -and $config.userName -eq $null) {
+        if ($null -eq $config.userEmail -and $null -eq $config.userName) {
             Write-Host "--------------------------------------------------------------------------------------------------"
             Write-Host $language.logInPrompt[0]
             Write-Host $language.logInPrompt[1]
@@ -116,8 +119,8 @@ function branchCreateSwitch {
         exit 1
     }
 
-    $err0 = git branch $branch *>$null
-    $err1 = git checkout $branch *>$null
+    git branch $branch *>$null
+    git checkout $branch *>$null
     Write-Host $($language.switched)
     git branch
 }
@@ -130,7 +133,7 @@ function branchSwitch {
         exit 1
     }
 
-    $err0 = git checkout $branch *>$null
+    git checkout $branch *>$null
     git branch
 }
 
@@ -149,7 +152,7 @@ function branchDelete {
         $delType = "-d"
     }
 
-    $err0 = & git branch $delType $branch 2>&1
+    & git branch $delType $branch 2>&1
     if ($LASTEXITCODE -ne 0) {
         git branch
         Write-Host "$branch $($language.branchSafe)"
@@ -175,6 +178,8 @@ function log {
 
 function behaviourCheck {
     holiday
+
+    $release = $release.Replace(" ","-")
 
     if ($interactive) {
         $otherModes = "interactive"
@@ -322,9 +327,64 @@ function behaviourCheck {
     addStats
 }
 
+function gitIgnore {
+    if (Test-Path ".gitignore"){
+        $wasFound = $false, $false
+        $toFind = "RELEASE", "RELEASE/*"
+        $c = (Get-Content ".\.gitignore")
+        $nwLineCreate = $true
+        for ($j = 0; $j -lt $c.Count; $j++){
+            $line = $c[$j]
+
+            if ($j -eq $c.Count -1){
+                if (-not $line -match "^[\s]*$"){
+                    $nwLineCreate = $false
+                }
+            }
+
+            for ($i = 0; $i -lt $toFind.Length; $i++){
+                if ($line -eq $toFind[$i]){
+                    $wasFound[$i] = $true
+                }
+            }
+        }
+        
+        if ($nwLineCreate){
+            "" | Out-File -FilePath ".\.gitignore" -Append -Encoding utf8 -NoNewline
+        }
+
+        for ($i = 0; $i -lt $toFind.Length; $i++){
+            if (-not $wasFound[$i]){
+                $toFind[$i] | Out-File -FilePath ".\.gitignore" -Append -Encoding utf8 
+            }
+        }
+    }
+    else {
+        New-Item ".\.gitignore"
+        "RELEASE" | Out-File -FilePath ".\.gitignore" -Append -Encoding utf8
+        "RELEASE/*" | Out-File -FilePath ".\.gitignore" -Append -Encoding utf8
+    }
+}
+
 function release {
-    git tag -a $release -m $message
-    git push origin $release
+    gitIgnore
+
+    if (Get-Command gh -ErrorAction SilentlyContinue) {
+        New-Item RELEASE -ItemType Directory -Force
+        if ($null -eq (Get-ChildItem ".\RELEASE\")){
+            Write-Host "You have to have your files in .\RELEASE\ that you want to release (files like .exe, .app etc.) that now has been created"
+        }
+        else{
+            $files = Get-ChildItem .\RELEASE -File
+            gh release create $($release) $($files) --title "$($title)" --notes "$($message)"
+        }
+    } else {
+        Write-Host "You don't have GitHub CLI, if you want to use release feature to it's fullest install it from here: " + "https://cli.github.com"
+        Write-Host "This now just creates tag and pushes it to GitHub without anything specific"
+
+        git tag -a "$($release)" -m $message
+        git push origin "$($release)"
+    }
 }
 
 function description {
