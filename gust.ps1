@@ -20,7 +20,10 @@ param(
     [switch]$interactive,
 
     [Alias("p")]
-    [string]$path # this has to be absolute path
+    [string]$path, # this has to be absolute path
+
+    [Alias("r")]
+    [string]$release # this this is for github releases, you can make a new release from this! this will be the name of it
 )
 
 $Global:version = "0.5.8"
@@ -226,6 +229,9 @@ function behaviourCheck {
     elseif ($otherModes -match "^d(e(s(c(r(i(p(t(i(o(n)?)?)?)?)?)?)?)?)?)?$") {
         $otherModes = "D"
     }
+    elseif ($otherModes -match "^r(e(l(e(a(s(e)?)?)?)?)?)?$") {
+        $otherModes = "R"
+    }
     elseif ($otherModes -eq "") {
         $otherModes = $config.defaultMode
     }
@@ -289,6 +295,10 @@ function behaviourCheck {
         "D"{
             description
         }
+        "R"{
+            Write-Host "test"
+            release
+        }
         default {
             if ($config.runModification) {
                 $found = runModification $otherModes
@@ -310,6 +320,11 @@ function behaviourCheck {
         runActions $true
     }
     addStats
+}
+
+function release {
+    git tag -a $release -m $message
+    git push origin $release
 }
 
 function description {

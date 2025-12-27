@@ -30,6 +30,10 @@ function getPath {
     return $path
 }
 
+function getRelease {
+    return $release
+}
+
 function callNormalMode {
     #This function can call normal or standard modes from gust.ps1
     param (
