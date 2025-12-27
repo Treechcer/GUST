@@ -389,9 +389,12 @@ function release {
 
 function description {
     $str = @"
+ ------------------------------------------------------------------------------------------------------------------
+|                                                      Modes                                                       |
+ ------------------------------------------------------------------------------------------------------------------ 
 | Name                      | Description                                                                          |
 |---------------------------|--------------------------------------------------------------------------------------|
-| c(commit)                 | This is configs default. Adds a commit message and pushes to your GitHub repository. |
+| c(ommit)                  | This is configs default. Adds a commit message and pushes to your GitHub repository. |
 | b(ranch)s(witch)c(create) | Creates a new branch and switches to the new branch.                                 |
 | b(ranch)s(witch)          | Switches to an existing branch.                                                      |
 | b(ranch)d(elete)          | Deletes an existing branch.                                                          |
@@ -399,8 +402,10 @@ function description {
 | p(ull)                    | Pulls the latest changes from your remote repository.                                |
 | l(og)                     | Shows recent commits (default number or set with -number / -n).                      |
 | autoCommit                | Use this for automatically commit (Task Scheduler)                                   |
-| p(ath)                    | This is used for autoCommit to automatically commit specific folder                  |
 | d(escription)             | This shows you this description in terminal                                          |
+ ------------------------------------------------------------------------------------------------------------------
+
+ 
 "@
     Write-Host $str
 }

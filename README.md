@@ -1,11 +1,12 @@
 # Gust – Git Utility Something Tool (PowerShell)
 
-**Gust** is a PowerShell script that automates common Git tasks for your GitHub repository (managing branches, pushing etc.) with all being configurable in `config.json`.
+**Gust** is a PowerShell script that automates common Git (and GitHub CLI) tasks for your GitHub repository (managing branches, pushing etc.) with all being configurable in `config.json`.
 
 ## Table Of Contents (TOC)
 
 - [Gust – Git Utility Something Tool (PowerShell)](#gust--git-utility-something-tool-powershell)
   - [Table Of Contents (TOC)](#table-of-contents-toc)
+  - [Dependencies](#dependencies)
   - [Features](#features)
   - [Parameters](#parameters)
   - [Mode parameters](#mode-parameters)
@@ -16,6 +17,8 @@
   - [Profiles](#profiles)
     - [Stats](#stats)
     - [Project Folder Structure](#project-folder-structure)
+  - [GitHub CLI](#github-cli)
+    - [Release](#release)
   - [Set Up To Call GUST Globally](#set-up-to-call-gust-globally)
     - [automatic setup (recommended)](#automatic-setup-recommended)
     - [manual GitHub clone](#manual-github-clone)
@@ -27,6 +30,15 @@
     - [Example actions](#example-actions)
   - [Mod / action API](#mod--action-api)
   - [Final Note](#final-note)
+
+## Dependencies
+
+This script has two dependencies:
+
+1. [GIT](https://git-scm.com/install/)
+2. [GitHub CLI](https://cli.github.com)
+
+> Note: GitHub CLI is only used right now only for Releases. More about everything Github CLI specific in chapter about it.
 
 ## Features
 
@@ -42,19 +54,22 @@
 
 ## Parameters
 
-| Parameter   | Required  | Description | Aliases  |
-|-------------|---------- |-------------| -------- |
-| message     | Sometimes                                  | Your commit message you want to use                                                                                                           | -c (as commit message) |
-| gitURL      | Only required when initializing repository | The GitHub repository URL (omit .git at the end it will be added automatically)                                                               | -u (as URL)            |
-| otherModes  | most of the time                           | This is used to change the mode you want to do, also it has configurable default value `"defaultMode" : "c"`                                  | -m (as mode)           |
-| branch      | no                                         | this is for working branches, it has default configurable in config under `"defaultBranch" : "main",`in some cases as `main`                  | -b                     |
-| number      | no                                         | this is used when you need some number as an input (now it's only used in log, it has default configurable in config `"defaultLogLength" : 5,`| -n                     |
+| Parameter  | Required                                           | Description                                                                                                                                    | Aliases                |
+|------------|----------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------|------------------------|
+| message    | For commits, releases...                           | Your commit message you want to use                                                                                                            | -c (as commit message) |
+| gitURL     | Only required when initializing repository         | The GitHub repository URL (omit .git at the end it will be added automatically)                                                                | -u (as URL)            |
+| otherModes | When you don't want to run from config defaultMode | This is used to change the mode you want to do, also it has configurable default value `"defaultMode" : "c"`                                   | -m (as mode)           |
+| branch     | Only when working with branches                    | this is for working branches, it has default configurable in config under `"defaultBranch" : "main",`in some cases as `main`                   | -b                     |
+| number     | Only for log                                       | this is used when you need some number as an input (now it's only used in log, it has default configurable in config `"defaultLogLength" : 5,` | -n                     |
+| path       | Only for autocommit                                | This is used for autoCommit to automatically commit specific folder                                                                            | -p                     |
+| release    | For release only                                   | This is used when you want to make a release, this is the version of the release.                                                              | -r                     |
+| title      | For release only                                   | This is used when you want to make a release, this is the name of the release.                                                                 | -t                     |
 
 ## Mode parameters
 
 | Name                      | Description                                                                          |
 |---------------------------|--------------------------------------------------------------------------------------|
-| c(commit)                 | This is configs default. Adds a commit message and pushes to your GitHub repository. |
+| c(ommit)                  | This is configs default. Adds a commit message and pushes to your GitHub repository. |
 | b(ranch)s(witch)c(create) | Creates a new branch and switches to the new branch.                                 |
 | b(ranch)s(witch)          | Switches to an existing branch.                                                      |
 | b(ranch)d(elete)          | Deletes an existing branch.                                                          |
@@ -62,8 +77,9 @@
 | p(ull)                    | Pulls the latest changes from your remote repository.                                |
 | l(og)                     | Shows recent commits (default number or set with -number / -n).                      |
 | autoCommit                | Use this for automatically commit (Task Scheduler)                                   |
-| p(ath)                    | This is used for autoCommit to automatically commit specific folder                  |
 | d(escription)             | This shows you this description in terminal                                          |
+
+> Note : commit message is used for more things where message is needed, for example in releases, you'll use message for description of the release.
 
 ### autoCommit setup
 
@@ -261,7 +277,6 @@ Every profile has `stats.json` in their respective folder, it counts how many ti
         config.json
     .gitignore
     actions.ps1
-    config.json # THIS FILE WILL BE DELETED LATER !!!
     gust.cmd
     gust.ps1
     install.ps1
@@ -270,6 +285,25 @@ Every profile has `stats.json` in their respective folder, it counts how many ti
     modLoader.ps1
     README.md
 ```
+
+## GitHub CLI
+
+This is used for GitHub specific things. Now only for releases.
+
+### Release
+
+This has two modes in a way, if you don't have GitHub CLI you'll just create (and push) tag with the name from parametre `release` and with message from parametre `message`.
+
+- release -> the version of the tag.
+- message -> message of te tag.
+
+> Note: in this release will your full repository at that time, you can't change that from what I could find, you can't just (easily*) make that like releases with GitHub CLI.
+
+With GitHub CLI you'll create full release and not just tag. You have to add `.exe` and other files for your release to .`\RELEASE\`. You have to add these parameters:
+  
+- release -> Version of the tag.
+- title   -> Name of the release.
+- message -> Description of the release.
 
 ## Set Up To Call GUST Globally
 
