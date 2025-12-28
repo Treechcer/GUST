@@ -15,7 +15,12 @@ function getModifications {
 }
 
 function getHelpPages {
-    return ""
+    $ret = @{
+        helpPages = "none                     - This is just mod template, you can telete this mod";
+        name = getModificationName
+    }
+    
+    return $ret
 }
 
 function getModificationVersion {

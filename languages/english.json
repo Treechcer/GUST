@@ -63,7 +63,10 @@
         "  .run [command] or 2   - runs GUST command",
         "  .exit or 3            - Quit interactive mode",
         "  .clear or 4           - Clears interactive mode",
-        "  .update or 5          - Updates GUST"
+        "  .update or 5          - Updates GUST",
+        "",
+        "  -------------- MODS ---------------",
+        ""
     ],
     "buttonToExit" : "Press any button to exit.",
     "commands" : "Commads",

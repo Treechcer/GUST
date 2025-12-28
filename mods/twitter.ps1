@@ -15,7 +15,12 @@ function getModifications {
 }
 
 function getHelpPages {
-    return "twitter                  - Never made it"
+    $ret = @{
+        helpPages = "twitter                  - Never made it";
+        name = getModificationName
+    }
+    
+    return $ret
 }
 
 function getModificationVersion {

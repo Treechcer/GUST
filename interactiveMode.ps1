@@ -133,16 +133,21 @@ function startInteractive {
             for ($iterator = 0; $iterator -lt $language.gustInteractiveHelp.Count; $iterator++) {
                 Write-Host $language.gustInteractiveHelp[$iterator]
             }
-            Write-Host "----------------------Mods----------------------"
             . "$PSScriptRoot/modLoader.ps1"
             $modHelpPages = getHelpPages
 
-            for ($i = 0; $i -lt $modHelpPages.Count; $i++){
-                if ($modHelpPages[$i] -ne ""){
-                    Write-Host $modHelpPages[$i]
+            for ($i = 0; $i -lt $modHelpPages.helpPages.Count; $i++){
+                if ($modHelpPages[$i].helpPages -ne ""){
+                    #Write-Host $modHelpPages[$i].name
+                    $len = 35
+                    $couter = [Math]::Floor([decimal](($len - $modHelpPages[$i].name.Length -2) / 2))
+                    $str = "-" * $couter
+                    Write-Host "  $($str) $($modHelpPages[$i].name) $($str)" -foreGroundColor Green
+                    Write-Host "  $($modHelpPages[$i].helpPages)";  
+                    Write-Host
                 }
             }
-            Write-Host ""
+
             Write-Host "$($language.buttonToExit)" -NoNewline -ForegroundColor Yellow
             while ($run) {
                 $key = [System.Console]::ReadKey($true)

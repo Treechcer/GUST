@@ -22,7 +22,12 @@ function getModifications {
 }
 
 function getHelpPages {
-    return "bsk                      - automatically post onto bluesky from API key"
+    $ret = @{
+        helpPages = "bsk                      - automatically post onto bluesky from API key";
+        name = getModificationName
+    }
+    
+    return $ret
 }
 
 function behaviourSwitchCheck {

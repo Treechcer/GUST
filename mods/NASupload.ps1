@@ -24,7 +24,12 @@ function getModifications {
 }
 
 function getHelpPages {
-    return "NAS                      - Uplaods locally to my NAS"
+    $ret = @{
+        helpPages = "NAS                      - Uplaods locally to my NAS";
+        name = getModificationName
+    }
+    
+    return $ret
 }
 
 function behaviourSwitchCheck {

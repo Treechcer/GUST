@@ -15,7 +15,12 @@ function getModifications{
 }
 
 function getHelpPages {
-    return "gustImport               - Calls normal mode from inside of mod"
+    $ret = @{
+        helpPages = "gustImport               - Calls normal mode from inside of mod";
+        name = getModificationName
+    }
+    
+    return $ret
 }
 
 function getModificationVersion{

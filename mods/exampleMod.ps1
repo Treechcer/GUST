@@ -30,7 +30,12 @@ function getModifications {
 }
 
 function getHelpPages {
-    return "modTest                  - Tests your mods"
+    $ret = @{
+        helpPages = "modTest                  - Tests your mods";
+        name = getModificationName
+    }
+    
+    return $ret
 }
 
 function behaviourSwitchCheck {

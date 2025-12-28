@@ -63,7 +63,10 @@
         "  .run [command] or 2   - Spustí GUST příkaz",
         "  .exit or 3            - Ukončení interaktivního módu",
         "  .clear or 4           - Vyčistění interaktviního módu",
-        "  .update or 5          - Vylepšení GUST"
+        "  .update or 5          - Vylepšení GUST",
+        "",
+        "  -------------- MODS ---------------",
+        ""
     ],
     "buttonToExit" : "Zmáčkni jakékoliv tlačítko aby jsi odešel.",
     "commands" : "Příkazy",
