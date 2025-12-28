@@ -369,6 +369,18 @@ function gitIgnore {
 function release {
     gitIgnore
 
+    if ($null -eq $release){
+        $release = $config.defaultRelease
+    }
+
+    if ($null -eq $title){
+        $title = $config.defaultTitle
+    }
+
+    if ($null -eq $message){
+        $message = $config.defaultReleaseMessage
+    }
+
     if (Get-Command gh -ErrorAction SilentlyContinue) {
         New-Item RELEASE -ItemType Directory -Force
         if ($null -eq (Get-ChildItem ".\RELEASE\")){
@@ -404,13 +416,15 @@ function description {
 | autoCommit                | Use this for automatically commit (Task Scheduler)                                   |
 | d(escription)             | This shows you this description in terminal                                          |
  ------------------------------------------------------------------------------------------------------------------
-
- 
 "@
     Write-Host $str
 }
 
 function autoCommit {
+    if ($null -eq $path){
+        $path = $config.defaultPath
+    }
+
     Set-Location $path
     gitPushCreate
 }
@@ -648,6 +662,10 @@ function getDefaultConf {
         runAfterActions         = $true;
         runBeforeActions        = $true;
         language                = "english";
+        defaultRelease          = "1.0.0";
+        defaultTitle            = "Realsed";
+        defaultPath             = "Set this value in config!!";
+        defaultReleaseMessage   = "released";
     }
 
     return $config

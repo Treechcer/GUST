@@ -6,6 +6,9 @@ class inputs {
     [string]$gitURL
     [string]$branch
     [int]$number
+    [string]$path
+    [string]$release
+    [string]$title
 
     inputs() {
         . "$PSScriptRoot/gust.ps1" "NOMODE"
@@ -15,6 +18,9 @@ class inputs {
         $this.gitURL = "NOT SET"
         $this.branch = $cfg.defaultBranch
         $this.number = $cfg.defaultLogLength
+        $this.path = $cfg.defaultPath
+        $this.release = $cfg.defaultRelease
+        $this.title = $cfg.defaultTitle
     }
 
     [void]execute() {
@@ -228,22 +234,22 @@ function inputWriter {
 
 
     if ($localIndex -eq 6) {
-        Write-Host "Path ('p') - $($language.value): $($inputs.number)" -ForegroundColor Red
+        Write-Host "Path ('p') - $($language.value): $($inputs.path)" -ForegroundColor Red
     }
     else {
-        Write-Host "Path ('p') - $($language.value): $($inputs.number)"
+        Write-Host "Path ('p') - $($language.value): $($inputs.path)"
     }
     if ($localIndex -eq 7) {
-        Write-Host "Release ('r') - $($language.value): $($inputs.number)" -ForegroundColor Red
+        Write-Host "Release ('r') - $($language.value): $($inputs.release)" -ForegroundColor Red
     }
     else {
-        Write-Host "Release ('r') - $($language.value): $($inputs.number)"
+        Write-Host "Release ('r') - $($language.value): $($inputs.release)"
     }
     if ($localIndex -eq 8) {
-        Write-Host "Title ('t') - $($language.value): $($inputs.number)" -ForegroundColor Red
+        Write-Host "Title ('t') - $($language.value): $($inputs.title)" -ForegroundColor Red
     }
     else {
-        Write-Host "Title ('t') - $($language.value): $($inputs.number)"
+        Write-Host "Title ('t') - $($language.value): $($inputs.title)"
     }
 
 
