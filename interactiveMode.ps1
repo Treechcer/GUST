@@ -1,3 +1,5 @@
+#what was I smoking while makig this? This could've been dome like 100 times easier... This sucks and I'm not fixing it
+
 class inputs {
     [string]$mode
     [string]$message
@@ -26,7 +28,7 @@ $commands = @(
 )
 
 $inputVaNames = @(
-    "mode", "message", "gitURL", "branch", "number"
+    "mode", "message", "gitURL", "branch", "number", "path", "release", "title"
 )
 
 function startInteractive {
@@ -45,7 +47,7 @@ function startInteractive {
             $key = [System.Console]::ReadKey($true)
             switch ($key.Key) {
                 "UpArrow" {
-                    if ($index -lt 1) {
+                    if ($index -le 1) {
                         $index = 1
                     }
                     else {
@@ -80,10 +82,13 @@ function startInteractive {
             inputWriter $localIndex $inputs
             $run = $true
             while ($run) {
+                if ($localIndex -le 1){
+                    $localIndex = 1
+                }
                 $key = [System.Console]::ReadKey($true)
                 switch ($key.Key) {
                     "UpArrow" {
-                        if ($localIndex -lt 1) {
+                        if ($localIndex -le 1) {
                             $localIndex = 1
                         }
                         else {
@@ -91,15 +96,15 @@ function startInteractive {
                         }
                     }
                     "DownArrow" {
-                        if ($localIndex -ge 6) {
-                            $localIndex = 6
+                        if ($localIndex -ge 9) {
+                            $localIndex = 9
                         }
                         else {
                             $localIndex += +1
                         }
                     }
                     "Enter" {
-                        if ($localIndex -eq 6) {
+                        if ($localIndex -eq 9) {
                             $inputs.execute()
                             $run = $false
                         }
@@ -220,7 +225,29 @@ function inputWriter {
     else {
         Write-Host "Number ('n') - $($language.value): $($inputs.number)"
     }
+
+
     if ($localIndex -eq 6) {
+        Write-Host "Path ('p') - $($language.value): $($inputs.number)" -ForegroundColor Red
+    }
+    else {
+        Write-Host "Path ('p') - $($language.value): $($inputs.number)"
+    }
+    if ($localIndex -eq 7) {
+        Write-Host "Release ('r') - $($language.value): $($inputs.number)" -ForegroundColor Red
+    }
+    else {
+        Write-Host "Release ('r') - $($language.value): $($inputs.number)"
+    }
+    if ($localIndex -eq 8) {
+        Write-Host "Title ('t') - $($language.value): $($inputs.number)" -ForegroundColor Red
+    }
+    else {
+        Write-Host "Title ('t') - $($language.value): $($inputs.number)"
+    }
+
+
+    if ($localIndex -eq 9) {
         Write-Host "$($language.exeCmd)" -ForegroundColor Red
     }
     else {
