@@ -21,6 +21,10 @@ function getModifications {
     return $modifications
 }
 
+function getHelpPages {
+    return "bsk                      - automatically post onto bluesky from API key"
+}
+
 function behaviourSwitchCheck {
     param(
         $name

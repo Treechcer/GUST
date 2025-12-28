@@ -29,6 +29,10 @@ function getModifications {
     return $modifications
 }
 
+function getHelpPages {
+    return "modTest                  - Tests your mods"
+}
+
 function behaviourSwitchCheck {
     param(
         # Function must have a single input: the mode name

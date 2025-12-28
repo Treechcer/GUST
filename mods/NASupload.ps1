@@ -23,6 +23,10 @@ function getModifications {
     return $modifications
 }
 
+function getHelpPages {
+    return "NAS                      - Uplaods locally to my NAS"
+}
+
 function behaviourSwitchCheck {
     param(
         $name

@@ -14,6 +14,10 @@ function getModifications {
     return $modifications
 }
 
+function getHelpPages {
+    return "twitter                  - Never made it"
+}
+
 function getModificationVersion {
     return "0.1.0"
 }

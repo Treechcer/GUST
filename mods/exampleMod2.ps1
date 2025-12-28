@@ -14,6 +14,10 @@ function getModifications{
     return $modifications
 }
 
+function getHelpPages {
+    return "gustImport               - Calls normal mode from inside of mod"
+}
+
 function getModificationVersion{
     return "1.0.0"
 }

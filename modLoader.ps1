@@ -134,3 +134,21 @@ function getGVersions {
 
     return $versions
 }
+
+function getHelpPages {
+    param(
+        $folder = "mods"
+    )
+    $mods = Get-ChildItem -Path "$PSScriptRoot\$folder" -Filter *.ps1
+
+    $f = "getHelpPages"
+
+    $helpPages = @()
+
+    foreach ($mod in $mods) {
+        . $mod.FullName
+        $helpPages += & $f
+    }
+
+    return $helpPages
+}
