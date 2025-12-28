@@ -34,6 +34,10 @@ function getRelease {
     return $release
 }
 
+function getTitle {
+    return $title
+}
+
 function callNormalMode {
     #This function can call normal or standard modes from gust.ps1
     param (

@@ -95,39 +95,50 @@ I recommend using this with `Task Scheduler`, you'll have to look into it if you
 
 ```json
 {
-    "defaultBranch" : "main",
-    "defaultRemote" : "origin",
-    "userName" : null,
-    "userEmail" : null,
-    "changeNameGlobal": false,
-    "autoPullBeforePush": true,
-    "useDefaultCommitMessage": false,
-    "defaultCommitMessage": "small fixes",
-    "forceBranchDelete": false,
-    "defaultLogLength": 5,
-    "defaultMode": "c",
-    "runModification": true,
-    "runAfterActions": true,
-    "runBeforeActions" : true,
-    "language": "english"
+  "defaultBranch": "main",
+  "defaultRemote": "origin",
+  "userName": null,
+  "userEmail": null,
+  "changeNameGlobal": null,
+  "autoPullBeforePush": null,
+  "useDefaultCommitMessage": false,
+  "defaultCommitMessage": "small fixes",
+  "forceBranchDelete": null,
+  "defaultLogLength": 5,
+  "defaultMode": "c",
+  "runModification": true,
+  "runActions": true,
+  "language": "english",
+  "runAfterActions": true,
+  "runBeforeActions": true,
+  "defaultRelease": "1.0.0",
+  "defaultTitle": "Released",
+  "defaultPath": "Set this value in config!!",
+  "defaultReleaseMessage": "released"
 }
 ```
 
-| key                  | description                                                                                                                                                                                                                                          |
-|----------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| defaultBranch        | Default branch to push to.                                                                                                                                                                                                                           |
-| defaultRemote        | Default git remote name.                                                                                                                                                                                                                             |
-| userName             | Used if no git config is set for user.name.                                                                                                                                                                                                          |
-| userEmail            | Used if no git config is set for user.email.                                                                                                                                                                                                         |
-| changeNameGlobal     | Boolean value that makes the name / email change global or local (to enable name changing you have to change the userEmail to your email address and userName to your name)                                                                          |
-| autoPullBeforePush   | If `True` this sets if you automatically pull before pushing.                                                                                                                                                                                        |
-| defaultCommitMessage | Used as no commit message is inputted.                                                                                                                                                                                                               |
-| forceBranchDelete    | If `true` uses `-D` (force deletes) branches.                                                                                                                                                                                                        |
-| defaultLogLength     | Number of commits shown when using the `log` mode.                                                                                                                                                                                                   |
-| defaultMode          | Default mode used when no mode is inputted.                                                                                                                                                                                                          |
-| runModifications     | Defaults to `true`, when it's true mods are enabled and can be executed.                                                                                                                                                                             |
-| runActions           | Defaults to `true`, when it's true actions are enabled and will be executed.                                                                                                                                                                         |
-| language             | Defaults to `english`, if you have another json in other language than english that translates GUST, you can add it, if it was named `czech.json` you would change the english to Czech (it works that it adds **.json** to whatever you add there). |
+| key                   | description                                                                                                                                                                                                                                          |
+|-----------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| defaultBranch         | Default branch to push to.                                                                                                                                                                                                                           |
+| defaultRemote         | Default git remote name.                                                                                                                                                                                                                             |
+| userName              | Used if no git config is set for user.name.                                                                                                                                                                                                          |
+| userEmail             | Used if no git config is set for user.email.                                                                                                                                                                                                         |
+| changeNameGlobal      | Boolean value that makes the name / email change global or local (to enable name changing you have to change the userEmail to your email address and userName to your name)                                                                          |
+| autoPullBeforePush    | If `True` this sets if you automatically pull before pushing.                                                                                                                                                                                        |
+| defaultCommitMessage  | Used as no commit message is inputted.                                                                                                                                                                                                               |
+| forceBranchDelete     | If `true` uses `-D` (force deletes) branches.                                                                                                                                                                                                        |
+| defaultLogLength      | Number of commits shown when using the `log` mode.                                                                                                                                                                                                   |
+| defaultMode           | Default mode used when no mode is inputted.                                                                                                                                                                                                          |
+| runModifications      | Defaults to `true`, when it's true mods are enabled and can be executed.                                                                                                                                                                             |
+| runActions            | Defaults to `true`, when it's true actions are enabled and will be executed.                                                                                                                                                                         |
+| language              | Defaults to `english`, if you have another json in other language than english that translates GUST, you can add it, if it was named `czech.json` you would change the english to Czech (it works that it adds **.json** to whatever you add there). |
+| runAfterActions       | Defaults to `true`, this runs actions after everything                                                                                                                                                                                               |
+| runBeforeActions      | Defaults to `true`, this runs actions before everything                                                                                                                                                                                              |
+| defaultRelease        | Defaults to `1.0.0`, this is default release version if you don't input any                                                                                                                                                                          |
+| defaultTitle          | Defaults to `Release`, this is the default title for releases                                                                                                                                                                                        |
+| defaultPath           | Defaults ti `Set this value in config!!`, this is used for any path needed (autocommit)                                                                                                                                                              |
+| defaultReleaseMessage | Defaults to `released`, this is used as release message (description)                                                                                                                                                                                |
 
 ## Prerequisites
 
@@ -348,6 +359,7 @@ It must define these functions:
 - **getModificationVersion** → returns the mod’s version  
 - **getModifications** → returns a list of regex/string patterns that the mod recognizes as valid "modes"  
 - **behaviourSwitchCheck** → main function called when a mode matches
+- **getHelpPages** → return object with name and helpPages (for interactive mode)
 
 > Function names **must not be changed**. Renaming them will break the mod system.
 
@@ -411,6 +423,11 @@ For now, it is only used as an easy way to access user inputs and GUST functiona
 | getOtherModes  | Returns the input for mode string.                             |
 | getBranch      | Returns the input for branch name.                             |
 | getNumber      | Returns the input for numeric input (used in log)              |
+| getUpdate      | Returns the input for update value                             |
+| getInteractive | Returns the input for interactivity value                      |
+| getPath        | Returns the input for path                                     |
+| getRelease     | Returns the input for release                                  |
+| getTitle       | Returns the input for title                                    |
 | callNormalMode | Executes a normal mode with the parameters you passed to GUST. |
 | getConfigValue | Return any value in config variable / config.json.             |
 
