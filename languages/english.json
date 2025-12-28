@@ -84,5 +84,9 @@
     "manDay" : "Happy International Men's Day!",
     "christmas" : "Merry Christmas!",
     "thanksgivingUSA" : "Happy Thanksgiving (USA)!",
-    "thanksgivingCAN" : "Happy Thanksgiving (Canada)!"
+    "thanksgivingCAN" : "Happy Thanksgiving (Canada)!",
+
+    "noReleaseFolder" : "You have to have your files in .\\RELEASE\\ that you want to release (files like .exe, .app etc.) that now has been created",
+    "noGHCLI": "You don't have GitHub CLI, if you want to use release feature to it's fullest install it from here: ",
+    "tagCreate" : "This now just creates tag and pushes it to GitHub without anything specific"
 }

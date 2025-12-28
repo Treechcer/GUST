@@ -301,7 +301,6 @@ function behaviourCheck {
             description
         }
         "R"{
-            Write-Host "test"
             release
         }
         default {
@@ -384,15 +383,15 @@ function release {
     if (Get-Command gh -ErrorAction SilentlyContinue) {
         New-Item RELEASE -ItemType Directory -Force
         if ($null -eq (Get-ChildItem ".\RELEASE\")){
-            Write-Host "You have to have your files in .\RELEASE\ that you want to release (files like .exe, .app etc.) that now has been created"
+            Write-Host $language.noReleaseFolder
         }
         else{
             $files = Get-ChildItem .\RELEASE -File
             gh release create $($release) $($files) --title "$($title)" --notes "$($message)"
         }
     } else {
-        Write-Host "You don't have GitHub CLI, if you want to use release feature to it's fullest install it from here: " + "https://cli.github.com"
-        Write-Host "This now just creates tag and pushes it to GitHub without anything specific"
+        Write-Host $language.noGHCLI + "https://cli.github.com"
+        Write-Host $language.tagCreate
 
         git tag -a "$($release)" -m $message
         git push origin "$($release)"
