@@ -84,5 +84,9 @@
     "manDay": "Šťastný Mezinárodní den mužů!",
     "christmas": "Veselé Vánoce!",
     "thanksgivingUSA": "Šťastný Den díkůvzdání (USA)!",
-    "thanksgivingCAN": "Šťastný Den díkůvzdání (Kanada)!"
+    "thanksgivingCAN": "Šťastný Den díkůvzdání (Kanada)!",
+
+    "noReleaseFolder" : "Tvé soubory, které chceš vydat musí být v .\\RELEASE\\ (soubory jako .exe, .app apod.) tato složka byla založena",
+    "noGHCLI": "Nemáš GitHub CLI, jestli chceš používát celou 'release' funkci musíš to stáhnout z tohoto odkazu: ",
+    "tagCreate" : "Toto teďka založilo jenom tag and puhnulo ho to na GitHub bez nějaký speciální chěví"
 }
