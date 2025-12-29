@@ -135,6 +135,9 @@ function behaviourCheck {
                 $otherModes = "prc"
             }
         }
+        if ($otherModes -match "c(r(e(a(t(e)?)?)?)?)?$"){
+            $otherModes = "prcreate"
+        }
     }
     elseif ($otherModes -match "^c(o(m(m(i(t)?)?)?)?)?$") {
         $otherModes = "c"
@@ -241,6 +244,9 @@ function behaviourCheck {
         }
         "rc"{
             revertCommit
+        }
+        "prcreate"{
+            PRCreate
         }
         default {
             if ($config.runModification) {
