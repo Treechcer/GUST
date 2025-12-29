@@ -342,6 +342,7 @@ function behaviourCheck {
 }
 
 function createRepo {
+    #TODO document this
     $publicity = ""
     if ($public -or $null -eq $public){
         $publicity = "--public"
