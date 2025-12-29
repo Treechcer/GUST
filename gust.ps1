@@ -225,6 +225,13 @@ function behaviourCheck {
     elseif ($otherModes -match "^p(u(l(l)?)?)?$") {
         $otherModes = "p"
     }
+    elseif ($otherModes -match "^p(u(l(l)?)?)?") {
+        if ($otherModes -match "r(e(q(u(e(s(t)?)?)?)?)?)?"){
+            if ($otherModes -match "c(e(c(k)?)?)?$"){
+                $otherModes = "prc"
+            }
+        }
+    }
     elseif ($otherModes -match "^c(o(m(m(i(t)?)?)?)?)?$") {
         $otherModes = "c"
     }
@@ -248,6 +255,11 @@ function behaviourCheck {
     }
     elseif ($otherModes -match "^r(e(l(e(a(s(e)?)?)?)?)?)?$") {
         $otherModes = "R"
+    }
+    elseif ($otherModes -match "^r(e(v(e(r(t)?)?)?)?)?") {
+        if ($otherModes -match "c(o(m(m(i(t)?)?)?)?)?$") {
+            $otherModes = "rc"
+        }
     }
     elseif ($otherModes -eq "") {
         $otherModes = $config.defaultMode
@@ -318,6 +330,12 @@ function behaviourCheck {
         "cr"{
             createRepo
         }
+        "prc"{
+            PRCheck
+        }
+        "rc"{
+            revertCommit
+        }
         default {
             if ($config.runModification) {
                 $found = runModification $otherModes
@@ -341,8 +359,21 @@ function behaviourCheck {
     addStats
 }
 
+function revertCommit {
+    #TODO documentation
+    git revert HEAD -m "$message"
+    git push
+}
+
+function PRCheck {
+    #TODO documentation
+    gh pr list
+    Write-Host "`n-----"
+    gh pr status
+}
+
 function createRepo {
-    #TODO document this
+    #TODO document
     $publicity = ""
     if ($public -or $null -eq $public){
         $publicity = "--public"
