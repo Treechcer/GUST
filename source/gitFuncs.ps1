@@ -59,7 +59,7 @@ function branchSwitch {
         exit 1
     }
 
-    git checkout $branch *>$null
+    git checkout "$branch"
     git branch
 }
 

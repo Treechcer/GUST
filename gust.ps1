@@ -35,7 +35,10 @@ param(
     [switch]$public, #if repo is public
 
     [Alias("d")]
-    [string]$description # for repo decription
+    [string]$description, # for repo decription
+
+    [Alias("w")]
+    [string]$who #used for githubCLI for PRs
 )
 
 $Global:version = "0.5.8"

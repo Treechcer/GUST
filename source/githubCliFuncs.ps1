@@ -6,7 +6,7 @@ function PRCheck {
 }
 
 function PRCreate {
-    gh pr create -a "@me" -B $branch -b $description -t $title
+    gh pr create -a $who -B $branch -b $description -t $title
 }
 
 function createRepo {
