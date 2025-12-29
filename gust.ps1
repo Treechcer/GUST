@@ -26,7 +26,16 @@ param(
     [string]$release, # this this is for github releases, you can make a new release from this! this will be the name of it
 
     [Alias("t")]
-    [string]$title # title for relases, like "name" but you have to have github CLI
+    [string]$title, # title for relases, like "name" but you have to have github CLI
+
+    [Alias("na")]
+    [string]$name, #name for repo creation
+
+    [Alias("pu")]
+    [switch]$public, #if repo is public
+
+    [Alias("d")]
+    [string]$description # for repo decription
 )
 
 $Global:version = "0.5.8"
@@ -209,6 +218,9 @@ function behaviourCheck {
                 $otherModes = "cnp"
             }
         }
+        if ($otherModes -match "r(e(p(o)?)?)?$"){
+            $otherModes = "cr"
+        }
     }
     elseif ($otherModes -match "^p(u(l(l)?)?)?$") {
         $otherModes = "p"
@@ -303,6 +315,9 @@ function behaviourCheck {
         "R"{
             release
         }
+        "cr"{
+            createRepo
+        }
         default {
             if ($config.runModification) {
                 $found = runModification $otherModes
@@ -324,6 +339,36 @@ function behaviourCheck {
         runActions $true
     }
     addStats
+}
+
+function createRepo {
+    $publicity = ""
+    if ($public -or $null -eq $public){
+        $publicity = "--public"
+    }
+    else{
+        $publicity = "--private"
+    }
+
+    $descriptionArgument = ""
+    if ($null -ne $description){
+        if ($description -match "\s"){
+            $descriptionArgument += "-d `"$description`""
+        }
+        else{
+            $descriptionArgument += "-d $description"
+        }
+    }
+
+    $name = $name.Replace(" ", "-")
+    
+    $remote = "--remote=$($config.defaultRemote)"
+
+    Write-Host "gh repo create $name $publicity $licenseArg $descriptionArgument --source=. $remote"
+    
+    git init
+    
+    gh repo create $name $publicity $licenseArg $descriptionArgument --source=. $remote
 }
 
 function gitIgnore {
