@@ -225,6 +225,13 @@ function behaviourCheck {
     elseif ($otherModes -match "^p(u(l(l)?)?)?$") {
         $otherModes = "p"
     }
+    elseif ($otherModes -match "^p(u(l(l)?)?)?") {
+        if ($otherModes -match "r(e(q(u(e(s(t)?)?)?)?)?)?"){
+            if ($otherModes -match "c(e(c(k)?)?)?$"){
+                $otherModes = "prc"
+            }
+        }
+    }
     elseif ($otherModes -match "^c(o(m(m(i(t)?)?)?)?)?$") {
         $otherModes = "c"
     }
@@ -318,6 +325,9 @@ function behaviourCheck {
         "cr"{
             createRepo
         }
+        "prc"{
+            PRCheck
+        }
         default {
             if ($config.runModification) {
                 $found = runModification $otherModes
@@ -339,6 +349,12 @@ function behaviourCheck {
         runActions $true
     }
     addStats
+}
+
+function PRCheck {
+    gh pr list
+    Write-Host "-----"
+    gh pt status
 }
 
 function createRepo {
