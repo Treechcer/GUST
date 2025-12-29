@@ -398,6 +398,9 @@ function getDefaultConf {
         defaultTitle            = "Realsed";
         defaultPath             = "Set this value in config!!";
         defaultReleaseMessage   = "released";
+        defaultWho              = "@me";
+        defaultDescriptionPR    = "PR created";
+        defaultPRTitle          = "PR";
     }
 
     return $config

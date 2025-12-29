@@ -6,6 +6,24 @@ function PRCheck {
 }
 
 function PRCreate {
+    #TODO documentation
+
+    if ($null -eq $who){
+        $who = $config.defaultWho
+    }
+
+    if ($null -eq $branch){
+        $who = $config.defaultBranch
+    }
+
+    if ($null -eq $description){
+        $who = $config.defaultDescriptionPR
+    }
+
+    if ($null -eq $title){
+        $who = $config.defaultPRTitle
+    }
+
     gh pr create -a $who -B $branch -b $description -t $title
 }
 
