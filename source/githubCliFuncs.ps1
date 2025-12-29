@@ -5,6 +5,10 @@ function PRCheck {
     gh pr status
 }
 
+function PRCreate {
+    gh pr create -a $who -B $branch -b $description -t $title
+}
+
 function createRepo {
     #TODO document
     $publicity = ""

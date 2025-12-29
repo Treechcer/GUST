@@ -43,6 +43,8 @@ function branchCreateSwitch {
         exit 1
     }
 
+    git push --set-upstream $config.defaultRemote test
+
     git branch $branch *>$null
     git checkout $branch *>$null
     Write-Host $($language.switched)
@@ -57,7 +59,7 @@ function branchSwitch {
         exit 1
     }
 
-    git checkout $branch *>$null
+    git checkout "$branch"
     git branch
 }
 

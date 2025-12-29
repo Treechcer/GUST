@@ -35,7 +35,10 @@ param(
     [switch]$public, #if repo is public
 
     [Alias("d")]
-    [string]$description # for repo decription
+    [string]$description, # for repo decription
+
+    [Alias("w")]
+    [string]$who #used for githubCLI for PRs
 )
 
 $Global:version = "0.5.8"
@@ -131,6 +134,9 @@ function behaviourCheck {
             if ($otherModes -match "c(e(c(k)?)?)?$"){
                 $otherModes = "prc"
             }
+        }
+        if ($otherModes -match "c(r(e(a(t(e)?)?)?)?)?$"){
+            $otherModes = "prcreate"
         }
     }
     elseif ($otherModes -match "^c(o(m(m(i(t)?)?)?)?)?$") {
@@ -238,6 +244,9 @@ function behaviourCheck {
         }
         "rc"{
             revertCommit
+        }
+        "prcreate"{
+            PRCreate
         }
         default {
             if ($config.runModification) {
