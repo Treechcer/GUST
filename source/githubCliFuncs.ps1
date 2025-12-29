@@ -8,6 +8,9 @@ function PRCheck {
 function PRCreate {
     #TODO documentation
 
+    . "$PSScriptRoot\gitFuncs.ps1"
+    gitPushCreate
+
     if ($null -eq $who){
         $who = $config.defaultWho
     }

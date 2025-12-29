@@ -43,7 +43,7 @@ function branchCreateSwitch {
         exit 1
     }
 
-    git push --set-upstream $config.defaultRemote test
+    git push --set-upstream $config.defaultRemote $branch
 
     git branch $branch *>$null
     git checkout $branch *>$null
