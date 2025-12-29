@@ -83,109 +83,10 @@ function checkUser {
     }
 }
 
-function gitPushCreate {
-    git pull --no-edit
-
-    if ($gitURL) {
-        if (-not $branch) {
-            $branch = $config.defaultBranch
-        }
-
-        if (-not (Test-Path -Path ".git" -PathType Container)) {
-            git init
-        }
-
-        git remote add $config.defaultRemote "$gitURL.git"
-
-        if ($config.autoPullBeforePush) {
-            git pull $config.defaultRemote $branch --allow-unrelated-histories
-        }
-
-        git add .
-        if (-not $message -and $config.useDefaultCommitMessage) {
-            $message = $config.defaultCommitMessage
-        }
-
-        git commit -m "$message" *>$null
-        git push --set-upstream $config.defaultRemote $branch
-    }
-    else {
-        git add .
-        if (-not $message) {
-            $message = $config.defaultCommitMessage
-        }
-
-        git commit -m "$message" *>$null
-        git push
-    }
-}
-
-function branchCreateSwitch {
-    $exists = git branch --list $branch
-
-    if ($exists) {
-        Write-Host "$branch -- $($language.branchExists)"
-        exit 1
-    }
-
-    git branch $branch *>$null
-    git checkout $branch *>$null
-    Write-Host $($language.switched)
-    git branch
-}
-
-function branchSwitch {
-    $exists = git branch --list $branch
-
-    if (-not $exists) {
-        Write-Host "$branch -- $($language.branchDoesNotExists)"
-        exit 1
-    }
-
-    git checkout $branch *>$null
-    git branch
-}
-
-function branchDelete {
-    $exists = git branch --list $branch
-
-    if (-not $exists) {
-        Write-Host "$branch -- $($language.branchDoesNotExists)"
-        exit 1
-    }
-
-    if ($config.forceBranchDelete) {
-        $delType = "-D"
-    }
-    else {
-        $delType = "-d"
-    }
-
-    & git branch $delType $branch 2>&1
-    if ($LASTEXITCODE -ne 0) {
-        git branch
-        Write-Host "$branch $($language.branchSafe)"
-        exit 1
-    }
-    else {
-        Write-Host "$branch $($language.wasDeleted)"
-    }
-}
-
-function status {
-    git status
-    git branch
-}
-
-function log {
-    if (-not $number) {
-        $number = $config.defaultLogLength
-    }
-
-    git log --oneline -n $number
-}
-
 function behaviourCheck {
+    . "$PSScriptRoot\source\funcs.ps1"
+    . "$PSScriptRoot\source\gitFuncs.ps1"
+
     holiday
 
     $release = $release.Replace(" ","-")
@@ -266,9 +167,11 @@ function behaviourCheck {
     }
 
     if ($config.runBeforeActions) {
-        . "$PSScriptRoot\actions.ps1"
+        . "$PSScriptRoot\source\actions.ps1"
         runActions $false
     }
+
+    . "$PSScriptRoot\source\githubCliFuncs.ps1"
 
     switch ($otherModes) {
         "c" {
@@ -314,7 +217,7 @@ function behaviourCheck {
             cnp
         }
         "interactive" {
-            . "$PSScriptRoot/interactiveMode.ps1"
+            . "$PSScriptRoot\source\interactiveMode.ps1"
             startInteractive
             exit
         }
@@ -353,199 +256,10 @@ function behaviourCheck {
     }
 
     if ($config.runAfterActions) {
-        . "$PSScriptRoot\actions.ps1"
+        . "$PSScriptRoot\source\actions.ps1"
         runActions $true
     }
     addStats
-}
-
-function revertCommit {
-    #TODO documentation
-    git revert HEAD -m "$message"
-    git push
-}
-
-function PRCheck {
-    #TODO documentation
-    gh pr list
-    Write-Host "`n-----"
-    gh pr status
-}
-
-function createRepo {
-    #TODO document
-    $publicity = ""
-    if ($public -or $null -eq $public){
-        $publicity = "--public"
-    }
-    else{
-        $publicity = "--private"
-    }
-
-    $descriptionArgument = ""
-    if ($null -ne $description){
-        if ($description -match "\s"){
-            $descriptionArgument += "-d `"$description`""
-        }
-        else{
-            $descriptionArgument += "-d $description"
-        }
-    }
-
-    $name = $name.Replace(" ", "-")
-    
-    $remote = "--remote=$($config.defaultRemote)"
-
-    Write-Host "gh repo create $name $publicity $licenseArg $descriptionArgument --source=. $remote"
-    
-    git init
-    
-    gh repo create $name $publicity $licenseArg $descriptionArgument --source=. $remote
-}
-
-function gitIgnore {
-    if (Test-Path ".gitignore"){
-        $wasFound = $false, $false
-        $toFind = "RELEASE", "RELEASE/*"
-        $c = (Get-Content ".\.gitignore")
-        $nwLineCreate = $true
-        for ($j = 0; $j -lt $c.Count; $j++){
-            $line = $c[$j]
-
-            if ($j -eq $c.Count -1){
-                if (-not $line -match "^[\s]*$"){
-                    $nwLineCreate = $false
-                }
-            }
-
-            for ($i = 0; $i -lt $toFind.Length; $i++){
-                if ($line -eq $toFind[$i]){
-                    $wasFound[$i] = $true
-                }
-            }
-        }
-        
-        if ($nwLineCreate){
-            "" | Out-File -FilePath ".\.gitignore" -Append -Encoding utf8 -NoNewline
-        }
-
-        for ($i = 0; $i -lt $toFind.Length; $i++){
-            if (-not $wasFound[$i]){
-                $toFind[$i] | Out-File -FilePath ".\.gitignore" -Append -Encoding utf8 
-            }
-        }
-    }
-    else {
-        New-Item ".\.gitignore"
-        "RELEASE" | Out-File -FilePath ".\.gitignore" -Append -Encoding utf8
-        "RELEASE/*" | Out-File -FilePath ".\.gitignore" -Append -Encoding utf8
-    }
-}
-
-function release {
-    gitIgnore
-
-    if ($null -eq $release){
-        $release = $config.defaultRelease
-    }
-
-    if ($null -eq $title){
-        $title = $config.defaultTitle
-    }
-
-    if ($null -eq $message){
-        $message = $config.defaultReleaseMessage
-    }
-
-    if (Get-Command gh -ErrorAction SilentlyContinue) {
-        New-Item RELEASE -ItemType Directory -Force
-        if ($null -eq (Get-ChildItem ".\RELEASE\")){
-            Write-Host $language.noReleaseFolder
-        }
-        else{
-            $files = Get-ChildItem .\RELEASE -File
-            gh release create $($release) $($files) --title "$($title)" --notes "$($message)"
-        }
-    } else {
-        Write-Host $language.noGHCLI + "https://cli.github.com"
-        Write-Host $language.tagCreate
-
-        git tag -a "$($release)" -m $message
-        git push origin "$($release)"
-    }
-}
-
-function description {
-    $str = @"
- ------------------------------------------------------------------------------------------------------------------
-|                                                      Modes                                                       |
- ------------------------------------------------------------------------------------------------------------------ 
-| Name                      | Description                                                                          |
-|---------------------------|--------------------------------------------------------------------------------------|
-| c(ommit)                  | This is configs default. Adds a commit message and pushes to your GitHub repository. |
-| b(ranch)s(witch)c(create) | Creates a new branch and switches to the new branch.                                 |
-| b(ranch)s(witch)          | Switches to an existing branch.                                                      |
-| b(ranch)d(elete)          | Deletes an existing branch.                                                          |
-| s(tatus)                  | Shows the status of current branch.                                                  |
-| p(ull)                    | Pulls the latest changes from your remote repository.                                |
-| l(og)                     | Shows recent commits (default number or set with -number / -n).                      |
-| autoCommit                | Use this for automatically commit (Task Scheduler)                                   |
-| d(escription)             | This shows you this description in terminal                                          |
- ------------------------------------------------------------------------------------------------------------------
-"@
-    Write-Host $str
-}
-
-function autoCommit {
-    if ($null -eq $path){
-        $path = $config.defaultPath
-    }
-
-    Set-Location $path
-    gitPushCreate
-}
-
-function holiday {
-    #$language
-    $now = Get-Date
-    if (($now.day -eq 1 -and $now.Month -eq 1) -or ($now.day -eq 31 -and $now.Month -eq 12)) {
-        Write-Host $language.newYear
-    }
-    elseif ($now.day -eq 14 -and $now.Month -eq 2) {
-        Write-Host $language.valentine
-    }
-    elseif ($now.day -eq 8 -and $now.Month -eq 3) {
-        Write-Host $language.womenDay
-    }
-    elseif ($now.day -eq 17 -and $now.Month -eq 3) {
-        Write-Host $language.patrickDay
-    }
-    elseif ($now.day -eq 1 -and $now.Month -eq 4) {
-        Write-Host $language.aprilFools
-    }
-    elseif ($now.day -eq 1 -and $now.Month -eq 5) {
-        Write-Host $language.labourDay
-    }
-    elseif ($now.day -eq 31 -and $now.Month -eq 10) {
-        Write-Host $language.haloween
-    }
-    elseif ($now.day -eq 1 -and $now.Month -eq 11) {
-        Write-Host $language.saintDay
-    }
-    elseif ($now.day -eq 19 -and $now.Month -eq 11) {
-        Write-Host $language.manDay
-    }
-    elseif (($now.day -eq 24 -or $now.day -eq 25) -and $now.Month -eq 12 ) {
-        Write-Host $language.christmas
-    }
-    # I HATE THINGS THAT CHNAGES YEARLY LIKE WHY DON'T YOU JUST IDK HAVE DATE???
-
-    elseif (($now.day -ge 22 -and $now.day -le 28) -and $now.Month -eq 11 -and $now.DayOfWeek -eq "Thursday") {
-        Write-Host $language.thanksgivingUSA
-    }
-    elseif (($now.day -ge 8 -and $now.day -le 14) -and $now.Month -eq 11 -and $now.DayOfWeek -eq "Monday") {
-        Write-Host $language.thanksgivingCAN
-    }
 }
 
 function runModification {
@@ -553,78 +267,11 @@ function runModification {
         [string]$modname
     )
 
-    . "$PSScriptRoot\modLoader.ps1"
+    . "$PSScriptRoot\source\modLoader.ps1"
 
     $found = loadMods $modname
 
     return $found
-}
-
-function writeMods {
-    . "$PSScriptRoot\modLoader.ps1"
-
-    $names = getNames
-    $versions = getVersions
-    $gVersions = getGVersions
-
-    $modCount = $names.Length
-    $modCount
-    $names += getNames "actions"
-    $versions += getVersions "actions"
-    $gVersions += getGVersions "actions"
-
-    Write-Host ("{0,-4} {1,-25} {2,-12} {3,-12} {4}" -f "#", "$($language.modName)", "$($language.local)", "$($language.gustVer)", "$($language.note)")
-    Write-Host ("-" * 70)
-
-    for ($i = 0; $i -lt $names.Length; $i++) {
-        $bonus = ""
-        $color = "Gray"
-
-        if ($gVersions[$i] -ne $Global:version) {
-            $eval = compareModVersions $Global:version $gVersions[$i]
-
-            if ($eval -eq "minor" -and ($eval -ne $true)) {
-                $bonus = $language.minorDiff
-                $color = "Yellow"
-            }
-            elseif ($eval -eq "release or major" -and ($eval -ne $true)) {
-                $bonus = $language.majorDiff
-                $color = "Red"
-            }
-        }
-
-        if ($i -eq $modCount) {
-            Write-Host ""
-            Write-Host ("{0,-4} {1,-25} {2,-12} {3,-12} {4}" -f "#", "$($language.actionName)", "$($language.local)", "$($language.gustVer)", "$($language.note)")
-            Write-Host ("-" * 70)
-            #Write-Host $line -ForegroundColor $color
-            $line = ("[{0}] {1,-25} {2,-12} {3,-12} {4}" -f ($i + 1 - $modCount), $names[$i], "($($versions[$i]))", $gVersions[$i], $bonus)
-        }
-        elseif ($i -gt $modCount) {
-            $line = ("[{0}] {1,-25} {2,-12} {3,-12} {4}" -f ($i + 1 - $modCount), $names[$i], "($($versions[$i]))", $gVersions[$i], $bonus)
-        }
-        else {
-            $line = ("[{0}] {1,-25} {2,-12} {3,-12} {4}" -f ($i + 1), $names[$i], "($($versions[$i]))", $gVersions[$i], $bonus)
-        }
-
-        Write-Host $line -ForegroundColor $color
-    }
-}
-
-function update {
-    . "$PSScriptRoot\install.ps1" $False
-    install
-    v = $Global:version
-    . "$PSScriptRoot\temp\gust.ps1" "NOMODE"
-    Write-Host $(getVersion) $v
-    if ($(getVersion) -ne $v) {
-        robocopy $PSScriptRoot\temp $PSScriptRoot /E /IS /IT
-    }
-    Remove-Item -Path $PSScriptRoot/temp -Recurse -Force
-}
-
-function getVersion {
-    return $Global:version
 }
 
 function swp {
@@ -829,7 +476,7 @@ function getLanguageObject {
     return $language
 }
 
-. "$PSScriptRoot\modAPI.ps1"
+. "$PSScriptRoot\source\modAPI.ps1"
 
 $configPath = $(profileCheck)
 

@@ -37,7 +37,7 @@ function behaviourSwitchCheck{
             # This makes mod able to call other mods
 
             # This example calls "status" but it can call ANY mode
-            . "$PSScriptRoot\..\modAPI.ps1"
+            . "$PSScriptRoot\..\source\modAPI.ps1"
             callNormalMode "status"
         }
         Default {

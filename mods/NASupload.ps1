@@ -39,7 +39,7 @@ function behaviourSwitchCheck {
 
     switch ($name) {
         "NAS" { 
-            . "$PSScriptRoot\..\modAPI.ps1" #you have use this for mod API calls
+            . "$PSScriptRoot\..\source\modAPI.ps1" #you have use this for mod API calls
 
             $message = getMessage
             $message
