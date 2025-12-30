@@ -168,6 +168,11 @@ function behaviourCheck {
             $otherModes = "rc"
         }
     }
+    elseif ($otherModes -match "^i(s(s(u(e)?)?)?)?"){
+        if ($otherModes -match "c(h(e(c(k)?)?)?)?$"){
+            $otherModes = "ic"
+        }
+    }
     elseif ($otherModes -eq "") {
         $otherModes = $config.defaultMode
     }
@@ -247,6 +252,9 @@ function behaviourCheck {
         }
         "prcreate"{
             PRCreate
+        }
+        "ic"{
+            issueCheck
         }
         default {
             if ($config.runModification) {

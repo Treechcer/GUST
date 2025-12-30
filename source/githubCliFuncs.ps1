@@ -1,3 +1,10 @@
+function issueCheck {
+    #TODO documentation
+    gh issue list
+    Write-Host "`n-----"
+    gh issue status
+}
+
 function PRCheck {
     #TODO documentation
     gh pr list
