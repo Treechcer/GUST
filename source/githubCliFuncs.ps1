@@ -1,3 +1,24 @@
+function issueCreateNew {
+    #TODO documentation
+    if ($null -eq $who){
+        $who = $config.defaultWho
+    }
+
+    if ($null -eq $label){
+        $label = $config.defaultLabelsIssue
+    }
+
+    if ($null -eq $description){
+        $description = $config.defaultDescriptionPR
+    }
+
+    if ($null -eq $title){
+        $title = $config.defaultPRTitle
+    }
+
+    gh issue create -a "$who" -b "$description" -t "$title" -l "$label"
+}
+
 function issueCheck {
     #TODO documentation
     gh issue list
@@ -23,18 +44,22 @@ function PRCreate {
     }
 
     if ($null -eq $branch){
-        $who = $config.defaultBranch
+        $branch = $config.defaultBranch
     }
 
     if ($null -eq $description){
-        $who = $config.defaultDescriptionPR
+        $description = $config.defaultDescriptionPR
     }
 
     if ($null -eq $title){
-        $who = $config.defaultPRTitle
+        $title = $config.defaultPRTitle
     }
 
-    gh pr create -a $who -B $branch -b $description -t $title
+    if ($null -eq $label){
+        $label = $config.defaultLabelsPR
+    }
+
+    gh pr create -a "$who" -B $branch -b "$description" -t "$title" -l "$label"
 }
 
 function createRepo {

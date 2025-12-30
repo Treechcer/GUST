@@ -38,7 +38,10 @@ param(
     [string]$description, # for repo decription
 
     [Alias("w")]
-    [string]$who #used for githubCLI for PRs
+    [string]$who, #used for githubCLI for PRs
+
+    [Alias("la")]
+    [string]$label #labels used for issue in github cli
 )
 
 $Global:version = "0.5.8"
@@ -172,6 +175,9 @@ function behaviourCheck {
         if ($otherModes -match "c(h(e(c(k)?)?)?)?$"){
             $otherModes = "ic"
         }
+        elseif ($otherModes -match "c(r(e(a(t(e)?)?)?)?)?$") {
+            $otherModes = "icn"
+        }
     }
     elseif ($otherModes -eq "") {
         $otherModes = $config.defaultMode
@@ -255,6 +261,9 @@ function behaviourCheck {
         }
         "ic"{
             issueCheck
+        }
+        "icn"{
+            issueCreateNew
         }
         default {
             if ($config.runModification) {
@@ -387,28 +396,32 @@ function addStats {
 
 function getDefaultConf {
     $config = [PSCustomObject]@{
-        defaultBranch           = "main";
-        defaultRemote           = "origin";
-        userName                = $null;
-        userEmail               = $null;
-        changeNameGlobal        = $false;
-        autoPullBeforePush      = $true;
-        useDefaultCommitMessage = $false;
-        defaultCommitMessage    = "small fixes";
-        forceBranchDelete       = $false;
-        defaultLogLength        = 5;
-        defaultMode             = "c";
-        runModification         = $true;
-        runAfterActions         = $true;
-        runBeforeActions        = $true;
-        language                = "english";
-        defaultRelease          = "1.0.0";
-        defaultTitle            = "Realsed";
-        defaultPath             = "Set this value in config!!";
-        defaultReleaseMessage   = "released";
-        defaultWho              = "@me";
-        defaultDescriptionPR    = "PR created";
-        defaultPRTitle          = "PR";
+        defaultBranch             = "main";
+        defaultRemote             = "origin";
+        userName                  = $null;
+        userEmail                 = $null;
+        changeNameGlobal          = $false;
+        autoPullBeforePush        = $true;
+        useDefaultCommitMessage   = $false;
+        defaultCommitMessage      = "small fixes";
+        forceBranchDelete         = $false;
+        defaultLogLength          = 5;
+        defaultMode               = "c";
+        runModification           = $true;
+        runAfterActions           = $true;
+        runBeforeActions          = $true;
+        language                  = "english";
+        defaultRelease            = "1.0.0";
+        defaultTitle              = "Realsed";
+        defaultPath               = "Set this value in config!!";
+        defaultReleaseMessage     = "released";
+        defaultWho                = "@me";
+        defaultDescriptionPR      = "PR created";
+        defaultPRTitle            = "PR";
+        defaultLabelsPR           = "bug";
+        defaultLabelsIssue        = "bug";
+        defaultDescriptionIssue   = "issue created";
+        defaultIssueTitle         = "Issue";
     }
 
     return $config
