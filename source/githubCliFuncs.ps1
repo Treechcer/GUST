@@ -1,5 +1,4 @@
 function issueCreateNew {
-    #TODO documentation
     if ($null -eq $who){
         $who = $config.defaultWho
     }
@@ -20,22 +19,18 @@ function issueCreateNew {
 }
 
 function issueCheck {
-    #TODO documentation
     gh issue list
     Write-Host "`n-----"
     gh issue status
 }
 
 function PRCheck {
-    #TODO documentation
     gh pr list
     Write-Host "`n-----"
     gh pr status
 }
 
 function PRCreate {
-    #TODO documentation
-
     . "$PSScriptRoot\gitFuncs.ps1"
     gitPushCreate
 
@@ -63,9 +58,8 @@ function PRCreate {
 }
 
 function createRepo {
-    #TODO document
     $publicity = ""
-    if ($public -or $null -eq $public){
+    if ($public -or $null -eq $public -or ($public.ToLower()) -eq "true"){
         $publicity = "--public"
     }
     else{
@@ -85,12 +79,10 @@ function createRepo {
     $name = $name.Replace(" ", "-")
     
     $remote = "--remote=$($config.defaultRemote)"
-
-    Write-Host "gh repo create $name $publicity $licenseArg $descriptionArgument --source=. $remote"
     
     git init
     
-    gh repo create $name $publicity $licenseArg $descriptionArgument --source=. $remote
+    gh repo create $name $publicity $descriptionArgument --source=. $remote
 }
 
 function release {

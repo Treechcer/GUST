@@ -19,6 +19,11 @@
     - [Project Folder Structure](#project-folder-structure)
   - [GitHub CLI](#github-cli)
     - [Release](#release)
+    - [Issue Check](#issue-check)
+    - [Issue Create](#issue-create)
+    - [PR check](#pr-check)
+    - [PR Create](#pr-create)
+    - [Create Repo](#create-repo)
   - [Set Up To Call GUST Globally](#set-up-to-call-gust-globally)
     - [automatic setup (recommended)](#automatic-setup-recommended)
     - [manual GitHub clone](#manual-github-clone)
@@ -54,18 +59,29 @@ This script has two dependencies:
 
 ## Parameters
 
-| Parameter  | Required                                           | Description                                                                                                                                    | Aliases                |
-|------------|----------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------|------------------------|
-| message    | For commits, releases...                           | Your commit message you want to use                                                                                                            | -c (as commit message) |
-| gitURL     | Only required when initializing repository         | The GitHub repository URL (omit .git at the end it will be added automatically)                                                                | -u (as URL)            |
-| otherModes | When you don't want to run from config defaultMode | This is used to change the mode you want to do, also it has configurable default value `"defaultMode" : "c"`                                   | -m (as mode)           |
-| branch     | Only when working with branches                    | this is for working branches, it has default configurable in config under `"defaultBranch" : "main",`in some cases as `main`                   | -b                     |
-| number     | Only for log                                       | this is used when you need some number as an input (now it's only used in log, it has default configurable in config `"defaultLogLength" : 5,` | -n                     |
-| path       | Only for autocommit                                | This is used for autoCommit to automatically commit specific folder                                                                            | -p                     |
-| release    | For release only                                   | This is used when you want to make a release, this is the version of the release.                                                              | -r                     |
-| title      | For release only                                   | This is used when you want to make a release, this is the name of the release.                                                                 | -t                     |
+| Parameter   | Required                                            | Description                                                                                                                                    | Aliases                |
+|-------------|-----------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------|------------------------|
+| message     | For commits, releases...                            | Your commit message you want to use                                                                                                            | -c (as commit message) |
+| gitURL      | Only required when initializing repository.         | The GitHub repository URL (omit .git at the end it will be added automatically)                                                                | -u (as URL)            |
+| otherModes  | When you don't want to run from config defaultMode. | This is used to change the mode you want to do, also it has configurable default value `"defaultMode" : "c"`                                   | -m (as mode)           |
+| branch      | Only when working with branches.                    | this is for working branches, it has default configurable in config under `"defaultBranch" : "main",`in some cases as `main`                   | -b                     |
+| number      | Only for log.                                       | this is used when you need some number as an input (now it's only used in log, it has default configurable in config `"defaultLogLength" : 5,` | -n                     |
+| path        | Only for autocommit.                                | This is used for autoCommit to automatically commit specific folder                                                                            | -p                     |
+| release     | For release only.                                   | This is used when you want to make a release, this is the version of the release.                                                              | -r                     |
+| title       | For release only.                                   | This is used when you want to make a release, this is the name of the release.                                                                 | -t                     |
+| name        | For creating repositories only.                     | This is used to create repositories and giving them name.                                                                                      | -na                    |
+| public      | For creating repositories only.                     | This is True or False (or $null but that makes it Public) to make repository public or private. True => public.                                | -pu                    |
+| description | Used in most GitHub cli functionality.              | Used to add description to PRs, Issues etc.                                                                                                    | -d                     |
+| who         | Used in PRs and Issues.                             | This assigns the Issue / PR to someone, default is "@me" or the one publishing it.                                                            | -w                     |
+| label       | Used in PRs and Issues.                             | This is for organizing the Issues / PR to it's label.                                                                                          | -la                    |
+
+> Note : commit message is used for more things where message is needed, for example in releases, you'll use message for description of the release.
+
+You can learn all possible labels on [official GitHub docs](https://docs.github.com/en/issues/using-labels-and-milestones-to-track-work/managing-labels).
 
 ## Mode parameters
+
+(git)
 
 | Name                      | Description                                                                          |
 |---------------------------|--------------------------------------------------------------------------------------|
@@ -78,8 +94,18 @@ This script has two dependencies:
 | l(og)                     | Shows recent commits (default number or set with -number / -n).                      |
 | autoCommit                | Use this for automatically commit (Task Scheduler)                                   |
 | d(escription)             | This shows you this description in terminal                                          |
+| r(evert)c(ommit)          | This reverts your last commit and and commits a new one that "one commit back"       |
 
-> Note : commit message is used for more things where message is needed, for example in releases, you'll use message for description of the release.
+(GitHub CLI)
+
+| Name            | Description                                                                      |
+|-----------------|----------------------------------------------------------------------------------|
+| i(ssue)c(reate) | This creates new issue on your active github repository.                         |
+| i(ssue)c(heck)  | This mode lists and shows the status of issues the issues in current repository. |
+| prc(heck)       | This mode lists and shows the status of PRs the issues in current repository.    |
+| (p)c(reate)     | This creates new PR on your active github repository.                            |
+| c(reate)r(epo)  | This mode creates new repository on your github account.                         |
+| r(elease)       | This releases your code as new release on github from folder `./RELEASE/`        |
 
 ### autoCommit setup
 
@@ -114,31 +140,45 @@ I recommend using this with `Task Scheduler`, you'll have to look into it if you
   "defaultRelease": "1.0.0",
   "defaultTitle": "Released",
   "defaultPath": "Set this value in config!!",
-  "defaultReleaseMessage": "released"
+  "defaultReleaseMessage": "released",
+  "defaultWho": "@me",
+  "defaultDescriptionPR": "PR created",
+  "defaultPRTitle": "PR",
+  "defaultLabelsIssue": "bug",
+  "defaultDescriptionIssue": "issue created",
+  "defaultIssueTitle": "Issue",
+  "defaultLabelsPR": "bug"
 }
 ```
 
-| key                   | description                                                                                                                                                                                                                                          |
-|-----------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| defaultBranch         | Default branch to push to.                                                                                                                                                                                                                           |
-| defaultRemote         | Default git remote name.                                                                                                                                                                                                                             |
-| userName              | Used if no git config is set for user.name.                                                                                                                                                                                                          |
-| userEmail             | Used if no git config is set for user.email.                                                                                                                                                                                                         |
-| changeNameGlobal      | Boolean value that makes the name / email change global or local (to enable name changing you have to change the userEmail to your email address and userName to your name)                                                                          |
-| autoPullBeforePush    | If `True` this sets if you automatically pull before pushing.                                                                                                                                                                                        |
-| defaultCommitMessage  | Used as no commit message is inputted.                                                                                                                                                                                                               |
-| forceBranchDelete     | If `true` uses `-D` (force deletes) branches.                                                                                                                                                                                                        |
-| defaultLogLength      | Number of commits shown when using the `log` mode.                                                                                                                                                                                                   |
-| defaultMode           | Default mode used when no mode is inputted.                                                                                                                                                                                                          |
-| runModifications      | Defaults to `true`, when it's true mods are enabled and can be executed.                                                                                                                                                                             |
-| runActions            | Defaults to `true`, when it's true actions are enabled and will be executed.                                                                                                                                                                         |
-| language              | Defaults to `english`, if you have another json in other language than english that translates GUST, you can add it, if it was named `czech.json` you would change the english to Czech (it works that it adds **.json** to whatever you add there). |
-| runAfterActions       | Defaults to `true`, this runs actions after everything                                                                                                                                                                                               |
-| runBeforeActions      | Defaults to `true`, this runs actions before everything                                                                                                                                                                                              |
-| defaultRelease        | Defaults to `1.0.0`, this is default release version if you don't input any                                                                                                                                                                          |
-| defaultTitle          | Defaults to `Release`, this is the default title for releases                                                                                                                                                                                        |
-| defaultPath           | Defaults ti `Set this value in config!!`, this is used for any path needed (autocommit)                                                                                                                                                              |
-| defaultReleaseMessage | Defaults to `released`, this is used as release message (description)                                                                                                                                                                                |
+| key                     | description                                                                                                                                                                                                                                          |
+|-------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| defaultBranch           | Default branch to push to.                                                                                                                                                                                                                           |
+| defaultRemote           | Default git remote name.                                                                                                                                                                                                                             |
+| userName                | Used if no git config is set for user.name.                                                                                                                                                                                                          |
+| userEmail               | Used if no git config is set for user.email.                                                                                                                                                                                                         |
+| changeNameGlobal        | Boolean value that makes the name / email change global or local (to enable name changing you have to change the userEmail to your email address and userName to your name)                                                                          |
+| autoPullBeforePush      | If `True` this sets if you automatically pull before pushing.                                                                                                                                                                                        |
+| defaultCommitMessage    | Used as no commit message is inputted.                                                                                                                                                                                                               |
+| forceBranchDelete       | If `true` uses `-D` (force deletes) branches.                                                                                                                                                                                                        |
+| defaultLogLength        | Number of commits shown when using the `log` mode.                                                                                                                                                                                                   |
+| defaultMode             | Default mode used when no mode is inputted.                                                                                                                                                                                                          |
+| runModifications        | Defaults to `true`, when it's true mods are enabled and can be executed.                                                                                                                                                                             |
+| runActions              | Defaults to `true`, when it's true actions are enabled and will be executed.                                                                                                                                                                         |
+| language                | Defaults to `english`, if you have another json in other language than english that translates GUST, you can add it, if it was named `czech.json` you would change the english to Czech (it works that it adds **.json** to whatever you add there). |
+| runAfterActions         | Defaults to `true`, this runs actions after everything                                                                                                                                                                                               |
+| runBeforeActions        | Defaults to `true`, this runs actions before everything                                                                                                                                                                                              |
+| defaultRelease          | Defaults to `1.0.0`, this is default release version if you don't input any                                                                                                                                                                          |
+| defaultTitle            | Defaults to `Release`, this is the default title for releases                                                                                                                                                                                        |
+| defaultPath             | Defaults ti `Set this value in config!!`, this is used for any path needed (autocommit)                                                                                                                                                              |
+| defaultReleaseMessage   | Defaults to `released`, this is used as release message (description)                                                                                                                                                                                |
+| defaultWho              | Defaults to `@me` so you assighn everything in default to yourself. Used in PRs and Issues.                                                                                                                                                          |
+| defaultDescriptionPR    | Defaults to `PR created`, this the description you give to PR if you don't provide any.                                                                                                                                                              |
+| defaultPRTitle          | Defaults to `PR`, this is the PR title if you don't prive any for Issues.                                                                                                                                                                            |
+| defaultLabelsIssue      | Defaults to `bug`, this is the default Label id you don't provide any for Issues.                                                                                                                                                                    |
+| defaultDescriptionIssue | Defaults to `issue created`, this is the default description for Issues if you don't provide any.                                                                                                                                                    |
+| defaultIssueTitle       | Defaults to `Issue`, this is the default issue title if you don't provide any.                                                                                                                                                                       |
+| defaultLabelsPR         | Defaults to `bug`, this is used as default label for PRs if you don't provide any.                                                                                                                                                                   |
 
 ## Prerequisites
 
@@ -272,6 +312,9 @@ Every profile has `stats.json` in their respective folder, it counts how many ti
     actions/
       actionTemplate.ps1
       example.ps1
+    languages/
+      czech.json
+      english.json
     mods/
       bluesky.ps1
       exampleMod.ps1
@@ -286,14 +329,19 @@ Every profile has `stats.json` in their respective folder, it counts how many ti
       Custom/
         stats.json
         config.json
+    source/
+      actions.ps1
+      funcs.ps1
+      gitFuncs.ps1
+      githubCliFuncs.ps1
+      interactiveMode.ps1
+      modAPI.ps1
+      modLoader.ps1
     .gitignore
-    actions.ps1
     gust.cmd
     gust.ps1
     install.ps1
     LICENSE
-    modAPI.ps1
-    modLoader.ps1
     README.md
 ```
 
@@ -315,6 +363,58 @@ With GitHub CLI you'll create full release and not just tag. You have to add `.e
 - release -> Version of the tag.
 - title   -> Name of the release.
 - message -> Description of the release.
+
+### Issue Check
+
+This doesn't require any variables for you to call it, this will just show you the list and status of all issues on your current github repository.
+
+### Issue Create
+
+This creates a new issue on your current GitHub repository. With this you can from just from your CLI create issues.
+
+For this to work correctly you have to pass values for $who (defaults in default to "@me" which assigns your account to the Issue), $description which describes the Issue (it has default which you should change!!), $title (it defaults to value but you should change it in your profile config) and $label (which default to bug).
+
+You would call something like this, where you add your values or rely on your default config values.
+
+```pwsh
+gust -m "icr" -w "who" -d "description" -t "title" -la "label"
+```
+
+> NOTE: You can learn all possible labels on [official GitHub docs](https://docs.github.com/en/issues/using-labels-and-milestones-to-track-work/managing-labels).
+
+### PR check
+
+This doesn't require any variables for you to call it, this will just show you the list and status of all PRs on your current github repository.
+
+### PR Create
+
+This creates a new PR on your current GitHub repository. With this you can from just from your CLI create PRs.
+
+For this to work correctly you have to pass values for $who (defaults in default to "@me" which assigns your account to the Issue), $branch (branch you want to merge to from your branch, so from branch `new-feature` to branch `main` you would just say $branch = main), $description which describes the Issue (it has default which you should change!!), $title (it defaults to value but you should change it in your profile config) and $label (which default to bug).
+
+You would call something like this, where you add your values or rely on your default config values.
+
+```pwsh
+gust -m "pc" -w "who" -d "description" -t "title" -la "label"
+
+#both modes call the same thing
+
+gust -m "prc" -w "who" -d "description" -t "title" -la "label"
+```
+
+> NOTE: You can learn all possible labels on [official GitHub docs](https://docs.github.com/en/issues/using-labels-and-milestones-to-track-work/managing-labels).
+
+### Create Repo
+
+This is for creating repository on your github account easily from CLI, much faster then from web.
+
+This expects you to add $name (-na "nameOfRepo"), $publicity ("true", "false", $null are expected), $description (any description of your repo). Some values have their default.
+
+You would call it something like this:
+
+```pwsh
+gust -m "cr" -na "someRepo" -pu "true" -d "repoDescription"
+```
 
 ## Set Up To Call GUST Globally
 

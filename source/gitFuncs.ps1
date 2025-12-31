@@ -103,7 +103,6 @@ function log {
 }
 
 function revertCommit {
-    #TODO documentation
     git revert HEAD -m "$message"
     git push
 }

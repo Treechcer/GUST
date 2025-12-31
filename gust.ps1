@@ -44,7 +44,7 @@ param(
     [string]$label #labels used for issue in github cli
 )
 
-$Global:version = "0.5.8"
+$Global:version = "0.6.0"
 
 #$config = Get-Content $configPath | ConvertFrom-Json
 #
@@ -136,6 +136,9 @@ function behaviourCheck {
         if ($otherModes -match "r(e(q(u(e(s(t)?)?)?)?)?)?"){
             if ($otherModes -match "c(e(c(k)?)?)?$"){
                 $otherModes = "prc"
+            }
+            if ($otherModes -match "c(r(e(a(t(e)?)?)?)?)?$"){
+                $otherModes = "prcreate"
             }
         }
         if ($otherModes -match "c(r(e(a(t(e)?)?)?)?)?$"){
