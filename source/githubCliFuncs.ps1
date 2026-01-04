@@ -81,7 +81,6 @@ function createRepo {
     $remote = "--remote=$($config.defaultRemote)"
     
     git init
-    
     gh repo create $name $publicity $descriptionArgument --source=. $remote
 }
 
