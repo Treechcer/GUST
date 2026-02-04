@@ -76,12 +76,25 @@ function createRepo {
         }
     }
 
+    if ($null -eq $branch -or $branch -eq ""){
+        $branch = $config.defaultBranch
+    }
+
     $name = $name.Replace(" ", "-")
     
     $remote = "--remote=$($config.defaultRemote)"
     
+    #Write-Host git push --set-upstream $($config.defaultRemote) $branch
+
     git init
     gh repo create $name $publicity $descriptionArgument --source=. $remote
+    #git add .
+    #git commit -m $config.defaultCommitMessage
+    #git push --set-upstream $config.defaultRemote $branch
+    #gitPushCreate
+
+    #doesn't work the commitng auto part so you just have to commit it yourself idc
+
 }
 
 function release {
