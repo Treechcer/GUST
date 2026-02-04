@@ -88,13 +88,11 @@ function createRepo {
 
     git init
     gh repo create $name $publicity $descriptionArgument --source=. $remote
-    #git add .
-    #git commit -m $config.defaultCommitMessage
+    git config --global --add --bool push.autoSetupRemote true
+    git add .
+    git commit -m $config.defaultCommitMessage
     #git push --set-upstream $config.defaultRemote $branch
-    #gitPushCreate
-
-    #doesn't work the commitng auto part so you just have to commit it yourself idc
-
+    gitPushCreate
 }
 
 function release {
