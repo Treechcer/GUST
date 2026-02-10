@@ -12,7 +12,13 @@ function gitPushCreate {
 
         git branch -M $branch
 
-        git remote add $config.defaultRemote "$gitURL.git"
+        if (-not ("$gitURL" -match "\\.git")){
+            $gitURL = $gitURL + ".git"
+        }
+        
+        #$gitURL
+
+        git remote add $config.defaultRemote "$gitURL"
 
         if ($config.autoPullBeforePush) {
             git pull $config.defaultRemote $branch --allow-unrelated-histories
