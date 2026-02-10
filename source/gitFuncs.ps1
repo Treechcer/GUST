@@ -10,6 +10,8 @@ function gitPushCreate {
             git init
         }
 
+        git branch -M $branch
+
         git remote add $config.defaultRemote "$gitURL.git"
 
         if ($config.autoPullBeforePush) {
