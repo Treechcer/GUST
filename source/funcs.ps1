@@ -167,3 +167,17 @@ function update {
     }
     Remove-Item -Path $PSScriptRoot\temp -Recurse -Force
 }
+
+function lineCount {
+    param (
+        $fileType
+    )
+
+    $lc = 0
+
+    Get-ChildItem -Path . -Filter "*.$fileType" -Recurse | ForEach-Object {
+        $lc += (Get-Content $_.FullName).Count
+    }
+
+    Write-Host $lc
+}

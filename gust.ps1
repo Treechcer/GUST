@@ -41,7 +41,10 @@ param(
     [string]$who, #used for githubCLI for PRs
 
     [Alias("la")]
-    [string]$label #labels used for issue in github cli
+    [string]$label, #labels used for issue in github cli
+
+    [Alias("ft")]
+    [string]$fileType
 )
 
 $Global:version = "0.6.0"
@@ -182,6 +185,9 @@ function behaviourCheck {
             $otherModes = "icn"
         }
     }
+    elseif ($otherModes -match ("l(c)?$")) {
+        $otherModes = "lc"
+    }
     elseif ($otherModes -eq "") {
         $otherModes = $config.defaultMode
     }
@@ -267,6 +273,9 @@ function behaviourCheck {
         }
         "icn"{
             issueCreateNew
+        }
+        "lc"{
+            lineCount $fileType
         }
         default {
             if ($config.runModification) {
