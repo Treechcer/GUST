@@ -196,16 +196,16 @@ function lineCount {
     Write-Host ".$filetype has" $cc "characters"
     Write-Host ".$filetype has" $fc "number of files"
     if ($fileSize -ge 1TB){
-        Write-Host ".$filetype has" $($fileSize/1TB) "TB in your directory"
+        Write-Host ".$filetype has" $([math]::Round($fileSize/1TB, 2)) "TB in your directory"
     }
     elseif ($fileSize -ge 1GB){;
-        Write-Host ".$filetype has" $($fileSize/1GB) "GB in your directory"
+        Write-Host ".$filetype has" $([math]::Round($fileSize/1GB, 2)) "GB in your directory"
     }
     elseif ($fileSize -ge 1MB){
-        Write-Host ".$filetype has" $($fileSize/1MB) "MB in your directory"
+        Write-Host ".$filetype has" $([math]::Round($fileSize/1MB, 2)) "MB in your directory"
     }
     elseif ($fileSize -ge 1KB){
-        Write-Host ".$filetype has" $($fileSize/1KB) "KB in your directory"
+        Write-Host ".$filetype has" $([math]::Round($fileSize/1KB, 2)) "KB in your directory"
     }
     else{
         Write-Host ".$filetype has" $fileSize "B in your directory"
