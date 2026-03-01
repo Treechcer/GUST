@@ -174,10 +174,40 @@ function lineCount {
     )
 
     $lc = 0
+    $cc = 0
+    $fc = 0
+    $fileSize
 
     Get-ChildItem -Path . -Filter "*.$fileType" -Recurse | ForEach-Object {
+        #get lines
         $lc += (Get-Content $_.FullName).Count
+
+        #get charcs
+        $content = Get-Content $_.FullName -Raw
+        $cc += $content.Length
+
+        #get file count
+        $fc++
+
+        $fileSize += (Get-Item $_.FullName).Length
     }
 
-    Write-Host $lc
+    Write-Host ".$filetype has" $lc "lines of text"
+    Write-Host ".$filetype has" $cc "characters"
+    Write-Host ".$filetype has" $fc "number of files"
+    if ($fileSize -ge 1TB){
+        Write-Host ".$filetype has" $($fileSize/1TB) "TB in your directory"
+    }
+    elseif ($fileSize -ge 1GB){;
+        Write-Host ".$filetype has" $($fileSize/1GB) "GB in your directory"
+    }
+    elseif ($fileSize -ge 1MB){
+        Write-Host ".$filetype has" $($fileSize/1MB) "MB in your directory"
+    }
+    elseif ($fileSize -ge 1KB){
+        Write-Host ".$filetype has" $($fileSize/1KB) "KB in your directory"
+    }
+    else{
+        Write-Host ".$filetype has" $fileSize "B in your directory"
+    }
 }
