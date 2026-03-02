@@ -197,17 +197,22 @@ function lineCount {
     Write-Host ".$filetype has" $fc "number of files"
     if ($fileSize -ge 1TB){
         Write-Host ".$filetype has" $([math]::Round($fileSize/1TB, 2)) "TB in your directory"
+        Write-Host ".$filetype has on average" $([math]::Round($fileSize/1TB/$fc, 2)) "TB"  
     }
     elseif ($fileSize -ge 1GB){;
         Write-Host ".$filetype has" $([math]::Round($fileSize/1GB, 2)) "GB in your directory"
+        Write-Host ".$filetype has on average" $([math]::Round($fileSize/1GB/$fc, 2)) "GB"  
     }
     elseif ($fileSize -ge 1MB){
         Write-Host ".$filetype has" $([math]::Round($fileSize/1MB, 2)) "MB in your directory"
+        Write-Host ".$filetype has on average" $([math]::Round($fileSize/1MB/$fc, 2)) "MB"  
     }
     elseif ($fileSize -ge 1KB){
         Write-Host ".$filetype has" $([math]::Round($fileSize/1KB, 2)) "KB in your directory"
+        Write-Host ".$filetype has on average" $([math]::Round($fileSize/1KB/$fc, 2)) "KB"  
     }
     else{
         Write-Host ".$filetype has" $fileSize "B in your directory"
+        Write-Host ".$filetype has on average" $fileSize/$fc "B"  
     }
 }
