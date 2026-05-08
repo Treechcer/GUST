@@ -192,9 +192,10 @@ function lineCount {
         $fileSize += (Get-Item $_.FullName).Length
     }
 
-    Write-Host ".$filetype has" $lc "lines of text"
-    Write-Host ".$filetype has" $cc "characters"
-    Write-Host ".$filetype has" $fc "number of files"
+
+    Write-Host ".$filetype has" $($("{0:N0}" -f $lc).Replace(",", ".")) "lines of text"
+    Write-Host ".$filetype has" $($("{0:N0}" -f $cc).Replace(",", ".")) "characters"
+    Write-Host ".$filetype has" $($("{0:N0}" -f $fc).Replace(",", ".")) "number of files"
     if ($fileSize -ge 1TB){
         Write-Host ".$filetype has" $([math]::Round($fileSize/1TB, 2)) "TB in your directory"
         Write-Host ".$filetype has on average" $([math]::Round($fileSize/1TB/$fc, 2)) "TB"  
