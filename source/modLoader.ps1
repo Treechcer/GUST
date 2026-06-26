@@ -20,13 +20,15 @@ function loadMods {
 
                 if ($eval -eq "release or major" -and ($eval -ne $true)) {
                     Write-Host "⚠️ ⚠️ ⚠️"
-                    Write-Host "$($language.modNotComapatible)"
+                    Write-Host "$modname"
+                    Write-Host "$modname $($language.modNotComapatible)"
                     Write-Host "$($language.modWasWritten) $(versionOfGust)"
                     Write-Host "$($language.youHave) $($Global:version)"
                     Write-Host "⚠️ ⚠️ ⚠️"
                 }
                 elseif ($eval -eq "minor" -and ($eval -ne $true)) {
                     Write-Host "⚠️ ⚠️ ⚠️"
+                    Write-Host "$modname"
                     Write-Host "$($language.minorModDifference)"
                     Write-Host "$($language.someIncopabilities)"
                     Write-Host "⚠️ ⚠️ ⚠️"
