@@ -1,6 +1,10 @@
 function gitPushCreate {
-    git pull --no-edit
+    #git pull --no-edit
 
+    #This is test, I don't know if it'll work better honestly, it might not ever get changed
+    
+    git pull --rebase
+    
     if ($gitURL) {
         if (-not $branch) {
             $branch = $config.defaultBranch
